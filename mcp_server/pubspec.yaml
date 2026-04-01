@@ -1,0 +1,5 @@
+name: volumen_mcp_server
+description: A Model Context Protocol server for the Volumen magazine project.
+version: 1.0.0
+environment:
+  sdk: '>=3.0.0 <4.0.0'
