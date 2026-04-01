@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connect — Volumen Magazine</title>
+<meta name="description" content="Reach out to Volumen Magazine. Follow our socials or drop a line for band pitches, press, and collaborations.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #080808;
+    --white: #f2ece0;
+    --red:   #bf2d1f;
+    --gold:  #c9a040;
+    --gray:  #181818;
+    --mid:   #444;
+    --dim:   #2a2a2a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── CURSOR ── */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--red);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: difference;
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .cursor { display: none; }
+    body { cursor: auto; }
+  }
+
+  .cursor.hover { width: 40px; height: 40px; background: var(--gold); }
+
+  /* ── GRAIN ── */
+  .grain {
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9998; opacity: 0.35;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 24px 6vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(8,8,8,0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  nav::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 6vw; right: 6vw;
+    height: 1px;
+    background: linear-gradient(to right, var(--red), transparent 60%);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 10px;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--red); }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--mid);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover,
+  .nav-links a.active { color: var(--gold); }
+
+  .nav-lang {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .lang-btn {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--mid);
+    background: none;
+    border: none;
+    cursor: none;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .lang-btn.active { color: var(--red); }
+  .lang-btn:hover   { color: var(--white); }
+  .lang-sep { color: var(--dim); font-size: 10px; }
+
+  /* ── PAGE HERO ── */
+  .page-hero {
+    padding: 160px 6vw 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 80% 50%, rgba(191,45,31,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 80%, rgba(201,160,64,0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .page-hero-label {
+    font-size: 9px;
+    letter-spacing: 6px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .page-hero-label::before {
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 1px;
+    background: var(--red);
+  }
+
+  .page-hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 10vw, 130px);
+    line-height: 0.9;
+    letter-spacing: 3px;
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .page-hero-title span { color: var(--red); }
+
+  .page-hero-sub {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(14px, 1.5vw, 18px);
+    color: #666;
+    max-width: 560px;
+    line-height: 1.65;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── CONTACT MAIN GRID ── */
+  .contact-area {
+    padding: 20px 6vw 120px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    flex-grow: 1;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── DIRECT INFO ── */
+  .info-block {
+    margin-bottom: 64px;
+  }
+
+  .info-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--white);
+    margin-bottom: 24px;
+  }
+
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24px;
+  }
+
+  .info-label {
+    font-size: 9px;
+    letter-spacing: 4px;
+    color: var(--mid);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .info-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--gold);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  .info-value:hover { color: var(--white); }
+
+  /* ── SOCIAL CARDS ── */
+  .social-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .social-card {
+    background: var(--gray);
+    padding: 32px 24px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 160px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s;
+    cursor: none;
+  }
+
+  .social-card:hover { background: #1c1c1c; }
+
+  .social-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--red);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+
+  .social-card:hover::before { transform: scaleX(1); }
+
+  .social-icon {
+    width: 24px; height: 24px;
+    fill: none;
+    stroke: var(--white);
+    stroke-width: 1.5;
+    margin-bottom: 24px;
+    transition: transform 0.4s ease, stroke 0.4s ease;
+  }
+
+  .social-card:hover .social-icon {
+    transform: translateY(-4px);
+    stroke: var(--gold);
+  }
+
+  .social-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 3px;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .social-handle {
+    font-size: 12px;
+    color: #666;
+    letter-spacing: 1px;
+    transition: color 0.3s;
+  }
+
+  .social-card:hover .social-handle { color: #888; }
+
+
+  /* ── CONTACT FORM ── */
+  .form-container {
+    background: #0f0f0f;
+    padding: 48px;
+    border: 1px solid #1a1a1a;
+    position: relative;
+  }
+
+  .form-container::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: -1px; width: 40px; height: 40px;
+    border-top: 2px solid var(--red);
+    border-left: 2px solid var(--red);
+  }
+
+  .form-header {
+    margin-bottom: 32px;
+  }
+
+  .form-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 3px;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .form-sub {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+  }
+
+  .form-group {
+    margin-bottom: 24px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--mid);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .form-control {
+    width: 100%;
+    background: var(--gray);
+    border: 1px solid transparent;
+    border-bottom: 1px solid #333;
+    padding: 16px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s, background 0.3s;
+    border-radius: 0;
+  }
+
+  .form-control:focus {
+    background: #111;
+    border-bottom-color: var(--red);
+  }
+  
+  .form-control::placeholder { color: #444; }
+
+  textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  .submit-btn {
+    width: 100%;
+    background: var(--white);
+    color: var(--black);
+    border: none;
+    padding: 18px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 6px;
+    cursor: none;
+    transition: background 0.3s, letter-spacing 0.3s, opacity 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .submit-btn:hover:not(:disabled) {
+    background: var(--red);
+    color: var(--white);
+    letter-spacing: 8px;
+  }
+
+  .submit-btn:disabled { opacity: 0.65; cursor: default; }
+
+  .btn-spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(0,0,0,0.2);
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+
+  .submit-btn.loading .btn-text { opacity: 0.6; }
+  .submit-btn.loading .btn-spinner { display: block; }
+
+  .form-msg {
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+    margin-top: 16px;
+    min-height: 20px;
+  }
+
+  .form-msg.error { color: var(--red); }
+
+  /* SUCCESS STATE */
+  .form-success {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 60px 20px;
+    text-align: center;
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  .form-success.visible { display: flex; }
+
+  .success-icon {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: scalePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  @keyframes scalePop {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal.delay-1 { transition-delay: 0.12s; }
+  .reveal.delay-2 { transition-delay: 0.24s; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 48px 6vw;
+    border-top: 1px solid #111;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: auto;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 8px;
+  }
+  .footer-logo span { color: var(--red); }
+
+  .footer-copy {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--mid);
+    text-transform: uppercase;
+  }
+
+  .footer-social { display: flex; gap: 24px; }
+
+  .footer-social a {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--mid);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .footer-social a:hover { color: var(--gold); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .contact-area { grid-template-columns: 1fr; gap: 60px; }
+  }
+
+  @media (max-width: 768px) {
+    .page-hero { padding: 120px 6vw 20px; }
+    .contact-area { padding-top: 20px; }
+    .form-container { padding: 32px 24px; }
+  }
+
+  @media (max-width: 600px) {
+    nav { padding: 16px 4vw; }
+    .nav-logo { font-size: 16px; letter-spacing: 4px; }
+    .nav-links { gap: 12px; }
+    .nav-links a { font-size: 8px; letter-spacing: 1px; }
+    .social-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="grain"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo"><span>V</span>OLUMEN</a>
+  <ul class="nav-links">
+    <li><a href="index.html#manifesto">About / Acerca</a></li>
+    <li><a href="editorial.html">Editorial</a></li>
+    <li><a href="index.html#gallery">Photos / Fotos</a></li>
+    <li><a href="contact.html" class="active">Contact / Contacto</a></li>
+  </ul>
+  <div class="nav-lang">
+    <button class="lang-btn active" id="btn-en">EN</button>
+    <span class="lang-sep">/</span>
+    <button class="lang-btn" id="btn-es">ES</button>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-bg-text">V</div>
+  <div class="page-hero-label">Get in Touch · Conéctate</div>
+  <h1 class="page-hero-title">THE<br><span>CONNECTION</span></h1>
+  <p class="page-hero-sub">Whether you're an artist aiming for the cover, a photographer with a pit pass, or just want to talk rock — we're listening.</p>
+</section>
+
+<!-- MAIN CONTENT -->
+<main class="contact-area">
+
+  <!-- LEFT COLUMN: INFO & SOCIALS -->
+  <div class="contact-left reveal">
+    
+    <div class="info-block">
+      <h2 class="info-title">DIRECT LINE</h2>
+      <div class="info-item">
+        <span class="info-label">Email / Correo</span>
+        <a href="mailto:reinaldoramirez05@gmail.com" class="info-value">reinaldoramirez05@gmail.com</a>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Phone / Teléfono</span>
+        <a href="tel:+17862597215" class="info-value">+1 (786) 259-7215</a>
+      </div>
+    </div>
+
+    <h2 class="info-title">FOLLOW THE SCENE</h2>
+    <div class="social-grid">
+      
+      <!-- INSTAGRAM -->
+      <a href="https://instagram.com/reinaldo.photos" target="_blank" class="social-card">
+        <svg class="social-icon" viewBox="0 0 24 24">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+        </svg>
+        <div>
+          <div class="social-name">INSTAGRAM</div>
+          <div class="social-handle">@reinaldo.photos</div>
+        </div>
+      </a>
+
+      <!-- TWITTER / X -->
+      <a href="https://twitter.com/reinaldor93" target="_blank" class="social-card">
+        <svg class="social-icon" viewBox="0 0 24 24">
+          <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
+          <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
+        </svg>
+        <div>
+          <div class="social-name">X / TWITTER</div>
+          <div class="social-handle">@reinaldor93</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- RIGHT COLUMN: FORM -->
+  <div class="contact-right reveal delay-1">
+    
+    <!-- INITIAL FORM WRAPPER -->
+    <div class="form-container" id="contact-wrap">
+      <div class="form-header">
+        <h2 class="form-title">PITCH US.</h2>
+        <p class="form-sub">Looking to feature your band, submit a photo gallery, or advertise? Drop us a message.</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Name / Nombre</label>
+        <input type="text" class="form-control" id="contact-name" placeholder="E.g. Gustavo Cerati">
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Email / Correo *</label>
+        <input type="email" class="form-control" id="contact-email" placeholder="hello@band.com" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Message / Mensaje</label>
+        <textarea class="form-control" id="contact-message" placeholder="Tell us about the upcoming tour or record..."></textarea>
+      </div>
+
+      <button class="submit-btn" id="contact-submit" onclick="submitContact()">
+        <span class="btn-text">SEND MESSAGE</span>
+        <span class="btn-spinner"></span>
+      </button>
+      <div class="form-msg" id="contact-msg"></div>
+    </div>
+
+    <!-- SUCCESS WRAPPER -->
+    <div class="form-container form-success" id="contact-success">
+      <div class="success-icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <h2 class="form-title" style="margin: 0;">LOUD AND CLEAR</h2>
+      <p class="form-sub" style="text-align: center;">Message received. We usually review pitches and inquiries within 48 hours.<br><br><em>Mensaje recibido. Responderemos pronto.</em></p>
+    </div>
+
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span>V</span>OLUMEN</div>
+  <div class="footer-copy">© 2026 Volumen Magazine · Austin, Texas · All Rights Reserved</div>
+  <div class="footer-social">
+    <a href="https://instagram.com/reinaldo.photos" target="_blank">Instagram</a>
+    <a href="https://twitter.com/reinaldor93" target="_blank">Twitter / X</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+  });
+
+  document.querySelectorAll('a, button, .social-card, input, textarea').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => revealObserver.observe(r));
+
+  // Lang toggle (visual only for now)
+  document.getElementById('btn-en').addEventListener('click', function() {
+    this.classList.add('active');
+    document.getElementById('btn-es').classList.remove('active');
+  });
+  document.getElementById('btn-es').addEventListener('click', function() {
+    this.classList.add('active');
+    document.getElementById('btn-en').classList.remove('active');
+  });
+
+  // ── CONTACT FORM LOGIC (FORMSPREE) ──
+  async function submitContact() {
+    const btn = document.getElementById('contact-submit');
+    const msg = document.getElementById('contact-msg');
+    const wrap = document.getElementById('contact-wrap');
+    const success = document.getElementById('contact-success');
+    
+    const name = document.getElementById('contact-name').value.trim();
+    const email = document.getElementById('contact-email').value.trim();
+    const message = document.getElementById('contact-message').value.trim();
+
+    if (!email) {
+      msg.textContent = 'Email is required. / El correo es requerido.';
+      msg.classList.add('error');
+      return;
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      msg.textContent = 'Please enter a valid email. / Ingresa un correo válido.';
+      msg.classList.add('error');
+      return;
+    }
+
+    // Start loading
+    btn.disabled = true;
+    btn.classList.add('loading');
+    msg.textContent = '';
+    msg.classList.remove('error');
+
+    try {
+      // NOTE: Using the same Formspree ID from the landing page.
+      const response = await fetch('https://formspree.io/f/maqlbbnv', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          form: 'Contact / Pitch Form',
+          name: name,
+          email: email,
+          message: message
+        })
+      });
+
+      if (response.ok) {
+        wrap.style.display = 'none';
+        success.classList.add('visible');
+      } else {
+        throw new Error('Network response was not ok');
+      }
+    } catch (error) {
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      msg.textContent = 'Something went wrong. Please try again. / Algo salió mal.';
+      msg.classList.add('error');
+    }
+  }
+</script>
+</body>
+</html>
