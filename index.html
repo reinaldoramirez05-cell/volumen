@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volumen — Latin Rock / Rock Latino</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #080808;
+    --white: #f2ece0;
+    --red: #bf2d1f;
+    --gold: #c9a040;
+    --gray: #181818;
+    --mid: #444;
+    --dim: #2a2a2a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--red);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: difference;
+  }
+  .cursor.hover { width: 40px; height: 40px; background: var(--gold); }
+
+  /* GRAIN */
+  .grain {
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9998; opacity: 0.35;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 24px 6vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    mix-blend-mode: normal;
+  }
+
+  nav::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 6vw; right: 6vw;
+    height: 1px;
+    background: linear-gradient(to right, var(--red), transparent 60%);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 10px;
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--red); }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--mid);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+
+  .nav-lang {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .lang-btn {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--mid);
+    background: none;
+    border: none;
+    cursor: none;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .lang-btn.active { color: var(--red); }
+  .lang-btn:hover { color: var(--white); }
+  .lang-sep { color: var(--dim); font-size: 10px; }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 140px 6vw 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* HERO BACKGROUND PHOTO */
+  .hero-photo {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .hero-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    filter: grayscale(100%) contrast(1.1) brightness(0.4);
+    opacity: 0.28;
+    animation: slowZoom 20s ease-in-out infinite alternate;
+  }
+
+  /* Gradient overlay so text stays readable at bottom */
+  .hero-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      linear-gradient(to bottom, rgba(8,8,8,0.5) 0%, transparent 30%, transparent 60%, rgba(8,8,8,0.95) 100%),
+      linear-gradient(to right, rgba(8,8,8,0.3) 0%, transparent 50%);
+  }
+
+  @keyframes slowZoom {
+    from { transform: scale(1); }
+    to   { transform: scale(1.06); }
+  }
+
+  /* BIG V BACKGROUND */
+  .hero-bg-v {
+    position: absolute;
+    right: -2vw;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 55vw;
+    color: transparent;
+    -webkit-text-stroke: 1px #1a1a1a;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    animation: breathe 8s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% { opacity: 0.4; transform: translateY(-50%) scale(1); }
+    50% { opacity: 0.7; transform: translateY(-50%) scale(1.01); }
+  }
+
+  /* ISSUE TAG */
+  .issue-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+    position: relative;
+    z-index: 2;
+  }
+
+  .issue-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+    animation: pulse 2s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .issue-text {
+    font-size: 10px;
+    letter-spacing: 5px;
+    color: var(--mid);
+    text-transform: uppercase;
+  }
+
+  /* HERO TITLE */
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 16vw, 200px);
+    line-height: 0.88;
+    letter-spacing: 3px;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.4s forwards;
+  }
+
+  .hero-title .v { color: var(--red); }
+  .hero-title .rest { color: var(--white); }
+
+  /* BILINGUAL TAGLINE */
+  .bilingual-block {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 0 40px;
+    margin-top: 56px;
+    max-width: 900px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.7s forwards;
+    position: relative;
+    z-index: 2;
+  }
+
+  .bi-divider {
+    background: var(--dim);
+    align-self: stretch;
+  }
+
+  .bi-side { padding: 0 8px; }
+
+  .bi-lang {
+    font-size: 9px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+
+  .bi-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(15px, 1.6vw, 20px);
+    line-height: 1.55;
+    color: #a09880;
+    font-weight: 400;
+  }
+
+  .bi-text em {
+    color: var(--white);
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  /* SCROLL INDICATOR */
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 6vw;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.2s forwards;
+    z-index: 2;
+  }
+
+  .scroll-line {
+    width: 40px; height: 1px;
+    background: var(--red);
+    animation: expandLine 2s ease 1.5s infinite;
+  }
+
+  @keyframes expandLine {
+    0% { width: 20px; opacity: 0.3; }
+    50% { width: 50px; opacity: 1; }
+    100% { width: 20px; opacity: 0.3; }
+  }
+
+  .scroll-text {
+    font-size: 9px;
+    letter-spacing: 4px;
+    color: var(--mid);
+    text-transform: uppercase;
+  }
+
+  /* TICKER */
+  .ticker {
+    background: var(--red);
+    padding: 12px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+  }
+
+  .ticker-inner {
+    display: inline-flex;
+    animation: ticker 25s linear infinite;
+  }
+
+  .ticker-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: var(--white);
+    padding: 0 40px;
+  }
+
+  .ticker-item .sep { color: rgba(255,255,255,0.3); margin: 0 8px; }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* MANIFESTO SECTION */
+  #manifesto {
+    padding: 120px 6vw;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    align-items: start;
+    border-top: 1px solid #111;
+  }
+
+  @media (max-width: 768px) {
+    #manifesto { grid-template-columns: 1fr; gap: 40px; }
+    .bilingual-block { grid-template-columns: 1fr; }
+    .bi-divider { display: none; }
+  }
+
+  .manifesto-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 6px;
+    color: var(--red);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    align-self: flex-start;
+    padding-top: 8px;
+  }
+
+  .manifesto-en {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 3vw, 38px);
+    line-height: 1.35;
+    color: var(--white);
+    font-weight: 400;
+    margin-bottom: 32px;
+    border-left: 3px solid var(--red);
+    padding-left: 32px;
+  }
+
+  .manifesto-es {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(16px, 2vw, 24px);
+    line-height: 1.5;
+    color: var(--gold);
+    font-weight: 400;
+    padding-left: 35px;
+  }
+
+  /* PILLARS */
+  #pillars {
+    padding: 80px 6vw 120px;
+    border-top: 1px solid #111;
+  }
+
+  .pillars-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 60px;
+  }
+
+  .pillars-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 5vw, 64px);
+    letter-spacing: 3px;
+    line-height: 1;
+  }
+
+  .pillars-title span { color: var(--red); }
+
+  .pillars-sub {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--mid);
+    text-align: right;
+    text-transform: uppercase;
+    max-width: 200px;
+    line-height: 1.8;
+  }
+
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+
+  @media (max-width: 900px) {
+    .pillars-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 500px) {
+    .pillars-grid { grid-template-columns: 1fr; }
+  }
+
+  .pillar-card {
+    background: var(--gray);
+    padding: 40px 28px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s;
+  }
+
+  .pillar-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--red);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+
+  .pillar-card:hover { background: #1e1e1e; }
+  .pillar-card:hover::before { transform: scaleX(1); }
+
+  .pillar-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: #222;
+    line-height: 1;
+    margin-bottom: 20px;
+    transition: color 0.4s;
+  }
+
+  .pillar-card:hover .pillar-num { color: #333; }
+
+  .pillar-name-en {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .pillar-name-es {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .pillar-desc {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.7;
+  }
+
+  /* SIGNUP */
+  #signup {
+    background: var(--gray);
+    padding: 100px 6vw;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    border-top: 1px solid #111;
+  }
+
+  @media (max-width: 768px) {
+    #signup { grid-template-columns: 1fr; gap: 40px; }
+    .pillars-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .pillars-sub { text-align: left; }
+  }
+
+  .signup-left h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 5vw, 64px);
+    letter-spacing: 3px;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .signup-left h2 span { color: var(--red); }
+
+  .signup-left p {
+    font-size: 14px;
+    color: #777;
+    line-height: 1.7;
+    max-width: 400px;
+  }
+
+  .signup-bilingual {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .signup-label-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .signup-label {
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--mid);
+    padding: 10px 16px;
+    background: #111;
+  }
+
+  .signup-label.es { color: var(--gold); }
+
+  .signup-field {
+    position: relative;
+  }
+
+  .signup-field input {
+    width: 100%;
+    background: #111;
+    border: none;
+    border-bottom: 1px solid var(--dim);
+    padding: 18px 16px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .signup-field input:focus { border-bottom-color: var(--red); }
+  .signup-field input::placeholder { color: #444; }
+
+  .signup-btn {
+    width: 100%;
+    background: var(--red);
+    border: none;
+    padding: 18px;
+    color: var(--white);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 6px;
+    cursor: none;
+    transition: background 0.3s, letter-spacing 0.3s, opacity 0.3s;
+    margin-top: 4px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 56px;
+  }
+
+  .signup-btn:hover:not(:disabled) { background: #a02318; letter-spacing: 8px; }
+  .signup-btn:disabled { opacity: 0.65; cursor: default; }
+
+  .signup-btn .btn-spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: var(--white);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+    display: none;
+  }
+
+  .signup-btn.loading .btn-text { opacity: 0.6; }
+  .signup-btn.loading .btn-spinner { display: block; }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .signup-note {
+    font-size: 10px;
+    color: #444;
+    letter-spacing: 2px;
+    text-align: center;
+    margin-top: 12px;
+    min-height: 20px;
+    transition: color 0.3s;
+  }
+
+  /* SUCCESS STATE */
+  .signup-success {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 40px 20px;
+    text-align: center;
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  .signup-success.visible { display: flex; }
+
+  .success-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: scalePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  @keyframes scalePop {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  .success-icon svg { stroke: var(--gold); }
+
+  .success-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 4px;
+    color: var(--white);
+  }
+
+  .success-sub {
+    font-size: 12px;
+    color: #666;
+    letter-spacing: 2px;
+    line-height: 1.8;
+  }
+
+  .success-sub em { color: var(--gold); font-style: normal; }
+
+  /* FOOTER */
+  footer {
+    padding: 48px 6vw;
+    border-top: 1px solid #111;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 8px;
+  }
+
+  .footer-logo span { color: var(--red); }
+
+  .footer-copy {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--mid);
+    text-transform: uppercase;
+  }
+
+  .footer-social {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-social a {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--mid);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .footer-social a:hover { color: var(--gold); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal.delay-1 { transition-delay: 0.15s; }
+  .reveal.delay-2 { transition-delay: 0.3s; }
+  .reveal.delay-3 { transition-delay: 0.45s; }
+  .reveal.delay-4 { transition-delay: 0.6s; }
+
+  /* GALLERY */
+  #gallery {
+    padding: 100px 6vw 120px;
+    border-top: 1px solid #111;
+  }
+
+  .gallery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 56px;
+  }
+
+  .gallery-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 5vw, 64px);
+    letter-spacing: 3px;
+    line-height: 1;
+  }
+
+  .gallery-title span { color: var(--red); }
+
+  .gallery-sub {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--mid);
+    text-align: right;
+    text-transform: uppercase;
+    max-width: 220px;
+    line-height: 1.8;
+  }
+
+  /* Masonry-style editorial grid */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 3px;
+  }
+
+  .gallery-item {
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    background: #0d0d0d;
+  }
+
+  /* Hero shot spans full left column, 2 rows */
+  .gallery-item.hero-shot {
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+    aspect-ratio: unset;
+    min-height: 680px;
+  }
+
+  /* Top-right: wide landscape */
+  .gallery-item.top-right {
+    grid-column: 2 / 4;
+    grid-row: 1 / 2;
+  }
+
+  /* Bottom-right pair */
+  .gallery-item.bot-mid {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+  }
+
+  .gallery-item.bot-right {
+    grid-column: 3 / 4;
+    grid-row: 2 / 3;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                filter 0.5s ease;
+    filter: grayscale(15%) brightness(0.9);
+  }
+
+  .gallery-item:hover img {
+    transform: scale(1.04);
+    filter: grayscale(0%) brightness(1);
+  }
+
+  /* Caption overlay */
+  .gallery-caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 32px 24px 24px;
+    background: linear-gradient(to top, rgba(8,8,8,0.88) 0%, transparent 100%);
+    transform: translateY(12px);
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .gallery-item:hover .gallery-caption {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .caption-tag {
+    font-size: 9px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 6px;
+  }
+
+  .caption-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(13px, 1.2vw, 16px);
+    color: var(--white);
+    font-style: italic;
+    line-height: 1.4;
+  }
+
+  /* Corner accent on hover */
+  .gallery-item::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 0;
+    background: var(--red);
+    transition: height 0.4s ease;
+  }
+
+  .gallery-item:hover::after { height: 100%; }
+
+  /* Photo count badge */
+  .gallery-badge {
+    position: absolute;
+    top: 16px; right: 16px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--white);
+    background: var(--red);
+    padding: 4px 10px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 2;
+  }
+
+  .gallery-item:hover .gallery-badge { opacity: 1; }
+
+  @media (max-width: 900px) {
+    .gallery-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+    }
+    .gallery-item.hero-shot {
+      grid-column: 1 / 3;
+      grid-row: 1 / 2;
+      min-height: 360px;
+    }
+    .gallery-item.top-right {
+      grid-column: 1 / 3;
+      grid-row: 2 / 3;
+    }
+    .gallery-item.bot-mid { grid-column: 1 / 2; grid-row: 3 / 4; }
+    .gallery-item.bot-right { grid-column: 2 / 3; grid-row: 3 / 4; }
+  }
+
+  @media (max-width: 560px) {
+    .gallery-grid { grid-template-columns: 1fr; }
+    .gallery-item.hero-shot,
+    .gallery-item.top-right,
+    .gallery-item.bot-mid,
+    .gallery-item.bot-right {
+      grid-column: 1 / 2;
+      grid-row: unset;
+      min-height: 280px;
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="grain"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo"><span>V</span>OLUMEN</a>
+  <ul class="nav-links">
+    <li><a href="#manifesto">About / Acerca</a></li>
+    <li><a href="editorial.html">Editorial</a></li>
+    <li><a href="#gallery">Photos / Fotos</a></li>
+    <li><a href="#signup">Subscribe / Suscríbete</a></li>
+  </ul>
+  <div class="nav-lang">
+    <button class="lang-btn active" id="btn-en">EN</button>
+    <span class="lang-sep">/</span>
+    <button class="lang-btn" id="btn-es">ES</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+
+  <!-- BACKGROUND PHOTO — swap src with your own concert photo -->
+  <div class="hero-photo">
+    <img src="photos/concert-wide.jpg" alt="Concert background" />
+  </div>
+
+  <div class="hero-bg-v">V</div>
+
+  <div class="issue-tag">
+    <div class="issue-dot"></div>
+    <span class="issue-text">Coming Soon · Próximamente · Austin, TX</span>
+  </div>
+
+  <h1 class="hero-title">
+    <span class="v">V</span><span class="rest">OLUMEN</span>
+  </h1>
+
+  <div class="bilingual-block">
+    <div class="bi-side">
+      <div class="bi-lang">English</div>
+      <div class="bi-text">Amplifying the Latin rock artists, photographers, and fans who've <em>always existed</em> between two languages — and never had a magazine that spoke both.</div>
+    </div>
+    <div class="bi-divider"></div>
+    <div class="bi-side">
+      <div class="bi-lang">Español</div>
+      <div class="bi-text">Amplificando a los artistas, fotógrafos y fanáticos del rock latino que <em>siempre han existido</em> entre dos idiomas — y nunca tuvieron una revista que hablara los dos.</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <span class="scroll-text">Scroll / Desplázate</span>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner" id="ticker">
+    <span class="ticker-item">Latin Rock <span class="sep">◆</span> Rock Latino <span class="sep">◆</span> Austin TX <span class="sep">◆</span> Bilingual <span class="sep">◆</span> Bilingüe <span class="sep">◆</span> Concert Photography <span class="sep">◆</span> Fotografía en Vivo <span class="sep">◆</span> Band Interviews <span class="sep">◆</span> Entrevistas <span class="sep">◆</span> Rock en Español <span class="sep">◆</span> US Latino Scene <span class="sep">◆</span> </span>
+    <span class="ticker-item">Latin Rock <span class="sep">◆</span> Rock Latino <span class="sep">◆</span> Austin TX <span class="sep">◆</span> Bilingual <span class="sep">◆</span> Bilingüe <span class="sep">◆</span> Concert Photography <span class="sep">◆</span> Fotografía en Vivo <span class="sep">◆</span> Band Interviews <span class="sep">◆</span> Entrevistas <span class="sep">◆</span> Rock en Español <span class="sep">◆</span> US Latino Scene <span class="sep">◆</span> </span>
+  </div>
+</div>
+
+<!-- MANIFESTO -->
+<section id="manifesto">
+  <div class="manifesto-label reveal">MANIFESTO</div>
+  <div class="manifesto-right">
+    <div class="manifesto-en reveal delay-1">
+      "Volumen amplifies the Latin rock artists, photographers, and fans who've always existed between two languages — and never had a magazine that spoke both."
+    </div>
+    <div class="manifesto-es reveal delay-2">
+      "Volumen amplifica a los artistas, fotógrafos y fanáticos del rock latino que siempre han existido entre dos idiomas — y nunca tuvieron una revista que hablara los dos."
+    </div>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section id="pillars">
+  <div class="pillars-header reveal">
+    <div class="pillars-title">WHAT WE<br><span>COVER</span></div>
+    <div class="pillars-sub">Lo que<br>cubrimos</div>
+  </div>
+  <div class="pillars-grid">
+    <div class="pillar-card reveal delay-1">
+      <div class="pillar-num">01</div>
+      <div class="pillar-name-en">PHOTO REVIEW</div>
+      <div class="pillar-name-es">Foto + Reseña</div>
+      <div class="pillar-desc">Concert photography as the lead story. Live shots paired with bilingual reviews — images first, words second.</div>
+    </div>
+    <div class="pillar-card reveal delay-2">
+      <div class="pillar-num">02</div>
+      <div class="pillar-name-en">LIVE INTERVIEW</div>
+      <div class="pillar-name-es">En Vivo</div>
+      <div class="pillar-desc">In-depth conversations with Latin rock artists on tour in the US, emerging acts, and Austin-based bands.</div>
+    </div>
+    <div class="pillar-card reveal delay-3">
+      <div class="pillar-num">03</div>
+      <div class="pillar-name-en">THE SCENE</div>
+      <div class="pillar-name-es">Escena</div>
+      <div class="pillar-desc">News, releases, and show announcements. The daily pulse of Latin rock across the United States.</div>
+    </div>
+    <div class="pillar-card reveal delay-4">
+      <div class="pillar-num">04</div>
+      <div class="pillar-name-en">ROOTS</div>
+      <div class="pillar-name-es">Raíces</div>
+      <div class="pillar-desc">Long-form cultural essays. The history of Rock en Español, city scene profiles, and the diaspora through music.</div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="gallery-header reveal">
+    <div class="gallery-title">SHOT IN<br><span>THE PIT</span></div>
+    <div class="gallery-sub">Fotografía<br>en Vivo</div>
+  </div>
+
+  <div class="gallery-grid">
+
+    <!-- Hero shot: guitarist low-angle -->
+    <div class="gallery-item hero-shot reveal delay-1">
+      <img src="photos/guitarist-floor.jpg" alt="Guitarist on stage" loading="lazy" />
+      <div class="gallery-badge">PHOTO REVIEW</div>
+      <div class="gallery-caption">
+        <div class="caption-tag">En Vivo · Live</div>
+        <div class="caption-text">Floor-level with the riff — BLU guitar, stage smoke, no barriers.</div>
+      </div>
+    </div>
+
+    <!-- Top-right: wide stage panorama -->
+    <div class="gallery-item top-right reveal delay-2">
+      <img src="photos/concert-wide.jpg" alt="Full band on stage" loading="lazy" />
+      <div class="gallery-badge">THE SCENE</div>
+      <div class="gallery-caption">
+        <div class="caption-tag">Escena · Show</div>
+        <div class="caption-text">Full band under green stage beams — the whole crowd pressed in.</div>
+      </div>
+    </div>
+
+    <!-- Bottom-right: Viloria crowd shot -->
+    <div class="gallery-item bot-mid reveal delay-3">
+      <img src="photos/viloria-crowd.jpg" alt="Viloria crowd show" loading="lazy" />
+      <div class="gallery-badge">ROOTS</div>
+      <div class="gallery-caption">
+        <div class="caption-tag">Raíces · Scene</div>
+        <div class="caption-text">Viloria — intimate rooms, string lights, a room that believed every word.</div>
+      </div>
+    </div>
+
+    <!-- Bottom-right: singer close-up -->
+    <div class="gallery-item bot-right reveal delay-4">
+      <img src="photos/singer-closeup.jpg" alt="Singer close up" loading="lazy" />
+      <div class="gallery-badge">INTERVIEW</div>
+      <div class="gallery-caption">
+        <div class="caption-tag">En Foco · Close</div>
+        <div class="caption-text">Leather, sequins, and a Flying V — the front row got the whole show.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SIGNUP -->
+<section id="signup">
+  <div class="signup-left reveal">
+    <h2>BE FIRST.<br><span>SÉ EL PRIMERO.</span></h2>
+    <p>Volumen launches soon. Sign up to get the debut issue, early access to artist interviews, and concert photography drops straight to your inbox.</p>
+  </div>
+  <div class="signup-right reveal delay-2">
+
+    <!-- FORM -->
+    <div class="signup-bilingual" id="signup-form-wrap">
+      <div class="signup-label-pair">
+        <div class="signup-label">Join the list</div>
+        <div class="signup-label es">Únete a la lista</div>
+      </div>
+      <div class="signup-field">
+        <input type="text" name="name" placeholder="Your name / Tu nombre" id="name-input" autocomplete="given-name">
+      </div>
+      <div class="signup-field">
+        <input type="email" name="email" placeholder="Your email / Tu correo" id="email-input" autocomplete="email" required>
+      </div>
+      <button class="signup-btn" id="signup-btn" onclick="handleSignup()">
+        <span class="btn-text">SUBSCRIBE / SUSCRÍBETE</span>
+        <span class="btn-spinner"></span>
+      </button>
+      <div class="signup-note" id="signup-msg">No spam. Ever. / Sin spam. Nunca.</div>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div class="signup-success" id="signup-success">
+      <div class="success-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <div class="success-title">YOU'RE ON THE LIST</div>
+      <div class="success-sub">Welcome to Volumen.<br><em>Bienvenido/a a Volumen.</em><br><br>Watch your inbox — we'll be in touch.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span>V</span>OLUMEN</div>
+  <div class="footer-copy">© 2026 Volumen Magazine · Austin, Texas · All Rights Reserved</div>
+  <div class="footer-social">
+    <a href="#">Instagram</a>
+    <a href="#">Twitter / X</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+
+  document.querySelectorAll('a, button, .pillar-card, input').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => revealObserver.observe(r));
+
+  // ─── FORMSPREE CONFIG ────────────────────────────────────────────────
+  // 1. Go to https://formspree.io and create a free account
+  // 2. Click "New Form", give it a name (e.g. "Volumen Subscribers")
+  // 3. Copy your form endpoint — it looks like: https://formspree.io/f/xAbCdEfG
+  // 4. Replace the placeholder below with your real endpoint
+  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/maqlbbnv';
+  // ─────────────────────────────────────────────────────────────────────
+
+  async function handleSignup() {
+    const name  = document.getElementById('name-input').value.trim();
+    const email = document.getElementById('email-input').value.trim();
+    const msg   = document.getElementById('signup-msg');
+    const btn   = document.getElementById('signup-btn');
+
+    // Basic validation
+    if (!email || !email.includes('@')) {
+      msg.style.color = '#bf2d1f';
+      msg.textContent = 'Please enter a valid email. / Ingresa un correo válido.';
+      return;
+    }
+
+    // Loading state
+    btn.disabled = true;
+    btn.classList.add('loading');
+    msg.style.color = '#444';
+    msg.textContent = 'Sending… / Enviando…';
+
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ name, email })
+      });
+
+      if (response.ok) {
+        // Show success
+        document.getElementById('signup-form-wrap').style.display = 'none';
+        const success = document.getElementById('signup-success');
+        success.classList.add('visible');
+      } else {
+        const data = await response.json();
+        throw new Error(data?.errors?.[0]?.message || 'Submission failed');
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      msg.style.color = '#bf2d1f';
+      msg.textContent = 'Something went wrong. Please try again. / Algo salió mal.';
+      console.error('Formspree error:', err);
+    }
+  }
+
+  // Lang toggle (visual only)
+  document.getElementById('btn-en').addEventListener('click', function() {
+    this.classList.add('active');
+    document.getElementById('btn-es').classList.remove('active');
+  });
+  document.getElementById('btn-es').addEventListener('click', function() {
+    this.classList.add('active');
+    document.getElementById('btn-en').classList.remove('active');
+  });
+
+  // Enter key signup
+  document.getElementById('email-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleSignup();
+  });
+  document.getElementById('name-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleSignup();
+  });
+
+  // Add .gallery-item to cursor hover targets
+  document.querySelectorAll('.gallery-item').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+</script>
+</body>
+</html>
