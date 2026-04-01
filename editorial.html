@@ -42,6 +42,12 @@
     transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
     mix-blend-mode: difference;
   }
+
+  @media (hover: none) and (pointer: coarse) {
+    .cursor { display: none; }
+    body { cursor: auto; }
+  }
+
   .cursor.hover { width: 40px; height: 40px; background: var(--gold); }
 
   /* ── GRAIN ── */
@@ -157,7 +163,7 @@
 
   .page-hero-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(56px, 10vw, 130px);
+    font-size: clamp(42px, 10vw, 130px);
     line-height: 0.9;
     letter-spacing: 3px;
     margin-bottom: 32px;
@@ -644,8 +650,14 @@
       grid-template-columns: 1fr;
       min-height: unset;
     }
-    .featured-img { aspect-ratio: 16 / 9; min-height: 260px; }
+    .featured-img { aspect-ratio: 16 / 9; min-height: 240px; }
     .featured-body { padding: 32px 28px; border-left: none; border-top: 1px solid #111; }
+  }
+
+  @media (max-width: 768px) {
+    .page-hero { padding: 120px 6vw 60px; }
+    .filter-bar { padding: 20px 6vw; top: 60px; }
+    .articles-area { padding: 40px 6vw 80px; }
   }
 
   @media (max-width: 600px) {
