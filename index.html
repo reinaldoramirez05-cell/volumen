@@ -570,11 +570,36 @@
     font-size: 18px;
     letter-spacing: 6px;
     cursor: none;
-    transition: background 0.3s, letter-spacing 0.3s;
+    transition: background 0.3s, letter-spacing 0.3s, opacity 0.3s;
     margin-top: 4px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 56px;
   }
 
-  .signup-btn:hover { background: #a02318; letter-spacing: 8px; }
+  .signup-btn:hover:not(:disabled) { background: #a02318; letter-spacing: 8px; }
+  .signup-btn:disabled { opacity: 0.65; cursor: default; }
+
+  .signup-btn .btn-spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: var(--white);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+    display: none;
+  }
+
+  .signup-btn.loading .btn-text { opacity: 0.6; }
+  .signup-btn.loading .btn-spinner { display: block; }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
 
   .signup-note {
     font-size: 10px;
@@ -582,7 +607,57 @@
     letter-spacing: 2px;
     text-align: center;
     margin-top: 12px;
+    min-height: 20px;
+    transition: color 0.3s;
   }
+
+  /* SUCCESS STATE */
+  .signup-success {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 40px 20px;
+    text-align: center;
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  .signup-success.visible { display: flex; }
+
+  .success-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: scalePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  @keyframes scalePop {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  .success-icon svg { stroke: var(--gold); }
+
+  .success-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 4px;
+    color: var(--white);
+  }
+
+  .success-sub {
+    font-size: 12px;
+    color: #666;
+    letter-spacing: 2px;
+    line-height: 1.8;
+  }
+
+  .success-sub em { color: var(--gold); font-style: normal; }
 
   /* FOOTER */
   footer {
@@ -998,20 +1073,37 @@
     <p>Volumen launches soon. Sign up to get the debut issue, early access to artist interviews, and concert photography drops straight to your inbox.</p>
   </div>
   <div class="signup-right reveal delay-2">
-    <div class="signup-bilingual">
+
+    <!-- FORM -->
+    <div class="signup-bilingual" id="signup-form-wrap">
       <div class="signup-label-pair">
         <div class="signup-label">Join the list</div>
         <div class="signup-label es">Únete a la lista</div>
       </div>
       <div class="signup-field">
-        <input type="text" placeholder="Your name / Tu nombre" id="name-input">
+        <input type="text" name="name" placeholder="Your name / Tu nombre" id="name-input" autocomplete="given-name">
       </div>
       <div class="signup-field">
-        <input type="email" placeholder="Your email / Tu correo" id="email-input">
+        <input type="email" name="email" placeholder="Your email / Tu correo" id="email-input" autocomplete="email" required>
       </div>
-      <button class="signup-btn" onclick="handleSignup()">SUBSCRIBE / SUSCRÍBETE</button>
+      <button class="signup-btn" id="signup-btn" onclick="handleSignup()">
+        <span class="btn-text">SUBSCRIBE / SUSCRÍBETE</span>
+        <span class="btn-spinner"></span>
+      </button>
       <div class="signup-note" id="signup-msg">No spam. Ever. / Sin spam. Nunca.</div>
     </div>
+
+    <!-- SUCCESS STATE -->
+    <div class="signup-success" id="signup-success">
+      <div class="success-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <div class="success-title">YOU'RE ON THE LIST</div>
+      <div class="success-sub">Welcome to Volumen.<br><em>Bienvenido/a a Volumen.</em><br><br>Watch your inbox — we'll be in touch.</div>
+    </div>
+
   </div>
 </section>
 
@@ -1048,20 +1140,56 @@
   }, { threshold: 0.12 });
   reveals.forEach(r => revealObserver.observe(r));
 
-  // Signup handler
-  function handleSignup() {
-    const name = document.getElementById('name-input').value;
-    const email = document.getElementById('email-input').value;
-    const msg = document.getElementById('signup-msg');
+  // ─── FORMSPREE CONFIG ────────────────────────────────────────────────
+  // 1. Go to https://formspree.io and create a free account
+  // 2. Click "New Form", give it a name (e.g. "Volumen Subscribers")
+  // 3. Copy your form endpoint — it looks like: https://formspree.io/f/xAbCdEfG
+  // 4. Replace the placeholder below with your real endpoint
+  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/maqlbbnv';
+  // ─────────────────────────────────────────────────────────────────────
+
+  async function handleSignup() {
+    const name  = document.getElementById('name-input').value.trim();
+    const email = document.getElementById('email-input').value.trim();
+    const msg   = document.getElementById('signup-msg');
+    const btn   = document.getElementById('signup-btn');
+
+    // Basic validation
     if (!email || !email.includes('@')) {
       msg.style.color = '#bf2d1f';
       msg.textContent = 'Please enter a valid email. / Ingresa un correo válido.';
       return;
     }
-    msg.style.color = '#c9a040';
-    msg.textContent = `You're on the list${name ? ', ' + name : ''}! / ¡Estás en la lista${name ? ', ' + name : ''}!`;
-    document.getElementById('name-input').value = '';
-    document.getElementById('email-input').value = '';
+
+    // Loading state
+    btn.disabled = true;
+    btn.classList.add('loading');
+    msg.style.color = '#444';
+    msg.textContent = 'Sending… / Enviando…';
+
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ name, email })
+      });
+
+      if (response.ok) {
+        // Show success
+        document.getElementById('signup-form-wrap').style.display = 'none';
+        const success = document.getElementById('signup-success');
+        success.classList.add('visible');
+      } else {
+        const data = await response.json();
+        throw new Error(data?.errors?.[0]?.message || 'Submission failed');
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      msg.style.color = '#bf2d1f';
+      msg.textContent = 'Something went wrong. Please try again. / Algo salió mal.';
+      console.error('Formspree error:', err);
+    }
   }
 
   // Lang toggle (visual only)
@@ -1077,6 +1205,15 @@
   // Enter key signup
   document.getElementById('email-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') handleSignup();
+  });
+  document.getElementById('name-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleSignup();
+  });
+
+  // Add .gallery-item to cursor hover targets
+  document.querySelectorAll('.gallery-item').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
   });
 </script>
 </body>
