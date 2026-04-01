@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Editorial — Volumen Magazine</title>
+<meta name="description" content="Band interviews, concert photography, scene news, and cultural roots — the full Volumen editorial archive.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #080808;
+    --white: #f2ece0;
+    --red:   #bf2d1f;
+    --gold:  #c9a040;
+    --gray:  #181818;
+    --mid:   #444;
+    --dim:   #2a2a2a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── CURSOR ── */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--red);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: difference;
+  }
+  .cursor.hover { width: 40px; height: 40px; background: var(--gold); }
+
+  /* ── GRAIN ── */
+  .grain {
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9998; opacity: 0.35;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 24px 6vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(8,8,8,0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  nav::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 6vw; right: 6vw;
+    height: 1px;
+    background: linear-gradient(to right, var(--red), transparent 60%);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 10px;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--red); }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--mid);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover,
+  .nav-links a.active { color: var(--gold); }
+
+  .nav-lang {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .lang-btn {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--mid);
+    background: none;
+    border: none;
+    cursor: none;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .lang-btn.active { color: var(--red); }
+  .lang-btn:hover   { color: var(--white); }
+  .lang-sep { color: var(--dim); font-size: 10px; }
+
+  /* ── PAGE HERO ── */
+  .page-hero {
+    padding: 160px 6vw 80px;
+    border-bottom: 1px solid #111;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 80% 50%, rgba(191,45,31,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 80%, rgba(201,160,64,0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .page-hero-label {
+    font-size: 9px;
+    letter-spacing: 6px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .page-hero-label::before {
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 1px;
+    background: var(--red);
+  }
+
+  .page-hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 10vw, 130px);
+    line-height: 0.9;
+    letter-spacing: 3px;
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .page-hero-title span { color: var(--red); }
+
+  .page-hero-sub {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(14px, 1.5vw, 18px);
+    color: #666;
+    max-width: 560px;
+    line-height: 1.65;
+    position: relative;
+    z-index: 1;
+  }
+
+  .page-hero-bg-text {
+    position: absolute;
+    right: -2vw;
+    bottom: -10%;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30vw;
+    color: transparent;
+    -webkit-text-stroke: 1px #111;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.5;
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    padding: 32px 6vw;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #111;
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 70px;
+    background: rgba(8,8,8,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 50;
+  }
+
+  .filter-bar::-webkit-scrollbar { display: none; }
+
+  .filter-btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: var(--mid);
+    background: none;
+    border: none;
+    cursor: none;
+    padding: 8px 20px;
+    white-space: nowrap;
+    position: relative;
+    transition: color 0.3s;
+  }
+
+  .filter-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 20px; right: 20px;
+    height: 2px;
+    background: var(--red);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .filter-btn:hover { color: var(--white); }
+  .filter-btn.active { color: var(--white); }
+  .filter-btn.active::after { transform: scaleX(1); }
+
+  .filter-sep {
+    color: #222;
+    font-size: 18px;
+    user-select: none;
+  }
+
+  .filter-count {
+    margin-left: auto;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #333;
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding-right: 4px;
+  }
+
+  /* ── ARTICLES AREA ── */
+  .articles-area {
+    padding: 60px 6vw 120px;
+  }
+
+  /* ── FEATURED ARTICLE ── */
+  .featured-article {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 0;
+    margin-bottom: 4px;
+    background: var(--gray);
+    overflow: hidden;
+    position: relative;
+    cursor: none;
+    transition: background 0.4s;
+    min-height: 500px;
+  }
+
+  .featured-article:hover { background: #1c1c1c; }
+
+  .featured-article::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--red);
+    transition: height 0.5s ease;
+    z-index: 2;
+  }
+  .featured-article:hover::before { height: 100%; }
+
+  .featured-img {
+    position: relative;
+    overflow: hidden;
+    background: #0d0d0d;
+  }
+
+  .featured-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.5s ease;
+    filter: grayscale(20%) brightness(0.85);
+  }
+
+  .featured-article:hover .featured-img img {
+    transform: scale(1.04);
+    filter: grayscale(0%) brightness(1);
+  }
+
+  .featured-body {
+    padding: 52px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-left: 1px solid #111;
+  }
+
+  .featured-tag-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .cat-badge {
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+  }
+
+  .cat-badge.interview  { background: var(--red);  color: var(--white); }
+  .cat-badge.photo      { background: var(--gold); color: var(--black); }
+  .cat-badge.scene      { background: #222; color: var(--white); border: 1px solid #333; }
+  .cat-badge.roots      { background: transparent; color: var(--gold); border: 1px solid var(--gold); }
+
+  .featured-issue {
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: #444;
+    text-transform: uppercase;
+  }
+
+  .featured-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 3.5vw, 48px);
+    letter-spacing: 2px;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+
+  .featured-title-es {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(13px, 1.2vw, 16px);
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  .featured-excerpt {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.75;
+    flex-grow: 1;
+    margin-bottom: 32px;
+  }
+
+  .featured-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #1a1a1a;
+    padding-top: 24px;
+  }
+
+  .article-date {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #444;
+    text-transform: uppercase;
+  }
+
+  .read-btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: var(--white);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: color 0.3s, gap 0.3s;
+  }
+
+  .read-btn:hover { color: var(--red); gap: 16px; }
+
+  .read-btn svg {
+    width: 16px; height: 16px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    transition: transform 0.3s;
+  }
+
+  .read-btn:hover svg { transform: translateX(4px); }
+
+  /* ── ARTICLES GRID ── */
+  .articles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  @media (max-width: 1000px) { .articles-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px)  { .articles-grid { grid-template-columns: 1fr; } }
+
+  .article-card {
+    background: var(--gray);
+    overflow: hidden;
+    position: relative;
+    cursor: none;
+    transition: background 0.4s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .article-card:hover { background: #1c1c1c; }
+
+  .article-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--red);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+    z-index: 2;
+  }
+  .article-card:hover::before { transform: scaleX(1); }
+
+  .card-img {
+    position: relative;
+    overflow: hidden;
+    background: #0d0d0d;
+    aspect-ratio: 16 / 9;
+  }
+
+  .card-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.7s ease, filter 0.4s ease;
+    filter: grayscale(20%) brightness(0.85);
+  }
+
+  .article-card:hover .card-img img {
+    transform: scale(1.05);
+    filter: grayscale(0%) brightness(1);
+  }
+
+  /* No-image placeholder */
+  .card-img.no-photo {
+    background: #0f0f0f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-img.no-photo::after {
+    content: 'V';
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    color: #1a1a1a;
+  }
+
+  .card-body {
+    padding: 28px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .card-tag-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(20px, 2vw, 26px);
+    letter-spacing: 2px;
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .card-title-es {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+
+  .card-excerpt {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.7;
+    flex-grow: 1;
+    margin-bottom: 24px;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #1a1a1a;
+    padding-top: 16px;
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 24px;
+    text-align: center;
+    gap: 16px;
+    grid-column: 1 / -1;
+  }
+
+  .empty-state.visible { display: flex; }
+
+  .empty-v {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    color: #1a1a1a;
+    line-height: 1;
+  }
+
+  .empty-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 4px;
+    color: #333;
+  }
+
+  .empty-sub {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #2a2a2a;
+    text-transform: uppercase;
+  }
+
+  /* ── SECTION DIVIDER ── */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 48px 0 32px;
+  }
+
+  .divider-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 5px;
+    color: var(--red);
+    white-space: nowrap;
+  }
+
+  .divider-line {
+    flex-grow: 1;
+    height: 1px;
+    background: linear-gradient(to right, #222, transparent);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal.delay-1 { transition-delay: 0.12s; }
+  .reveal.delay-2 { transition-delay: 0.24s; }
+  .reveal.delay-3 { transition-delay: 0.36s; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 48px 6vw;
+    border-top: 1px solid #111;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 8px;
+  }
+  .footer-logo span { color: var(--red); }
+
+  .footer-copy {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--mid);
+    text-transform: uppercase;
+  }
+
+  .footer-social { display: flex; gap: 24px; }
+
+  .footer-social a {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--mid);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .footer-social a:hover { color: var(--gold); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .featured-article {
+      grid-template-columns: 1fr;
+      min-height: unset;
+    }
+    .featured-img { aspect-ratio: 16 / 9; min-height: 260px; }
+    .featured-body { padding: 32px 28px; border-left: none; border-top: 1px solid #111; }
+  }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .filter-bar { gap: 4px; }
+    .filter-btn { padding: 8px 12px; font-size: 11px; }
+    footer { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="grain"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo"><span>V</span>OLUMEN</a>
+  <ul class="nav-links">
+    <li><a href="index.html#manifesto">About / Acerca</a></li>
+    <li><a href="editorial.html" class="active">Editorial</a></li>
+    <li><a href="index.html#gallery">Photos / Fotos</a></li>
+    <li><a href="index.html#signup">Subscribe / Suscríbete</a></li>
+  </ul>
+  <div class="nav-lang">
+    <button class="lang-btn active" id="btn-en">EN</button>
+    <span class="lang-sep">/</span>
+    <button class="lang-btn" id="btn-es">ES</button>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-bg-text">V</div>
+  <div class="page-hero-label">The Magazine · La Revista</div>
+  <h1 class="page-hero-title">THE<br><span>EDITORIAL</span></h1>
+  <p class="page-hero-sub">Band interviews, live photography, scene news, and cultural roots — everything Latin rock, in both languages.</p>
+</section>
+
+<!-- FILTER BAR -->
+<div class="filter-bar" id="filter-bar">
+  <button class="filter-btn active" data-filter="all" id="filter-all">All</button>
+  <span class="filter-sep">·</span>
+  <button class="filter-btn" data-filter="interview" id="filter-interview">Interviews</button>
+  <span class="filter-sep">·</span>
+  <button class="filter-btn" data-filter="photo" id="filter-photo">Photo Review</button>
+  <span class="filter-sep">·</span>
+  <button class="filter-btn" data-filter="scene" id="filter-scene">Scene</button>
+  <span class="filter-sep">·</span>
+  <button class="filter-btn" data-filter="roots" id="filter-roots">Roots</button>
+  <span class="filter-count" id="article-count">— articles</span>
+</div>
+
+<!-- ARTICLES -->
+<main class="articles-area">
+
+  <!-- ═══════════════════════════════════════════════
+       HOW TO ADD A NEW ARTICLE:
+
+       FEATURED (large): Copy the <article class="featured-article"> block below.
+       REGULAR CARD:     Copy any <article class="article-card"> block.
+
+       Set data-category to one of: interview | photo | scene | roots
+       Replace the title, excerpt, date, and image src.
+       ═══════════════════════════════════════════════ -->
+
+  <!-- FEATURED ARTICLE -->
+  <article class="featured-article reveal" data-category="interview">
+    <div class="featured-img">
+      <img src="photos/singer-swirl.jpg" alt="Live vocalist under warm stage lights" loading="lazy" style="object-position: center top;">
+    </div>
+    <div class="featured-body">
+      <div>
+        <div class="featured-tag-row">
+          <span class="cat-badge interview">Interview</span>
+          <span class="featured-issue">Vol. 01 · Issue 001</span>
+        </div>
+        <div class="featured-title">BETWEEN TWO STAGES</div>
+        <div class="featured-title-es">Entre dos escenarios</div>
+        <p class="featured-excerpt">
+          Eyes closed, mic raised — we sat down with one of Austin's most compelling Latin rock vocalists to talk about touring between two languages, the weight of the room, and what it means to finally have a scene that feels like home.
+        </p>
+      </div>
+      <div class="featured-meta">
+        <span class="article-date">Coming Soon</span>
+        <a href="#" class="read-btn">
+          Read More
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <!-- ARTICLE GRID -->
+  <div class="articles-grid" id="articles-grid">
+
+    <!-- PHOTO REVIEW -->
+    <article class="article-card reveal delay-1" data-category="photo">
+      <div class="card-img">
+        <img src="photos/guitarist-stage.jpg" alt="Guitarist under purple stage lights" loading="lazy" style="object-position: center top;">
+      </div>
+      <div class="card-body">
+        <div class="card-tag-row">
+          <span class="cat-badge photo">Photo Review</span>
+          <span class="article-date">Coming Soon</span>
+        </div>
+        <div class="card-title">PURPLE HAZE, FLYING V</div>
+        <div class="card-title-es">Luz morada, guitarra en llamas</div>
+        <p class="card-excerpt">Denim, sunglasses, and a Flying V under purple smoke — a front-row look at one of Latin rock's most commanding stage presences. Photo: Reinaldo.photos</p>
+        <div class="card-footer">
+          <a href="#" class="read-btn">
+            View
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- SCENE -->
+    <article class="article-card reveal delay-2" data-category="scene">
+      <div class="card-img">
+        <img src="photos/viloria-crowd.jpg" alt="Viloria crowd" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-tag-row">
+          <span class="cat-badge scene">Scene</span>
+          <span class="article-date">Coming Soon</span>
+        </div>
+        <div class="card-title">AUSTIN'S NEXT WAVE</div>
+        <div class="card-title-es">La próxima ola de Austin</div>
+        <p class="card-excerpt">String lights, intimate rooms, and an audience that knew every word. Viloria is redefining what a Latin rock show feels like.</p>
+        <div class="card-footer">
+          <a href="#" class="read-btn">
+            Read
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- ROOTS -->
+    <article class="article-card reveal delay-3" data-category="roots">
+      <div class="card-img">
+        <img src="photos/singer-closeup.jpg" alt="Singer close-up" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-tag-row">
+          <span class="cat-badge roots">Roots</span>
+          <span class="article-date">Coming Soon</span>
+        </div>
+        <div class="card-title">THE DIASPORA PLAYS LOUD</div>
+        <div class="card-title-es">La diáspora toca fuerte</div>
+        <p class="card-excerpt">A long-form essay on how Rock en Español crossed borders and became the sound of a generation that refused to choose one identity.</p>
+        <div class="card-footer">
+          <a href="#" class="read-btn">
+            Read
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- INTERVIEW -->
+    <article class="article-card reveal delay-1" data-category="interview">
+      <div class="card-img">
+        <img src="photos/singer-bw.jpg" alt="Vocalist in sequined jacket, black and white" loading="lazy" style="object-position: center 20%;">
+      </div>
+      <div class="card-body">
+        <div class="card-tag-row">
+          <span class="cat-badge interview">Interview</span>
+          <span class="article-date">Coming Soon</span>
+        </div>
+        <div class="card-title">ON TOUR, OUT OF BOUNDS</div>
+        <div class="card-title-es">De gira, sin fronteras</div>
+        <p class="card-excerpt">Six cities, two languages, one van — an emerging act talks about what it costs and what it means to tour as a Latin rock band in the U.S.</p>
+        <div class="card-footer">
+          <a href="#" class="read-btn">
+            Read
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- SCENE -->
+    <article class="article-card reveal delay-2" data-category="scene">
+      <div class="card-img no-photo"></div>
+      <div class="card-body">
+        <div class="card-tag-row">
+          <span class="cat-badge scene">Scene</span>
+          <span class="article-date">Coming Soon</span>
+        </div>
+        <div class="card-title">NEW RELEASES: SPRING 2026</div>
+        <div class="card-title-es">Nuevos lanzamientos: Primavera 2026</div>
+        <p class="card-excerpt">The records we've had on repeat — from emerging Austin acts to heavyweights coming off a Latin American tour cycle.</p>
+        <div class="card-footer">
+          <a href="#" class="read-btn">
+            Read
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- ROOTS -->
+    <article class="article-card reveal delay-3" data-category="roots">
+      <div class="card-img no-photo"></div>
+      <div class="card-body">
+        <div class="card-tag-row">
+          <span class="cat-badge roots">Roots</span>
+          <span class="article-date">Coming Soon</span>
+        </div>
+        <div class="card-title">CITY PROFILE: SAN ANTONIO</div>
+        <div class="card-title-es">Perfil de ciudad: San Antonio</div>
+        <p class="card-excerpt">Where Tex-Mex roots meet electric guitar — tracing how San Antonio quietly became one of the most important cities in Latin rock history.</p>
+        <div class="card-footer">
+          <a href="#" class="read-btn">
+            Read
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- EMPTY STATE (shown when filter has no results) -->
+    <div class="empty-state" id="empty-state">
+      <div class="empty-v">V</div>
+      <div class="empty-title">Coming Soon</div>
+      <div class="empty-sub">More articles dropping soon · Próximamente</div>
+    </div>
+
+  </div><!-- /articles-grid -->
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span>V</span>OLUMEN</div>
+  <div class="footer-copy">© 2026 Volumen Magazine · Austin, Texas · All Rights Reserved</div>
+  <div class="footer-social">
+    <a href="#">Instagram</a>
+    <a href="#">Twitter / X</a>
+    <a href="index.html#signup">Subscribe</a>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+  });
+
+  document.querySelectorAll('a, button, .article-card, .featured-article').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.08 });
+  reveals.forEach(r => revealObserver.observe(r));
+
+  // ── CATEGORY FILTER ──
+  const filterBtns    = document.querySelectorAll('.filter-btn');
+  const allArticles   = document.querySelectorAll('[data-category]');
+  const emptyState    = document.getElementById('empty-state');
+  const articleCount  = document.getElementById('article-count');
+
+  function updateCount(visible) {
+    articleCount.textContent = `${visible} article${visible !== 1 ? 's' : ''}`;
+  }
+
+  function filterArticles(category) {
+    let visible = 0;
+    allArticles.forEach(article => {
+      const match = category === 'all' || article.dataset.category === category;
+      article.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+    emptyState.classList.toggle('visible', visible === 0);
+    updateCount(visible);
+  }
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      filterArticles(btn.dataset.filter);
+    });
+  });
+
+  // Initial count
+  updateCount(allArticles.length);
+
+  // Lang toggle
+  document.getElementById('btn-en').addEventListener('click', function() {
+    this.classList.add('active');
+    document.getElementById('btn-es').classList.remove('active');
+  });
+  document.getElementById('btn-es').addEventListener('click', function() {
+    this.classList.add('active');
+    document.getElementById('btn-en').classList.remove('active');
+  });
+</script>
+</body>
+</html>
