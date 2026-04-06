@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Interviews — Volumen Magazine</title>
-<meta name="description" content="Conversations with the artists, fans, and creators defining the new bilingual music scene.">
+<title>Interview — Volumen Magazine</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -47,7 +46,6 @@
     .cursor { display: none; }
     body { cursor: auto; }
   }
-
   .cursor.hover { width: 40px; height: 40px; background: var(--gold); }
 
   /* ── GRAIN ── */
@@ -66,8 +64,16 @@
     justify-content: space-between;
     align-items: center;
     background: rgba(8,8,8,0.85);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+
+  nav::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 6vw; right: 6vw;
+    height: 1px;
+    background: linear-gradient(to right, var(--red), transparent 60%);
   }
 
   .nav-logo {
@@ -96,167 +102,206 @@
   .nav-links a:hover,
   .nav-links a.active { color: var(--gold); }
 
-  /* ── PAGE HERO ── */
-  .page-hero {
-    padding: 160px 6vw 80px;
-    border-bottom: 1px solid #111;
+  /* ── ARTICLE HERO ── */
+  .article-hero {
+    height: 85vh;
+    min-height: 600px;
     position: relative;
-    overflow: hidden;
-  }
-
-  .page-hero-label {
-    font-size: 9px;
-    letter-spacing: 6px;
-    color: var(--red);
-    text-transform: uppercase;
-    margin-bottom: 24px;
     display: flex;
-    align-items: center;
-    gap: 12px;
+    align-items: flex-end;
+    padding: 6vw;
   }
 
-  .page-hero-label::before {
-    content: '';
+  .article-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .article-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(0.6) contrast(1.1);
+  }
+
+  .article-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 30%, rgba(8,8,8,0.95) 100%);
+    z-index: 2;
+  }
+
+  .article-hero-content {
+    position: relative;
+    z-index: 3;
+    max-width: 900px;
+  }
+
+  .article-badge {
     display: inline-block;
-    width: 32px;
-    height: 1px;
     background: var(--red);
+    color: var(--white);
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    margin-bottom: 24px;
+    font-weight: 500;
   }
 
-  .page-hero-title {
+  .article-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(42px, 10vw, 130px);
-    line-height: 0.9;
-    letter-spacing: 3px;
-    margin-bottom: 32px;
+    font-size: clamp(40px, 6vw, 90px);
+    line-height: 1.05;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    color: var(--white);
   }
-  .page-hero-title span { color: var(--red); }
 
-  .page-hero-sub {
+  .article-subtitle {
     font-family: 'Playfair Display', serif;
     font-style: italic;
-    font-size: clamp(14px, 1.5vw, 18px);
-    color: #666;
-    max-width: 560px;
-    line-height: 1.65;
+    font-size: clamp(16px, 2vw, 24px);
+    color: var(--gold);
+    margin-bottom: 32px;
   }
 
-  /* ── INTERVIEWS GRID ── */
-  .interviews-area {
-    padding: 60px 6vw 120px;
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #888;
+    text-transform: uppercase;
   }
 
-  .interviews-grid {
+  .article-meta span {
+    color: var(--white);
+  }
+
+  /* ── ARTICLE CONTENT ── */
+  .article-body {
+    background: var(--black);
+    padding: 80px 6vw 120px;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 3fr 1fr;
     gap: 40px;
   }
 
-  @media (max-width: 768px) {
-    .interviews-grid { grid-template-columns: 1fr; }
+  .article-content {
+    grid-column: 2;
+    max-width: 760px;
   }
 
-  .interview-card {
-    background: var(--gray);
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    overflow: hidden;
-    transition: transform 0.4s ease, background 0.4s;
-    border: 1px solid #111;
-    text-decoration: none;
-    color: inherit;
+  .article-content p {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    line-height: 1.8;
+    color: #ddd;
+    margin-bottom: 32px;
   }
 
-  .interview-card:hover {
-    background: #1c1c1c;
-    transform: translateY(-5px);
+  .article-content p.lead {
+    font-size: 24px;
+    line-height: 1.6;
+    color: var(--white);
+    margin-bottom: 48px;
   }
 
-  .card-img {
-    position: relative;
-    overflow: hidden;
-    aspect-ratio: 1/1;
-  }
-
-  .card-img img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    filter: grayscale(100%) brightness(0.7);
-    transition: filter 0.6s ease, transform 0.6s ease;
-  }
-
-  .interview-card:hover .card-img img {
-    filter: grayscale(0%) brightness(1);
-    transform: scale(1.05);
-  }
-
-  .card-content {
-    padding: 32px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .card-tag {
-    font-size: 8px;
-    letter-spacing: 3px;
+  /* Interview Q&A styling */
+  .question {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 1px;
     color: var(--red);
     text-transform: uppercase;
+    margin-top: 48px;
     margin-bottom: 12px;
   }
 
-  .card-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 32px;
-    letter-spacing: 2px;
-    line-height: 1;
-    margin-bottom: 8px;
+  .answer {
+    margin-bottom: 40px;
   }
-
-  .card-subtitle {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: 14px;
+  
+  .answer strong {
     color: var(--gold);
-    margin-bottom: 20px;
-  }
-
-  .read-more {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 12px;
-    letter-spacing: 3px;
-    color: var(--white);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: gap 0.3s, color 0.3s;
-  }
-
-  .interview-card:hover .read-more {
-    color: var(--red);
-    gap: 12px;
-  }
-
-  /* ── ANIMATIONS ── */
-  .reveal {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.8s ease-out;
-  }
-
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  footer {
-    padding: 48px 6vw;
-    border-top: 1px solid #111;
-    text-align: center;
-    font-size: 10px;
-    letter-spacing: 3px;
-    color: var(--mid);
+    letter-spacing: 2px;
     text-transform: uppercase;
+    margin-right: 8px;
+  }
+
+  .article-content blockquote {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 4vw, 56px);
+    line-height: 1.1;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin: 80px -4vw 80px 0;
+    padding-left: 32px;
+    border-left: 4px solid var(--red);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 80px 6vw 40px;
+    border-top: 1px solid #111;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    background: var(--black);
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    letter-spacing: 14px;
+    color: #333;
+  }
+  .footer-logo span { color: var(--red); }
+
+  .footer-copy {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #444;
+  }
+
+  .footer-social {
+    display: flex;
+    gap: 32px;
+  }
+
+  .footer-social a {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--mid);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .footer-social a:hover { color: var(--gold); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .article-body { grid-template-columns: 1fr; }
+    .article-content { grid-column: 1; max-width: 100%; }
+    .article-content blockquote { margin-right: 0; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 20px 6vw; }
+    .nav-links { display: none; }
+    .article-hero { min-height: 50vh; }
+    .article-content p { font-size: 17px; }
+    .article-content p.lead { font-size: 20px; }
+    footer { flex-direction: column; align-items: center; gap: 40px; text-align: center; }
   }
 </style>
 </head>
@@ -268,92 +313,89 @@
 <nav>
   <a href="index.html" class="nav-logo"><span>V</span>OLUMEN</a>
   <ul class="nav-links">
-    <li><a href="index.html#manifesto">About / Acerca</a></li>
-    <li><a href="editorial.html">Editorial</a></li>
-    <li><a href="interviews.html" class="active">Interviews</a></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="editorial.html" class="active">Editorial</a></li>
     <li><a href="contact.html">Contact / Contacto</a></li>
   </ul>
 </nav>
 
-<section class="page-hero">
-  <div class="page-hero-label">The Conversations · Las Conversaciones</div>
-  <h1 class="page-hero-title">THE<br><span>INTERVIEWS</span></h1>
-  <p class="page-hero-sub">Unfiltered dialogues where two cultures meet. We talk to the artists defining the pulse of the scene.</p>
-</section>
-
-<main class="interviews-area">
-  <div class="interviews-grid">
-    
-    <!-- EXAMPLE INTERVIEW 1 -->
-    <a href="#" class="interview-card reveal">
-      <div class="card-img">
-        <img src="photos/band-monochrome.jpg" alt="Vocalist interview">
-      </div>
-      <div class="card-content">
-        <div class="card-tag">Issue 001</div>
-        <h2 class="card-title">THE FRONTMAN</h2>
-        <p class="card-subtitle">Liderando el cambio</p>
-        <span class="read-more">Read Entry / Leer →</span>
-      </div>
-    </a>
-
-    <!-- EXAMPLE INTERVIEW 2 -->
-    <a href="#" class="interview-card reveal" style="transition-delay: 0.2s;">
-      <div class="card-img">
-        <img src="photos/drummer-neon.jpg" alt="The rhythm interview">
-      </div>
-      <div class="card-content">
-        <div class="card-tag">Coming Soon</div>
-        <h2 class="card-title">NEON RHYTHMS</h2>
-        <p class="card-subtitle">Ritmos de neón</p>
-        <span class="read-more">Read Entry / Leer →</span>
-      </div>
-    </a>
-
-    <!-- EXAMPLE INTERVIEW 3 -->
-    <a href="#" class="interview-card reveal" style="transition-delay: 0.4s;">
-      <div class="card-img">
-        <img src="photos/drummer-rear.jpg" alt="The roots interview">
-      </div>
-      <div class="card-content">
-        <div class="card-tag">Archive</div>
-        <h2 class="card-title">STILL STANDING</h2>
-        <p class="card-subtitle">Aún de pie</p>
-        <span class="read-more">Read Entry / Leer →</span>
-      </div>
-    </a>
-
+<!-- HERO SECTION: Replace the background image and title for each new interview -->
+<header class="article-hero">
+  <div class="article-hero-bg">
+    <!-- Replace this image with the band's photo -->
+    <img src="photos/band-monochrome.jpg" alt="Band Interview Cover">
   </div>
+  <div class="article-hero-overlay"></div>
+  <div class="article-hero-content">
+    <div class="article-badge">EXCLUSIVE INTERVIEW</div>
+    
+    <!-- Replace Title and Subtitle -->
+    <h1 class="article-title">ECHOES OF THE UNDERGROUND:<br>A CONVERSATION WITH THE BAND</h1>
+    <p class="article-subtitle">Exploring their new album and the roots of modern Latin rock.</p>
+    
+    <div class="article-meta">
+      <div>AUTHOR: <span>REINALDO RAMIREZ</span></div>
+      <div>PHOTOGRAPHY: <span>REINALDO RAMIREZ</span></div>
+      <div>PUBLISHED: <span>APRIL 2026</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ARTICLE CONTENT: This is where you paste your interview text -->
+<main class="article-body">
+  <article class="article-content">
+    
+    <!-- Intro Paragraph -->
+    <p class="lead">From the underground clubs of Miami to the main stages of Austin, their sound has evolved into a relentless force. We sat down to discuss their upcoming album.</p>
+
+    <!-- Regular Paragraph -->
+    <p>The energy in the green room was palpable. Just hours before their biggest headline show to date, the band seemed entirely unbothered by the pressure. Since the release of their debut EP, they have been riding a wave of critical acclaim, blending traditional Latin rhythms with heavy, distorted riffs.</p>
+    
+    <!-- Q&A Format -->
+    <div class="question">Q: How did the new album process differ from your first EP?</div>
+    <div class="answer">
+      <strong>Vocalist:</strong> "It was completely different. Back then, we were just recording in a garage with whatever mics we could find. This time, we had the luxury of a studio, but we intentionally tried to keep that gritty, garage-band soul intact. We tracked almost everything live."
+    </div>
+
+    <div class="question">Q: What are the main themes you tackle on this record?</div>
+    <div class="answer">
+      <strong>Guitarist:</strong> "It's a lot about belonging. Growing up between two cultures, you always feel like an outsider. The heavy guitars are the frustration, and the rhythms are the roots pulling us back home."
+    </div>
+
+    <!-- Pull Quote -->
+    <blockquote>"The heavy guitars are the frustration, and the rhythms are the roots pulling us back home."</blockquote>
+
+    <div class="question">Q: What's next after this tour?</div>
+    <div class="answer">
+      <strong>Vocalist:</strong> "Sleep. Just kidding. We're heading straight to Mexico City for a festival, and then getting back into the studio. The momentum is here, and we don't want to stop."
+    </div>
+
+  </article>
 </main>
 
 <footer>
-  VOLUMEN MAGAZINE &copy; 2026. ALL RIGHTS RESERVED.
+  <div class="footer-logo"><span>V</span>OLUMEN</div>
+  <div class="footer-copy">© 2026 Volumen Magazine · Austin, Texas · All Rights Reserved</div>
+  <div class="footer-social">
+    <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener">Twitter / X</a>
+    <a href="contact.html">Contact</a>
+  </div>
 </footer>
 
 <script>
-  // Custom Cursor
+  // Custom cursor
   const cursor = document.getElementById('cursor');
   document.addEventListener('mousemove', e => {
     cursor.style.left = e.clientX + 'px';
     cursor.style.top = e.clientY + 'px';
   });
 
-  document.querySelectorAll('a, button').forEach(link => {
-    link.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-    link.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  // Hover effects for cursor
+  document.querySelectorAll('a').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
   });
-
-  // Reveal Animation
-  const observerOptions = { threshold: 0.1 };
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, observerOptions);
-
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 
 </body>

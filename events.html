@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Events — Volumen Magazine — Austin, TX</title>
+  <meta name="description"
+    content="The definitive guide to Latin Rock, underground shows, and festivals in the live music capital: Austin, Texas.">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --black: #080808;
+      --white: #f2ece0;
+      --red: #bf2d1f;
+      --gold: #c9a040;
+      --gray: #141414;
+      --mid: #444;
+      --dim: #2a2a2a;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── CURSOR ── */
+    .cursor {
+      width: 10px;
+      height: 10px;
+      background: var(--red);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+      mix-blend-mode: difference;
+    }
+
+    @media (hover: none) {
+      .cursor {
+        display: none;
+      }
+
+      body {
+        cursor: auto;
+      }
+    }
+
+    .cursor.hover {
+      width: 40px;
+      height: 40px;
+      background: var(--gold);
+    }
+
+    /* ── GRAIN ── */
+    .grain {
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0.35;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 24px 6vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(8, 8, 8, 0.85);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 10px;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-logo span {
+      color: var(--red);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--gold);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      height: 70vh;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+      padding: 0 6vw;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--dim);
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 70% 30%, rgba(191, 45, 31, 0.15) 0%, transparent 60%);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+    }
+
+    .hero-label {
+      font-size: 9px;
+      letter-spacing: 6px;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-label::before {
+      content: '';
+      width: 30px;
+      height: 1px;
+      background: var(--red);
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(50px, 12vw, 160px);
+      line-height: 0.9;
+      letter-spacing: 2px;
+      color: var(--white);
+      margin-bottom: 32px;
+    }
+
+    .hero-title span {
+      color: var(--red);
+    }
+
+    .hero-sub {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(16px, 2vw, 24px);
+      color: #666;
+    }
+
+    /* ── EVENTS LIST ── */
+    .events-section {
+      padding: 100px 6vw;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 60px;
+      border-bottom: 1px solid #111;
+      padding-bottom: 24px;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 56px;
+      letter-spacing: 4px;
+    }
+
+    .event-filters {
+      display: flex;
+      gap: 24px;
+    }
+
+    .filter-tab {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--mid);
+      padding-bottom: 8px;
+      cursor: none;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .filter-tab.active {
+      color: var(--white);
+    }
+
+    .filter-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--red);
+    }
+
+    /* ── EVENT CARD ── */
+    .event-card {
+      display: grid;
+      grid-template-columns: 100px 1fr 200px;
+      align-items: center;
+      padding: 40px 0;
+      border-bottom: 1px solid #111;
+      transition: background 0.3s, padding-left 0.3s;
+      cursor: none;
+    }
+
+    .event-card:hover {
+      background: rgba(255, 255, 255, 0.02);
+      padding-left: 20px;
+    }
+
+    .event-date {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      color: var(--red);
+      line-height: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .event-date span {
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: var(--mid);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .event-info {
+      padding: 0 40px;
+    }
+
+    .event-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      color: var(--white);
+    }
+
+    .event-venue {
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    .event-meta {
+      font-size: 11px;
+      color: #444;
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .ticket-btn {
+      justify-self: end;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      letter-spacing: 4px;
+      color: var(--white);
+      text-decoration: none;
+      padding: 14px 28px;
+      border: 1px solid var(--dim);
+      transition: all 0.3s;
+    }
+
+    .ticket-btn:hover {
+      background: var(--white);
+      color: var(--black);
+      border-color: var(--white);
+    }
+
+    /* ── VENUE SPOTLIGHT ── */
+    .spotlight {
+      padding: 100px 6vw;
+      background: var(--gray);
+    }
+
+    .spotlight-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+    }
+
+    .venue-card {
+      position: relative;
+      height: 400px;
+      overflow: hidden;
+    }
+
+    .venue-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(1) brightness(0.6);
+      transition: transform 0.6s;
+    }
+
+    .venue-card:hover img {
+      transform: scale(1.05);
+      filter: grayscale(0) brightness(0.8);
+    }
+
+    .venue-overlay {
+      position: absolute;
+      inset: 0;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    }
+
+    .venue-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      letter-spacing: 3px;
+      margin-bottom: 4px;
+    }
+
+    .venue-tag {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--red);
+      text-transform: uppercase;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 100px 6vw 40px;
+      border-top: 1px solid #111;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 40px;
+      letter-spacing: 14px;
+      color: #333;
+    }
+
+    .footer-logo span {
+      color: var(--red);
+    }
+
+    .footer-copy {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #444;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 32px;
+    }
+
+    .footer-social a {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-social a:hover {
+      color: var(--gold);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .event-card {
+        grid-template-columns: 100px 1fr;
+        gap: 20px;
+      }
+
+      .ticket-btn {
+        grid-column: 1 / -1;
+        justify-self: start;
+        margin-top: 20px;
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 24px;
+      }
+
+      footer {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="grain"></div>
+
+  <nav>
+    <a href="index.html" class="nav-logo"><span>V</span>OLUMEN</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="editorial.html">Editorial</a></li>
+      <li><a href="events.html" class="active">Live Events</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-label">AUSTIN SCENE GUIDE</div>
+      <h1 class="hero-title">THE <span>LIVE</span> SESSIONS</h1>
+      <p class="hero-sub">The definitive calendar for Latin Rock, Psych, and Heavy Sounds in the heart of Texas.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="events-section">
+      <div class="section-header">
+        <h2 class="section-title">UPCOMING SHOWS</h2>
+        <div class="event-filters">
+          <div class="filter-tab active">ALL SHOWS</div>
+          <div class="filter-tab">FESTIVALS</div>
+          <div class="filter-tab">LOCAL SCENE</div>
+        </div>
+      </div>
+
+      <!-- EVENT 1 -->
+      <div class="event-card">
+        <div class="event-date">APR 12 <span>SATURDAY</span></div>
+        <div class="event-info">
+          <h3 class="event-title">SXSW RECAP: POST-SCENE SHOWCASE</h3>
+          <p class="event-venue">📍 THE MOHAWK — AUSTIN, TX</p>
+          <p class="event-meta">DOORS 8:00 PM • 18+</p>
+        </div>
+        <a href="https://mohawkaustin.com" target="_blank" rel="noopener" class="ticket-btn">TICKETS →</a>
+      </div>
+
+      <!-- EVENT 2 -->
+      <div class="event-card">
+        <div class="event-date">APR 28 <span>SUNDAY</span></div>
+        <div class="event-info">
+          <h3 class="event-title">AUSTIN PSYCH FEST 2026</h3>
+          <p class="event-venue">📍 THE FAR OUT LOUNGE</p>
+          <p class="event-meta">FESTIVAL PASSES REQUIRED • ALL AGES</p>
+        </div>
+        <a href="https://levitation.fm" target="_blank" rel="noopener" class="ticket-btn">BUY PASS →</a>
+      </div>
+
+      <!-- EVENT 3 -->
+      <div class="event-card">
+        <div class="event-date">MAY 05 <span>TUESDAY</span></div>
+        <div class="event-info">
+          <h3 class="event-title">LOS ESPANTOS + GUEST BAND</h3>
+          <p class="event-venue">📍 HOTEL VEGAS — AUSTIN, TX</p>
+          <p class="event-meta">DOORS 9:00 PM • 21+</p>
+        </div>
+        <a href="https://texashotelvegas.com" target="_blank" rel="noopener" class="ticket-btn">TICKETS →</a>
+      </div>
+
+      <!-- EVENT 4 -->
+      <div class="event-card">
+        <div class="event-date">MAY 15 <span>FRIDAY</span></div>
+        <div class="event-info">
+          <h3 class="event-title">VOLUMEN PRESENTS: RAZA ROCK NIGHT</h3>
+          <p class="event-venue">📍 EMOS AUSTIN</p>
+          <p class="event-meta">DOORS 7:00 PM • ALL AGES</p>
+        </div>
+        <a href="https://www.emosaustin.com" target="_blank" rel="noopener" class="ticket-btn">TICKETS →</a>
+      </div>
+    </section>
+
+    <section class="spotlight">
+      <div class="section-header">
+        <h2 class="section-title">VENUE SPOTLIGHT</h2>
+      </div>
+      <div class="spotlight-grid">
+        <div class="venue-card">
+          <img src="photos/wide-stage-view.jpg" alt="The Mohawk Austin">
+          <div class="venue-overlay">
+            <div class="venue-tag">ICONIC SPOT</div>
+            <h3 class="venue-name">THE MOHAWK</h3>
+          </div>
+        </div>
+        <div class="venue-card">
+          <img src="photos/viloria-crowd.jpg" alt="Hotel Vegas Austin">
+          <div class="venue-overlay">
+            <div class="venue-tag">UNDERGROUND HEART</div>
+            <h3 class="venue-name">HOTEL VEGAS</h3>
+          </div>
+        </div>
+        <div class="venue-card">
+          <img src="photos/drummer-rear.jpg" alt="Emo's Austin">
+          <div class="venue-overlay">
+            <div class="venue-tag">BIG STAGE</div>
+            <h3 class="venue-name">EMO'S AUSTIN</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-logo"><span>V</span>OLUMEN</div>
+    <div class="footer-copy">© 2026 Volumen Magazine · Austin, Texas · All Rights Reserved</div>
+    <div class="footer-social">
+      <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener">Twitter / X</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+    document.querySelectorAll('a, .filter-tab').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+
+    // Tab switching effect (Visual only)
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', function () {
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+
+</html>

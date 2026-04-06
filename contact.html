@@ -69,8 +69,8 @@
     justify-content: space-between;
     align-items: center;
     background: rgba(8,8,8,0.85);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
   }
 
   nav::after {
@@ -340,6 +340,9 @@
     margin-bottom: 24px;
   }
 
+  .success-title { margin: 0; }
+  .success-text { text-align: center; }
+
   .form-label {
     display: block;
     font-size: 10px;
@@ -582,7 +585,7 @@
     <div class="social-grid">
       
       <!-- INSTAGRAM -->
-      <a href="https://instagram.com/reinaldo.photos" target="_blank" class="social-card">
+      <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener" class="social-card">
         <svg class="social-icon" viewBox="0 0 24 24">
           <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
           <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
@@ -595,7 +598,7 @@
       </a>
 
       <!-- TWITTER / X -->
-      <a href="https://twitter.com/reinaldor93" target="_blank" class="social-card">
+      <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener" class="social-card">
         <svg class="social-icon" viewBox="0 0 24 24">
           <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
           <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
@@ -648,8 +651,8 @@
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
       </div>
-      <h2 class="form-title" style="margin: 0;">LOUD AND CLEAR</h2>
-      <p class="form-sub" style="text-align: center;">Message received. We usually review pitches and inquiries within 48 hours.<br><br><em>Mensaje recibido. Responderemos pronto.</em></p>
+      <h2 class="form-title success-title">LOUD AND CLEAR</h2>
+      <p class="form-sub success-text">Message received. We usually review pitches and inquiries within 48 hours.<br><br><em>Mensaje recibido. Responderemos pronto.</em></p>
     </div>
 
   </div>
@@ -661,8 +664,8 @@
   <div class="footer-logo"><span>V</span>OLUMEN</div>
   <div class="footer-copy">© 2026 Volumen Magazine · Austin, Texas · All Rights Reserved</div>
   <div class="footer-social">
-    <a href="https://instagram.com/reinaldo.photos" target="_blank">Instagram</a>
-    <a href="https://twitter.com/reinaldor93" target="_blank">Twitter / X</a>
+    <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener">Twitter / X</a>
     <a href="contact.html">Contact</a>
   </div>
 </footer>

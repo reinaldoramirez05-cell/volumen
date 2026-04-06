@@ -66,8 +66,8 @@
     justify-content: space-between;
     align-items: center;
     background: rgba(8,8,8,0.85);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
   }
 
   nav::after {
@@ -194,6 +194,7 @@
     -webkit-text-stroke: 1px #111;
     line-height: 1;
     pointer-events: none;
+    -webkit-user-select: none;
     user-select: none;
     opacity: 0.5;
   }
@@ -206,16 +207,20 @@
     gap: 8px;
     border-bottom: 1px solid #111;
     overflow-x: auto;
-    scrollbar-width: none;
+    -ms-overflow-style: none; /* IE and Edge */
     position: sticky;
     top: 70px;
     background: rgba(8,8,8,0.92);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     z-index: 50;
   }
 
-  .filter-bar::-webkit-scrollbar { display: none; }
+  @supports (scrollbar-width: none) {
+    .filter-bar { scrollbar-width: none; } /* Firefox and Chrome 121+ */
+  }
+
+  .filter-bar::-webkit-scrollbar { display: none; } /* Chrome, Safari and Opera */
 
   .filter-btn {
     font-family: 'Bebas Neue', sans-serif;
@@ -249,6 +254,7 @@
   .filter-sep {
     color: #222;
     font-size: 18px;
+    -webkit-user-select: none;
     user-select: none;
   }
 
@@ -313,6 +319,8 @@
     transform: scale(1.04);
     filter: grayscale(0%) brightness(1);
   }
+
+  .img-pos-20 { object-position: center 20%; }
 
   .featured-body {
     padding: 52px 48px;
@@ -734,7 +742,7 @@
   <!-- FEATURED ARTICLE -->
   <article class="featured-article reveal" data-category="interview">
     <div class="featured-img">
-      <img src="photos/band-monochrome.jpg" alt="Band on stage, monochrome" loading="lazy" style="object-position: center 20%;">
+      <img src="photos/band-monochrome.jpg" alt="Band on stage, monochrome" loading="lazy" class="img-pos-20">
     </div>
     <div class="featured-body">
       <div>
@@ -830,7 +838,7 @@
     <!-- INTERVIEW -->
     <article class="article-card reveal delay-1" data-category="interview">
       <div class="card-img">
-        <img src="photos/singer-bw.jpg" alt="Vocalist in sequined jacket, black and white" loading="lazy" style="object-position: center 20%;">
+        <img src="photos/singer-bw.jpg" alt="Vocalist in sequined jacket, black and white" loading="lazy" class="img-pos-20">
       </div>
       <div class="card-body">
         <div class="card-tag-row">
@@ -908,8 +916,8 @@
   <div class="footer-logo"><span>V</span>OLUMEN</div>
   <div class="footer-copy">© 2026 Volumen Magazine · Austin, Texas · All Rights Reserved</div>
   <div class="footer-social">
-    <a href="https://instagram.com/reinaldo.photos" target="_blank">Instagram</a>
-    <a href="https://twitter.com/reinaldor93" target="_blank">Twitter / X</a>
+    <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener">Twitter / X</a>
     <a href="contact.html">Contact</a>
   </div>
 </footer>
