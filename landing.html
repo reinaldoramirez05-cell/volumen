@@ -1,82 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Volumen — Welcome</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;500&display=swap" rel="stylesheet">
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #080808;
-            overflow: hidden;
-            font-family: 'DM Sans', sans-serif;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volumen - Interactive</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+    
+    #loader {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-family: sans-serif;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-size: 14px;
+      transition: opacity 1s ease;
+      pointer-events: none;
+    }
 
-        /* 3D Canvas container taking up full screen */
-        #canvas3d {
-            width: 100vw;
-            height: 100vh;
-            display: block;
-            /* Explicitly allowing pointer events so hover and 3D interactions work */
-            pointer-events: auto;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-
-        /* Minimal entry link to avoid blocking the 3D scene */
-        .enter-button {
-            position: absolute;
-            bottom: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 20px;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            color: #f2ece0;
-            text-decoration: none;
-            padding: 15px 40px;
-            border: 1px solid rgba(242, 236, 224, 0.2);
-            transition: all 0.4s ease;
-            background: rgba(8, 8, 8, 0.5);
-            -webkit-backdrop-filter: blur(4px);
-            backdrop-filter: blur(4px);
-        }
-
-        .enter-button:hover {
-            background: #bf2d1f; /* Volumen Red */
-            border-color: #bf2d1f;
-            color: #f2ece0;
-        }
-    </style>
+    #canvas3d {
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      /* crucial for interactions */
+      pointer-events: auto;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+    }
+    
+    .enter-btn {
+      position: absolute;
+      bottom: 5vh;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      padding: 10px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      transition: all 0.3s;
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    .enter-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+      border-color: #fff;
+    }
+    
+    /* Fade in button and canvas when loaded */
+    body.loaded #canvas3d {
+      opacity: 1;
+    }
+    body.loaded .enter-btn {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    body.loaded #loader {
+      opacity: 0;
+    }
+  </style>
 </head>
 <body>
-
-    <!-- Target Canvas for Spline -->
-    <canvas id="canvas3d"></canvas>
-
-    <!-- Minimal UI to proceed to the main magazine -->
-    <a href="index.html" class="enter-button">Enter Volumen</a>
-
-    <!-- Spline Initialization -->
-    <script type="module">
-        import { Application } from 'https://esm.sh/@splinetool/runtime';
-        
-        const canvas = document.getElementById('canvas3d');
-        const spline = new Application(canvas);
-        
-        // Load the provided Spline scene
-        spline.load('https://prod.spline.design/8TbfXLi1sYanDr0w/scene.splinecode')
-            .then(() => {
-                console.log('Spline Landing Page Initialized - Interaction Ready');
-            });
-    </script>
+  <div id="loader">Loading Environment...</div>
+  <canvas id="canvas3d"></canvas>
+  <a href="index.html" class="enter-btn">Enter Volumen</a>
+  
+  <script type="module">
+    import { Application } from 'https://esm.sh/@splinetool/runtime';
+    
+    const canvas = document.getElementById('canvas3d');
+    const spline = new Application(canvas);
+    
+    spline.load('https://prod.spline.design/8TbfXLi1sYanDr0w/scene.splinecode')
+      .then(() => {
+        console.log("3D engine ready. Interactivity initialized.");
+        document.body.classList.add('loaded');
+      })
+      .catch((e) => {
+        console.error("Spline load failed:", e);
+        document.getElementById('loader').innerText = "Load Failed";
+      });
+  </script>
 </body>
 </html>
