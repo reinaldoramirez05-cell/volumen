@@ -101,9 +101,9 @@
                 document.body.classList.add('loaded');
                 
                 spline.addEventListener('mouseDown', (e) => {
-                    console.log('Spline object clicked:', e?.target?.name);
                     const name = e?.target?.name?.toLowerCase() || '';
-                    if (name.includes('play')) {
+                    console.log('Spline object hit:', name);
+                    if (name.includes('play') || name.includes('center') || name.includes('iPod') || name.includes('button')) {
                         window.location.href = 'index.html';
                     }
                 });
