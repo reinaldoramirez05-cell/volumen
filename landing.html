@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volumen - Interactive</title>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; }
+        #loader { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-family: sans-serif; letter-spacing: 0.2em; text-transform: uppercase; font-size: 14px; transition: opacity 1s ease; pointer-events: none; }
+        #canvas3d { width: 100vw; height: 100vh; display: block; pointer-events: auto; opacity: 0; transition: opacity 1.5s ease; }
+        .enter-btn { position: absolute; bottom: 12vh; left: 50%; transform: translateX(-50%); font-family: sans-serif; text-transform: uppercase; letter-spacing: 0.2em; color: rgba(255, 255, 255, 0.7); text-decoration: none; padding: 10px 20px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 4px; background: rgba(0, 0, 0, 0.3); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); transition: all 0.3s; z-index: 10; opacity: 0; pointer-events: none; }
+        .enter-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.1); border-color: #fff; }
+        body.loaded #canvas3d { opacity: 1; }
+        body.loaded .enter-btn { opacity: 1; pointer-events: auto; }
+        body.loaded #loader { opacity: 0; }
+    </style>
+</head>
+<body>
+    <div id="loader">Loading Environment...</div>
+    <canvas id="canvas3d"></canvas>
+    <a href="index.html" class="enter-btn">PRESS PLAY</a>
+    <script type="module">
+        import { Application } from 'https://esm.sh/@splinetool/runtime';
+        const canvas = document.getElementById('canvas3d');
+        const spline = new Application(canvas);
+        spline.load('https://prod.spline.design/g0MvNt8Ko9rrWfZe/scene.splinecode').then(() => {
+            document.body.classList.add('loaded');
+            spline.addEventListener('mouseDown', () => { window.location.href = 'index.html'; });
+        });
+    </script>
+</body>
+</html>
