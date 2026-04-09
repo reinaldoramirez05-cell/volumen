@@ -100,6 +100,8 @@
             const name = e?.target?.name?.toLowerCase() || '';
             if (name.includes('play')) {
                 window.location.href = 'home.html';
+            } else {
+                alert("You clicked an object named: '" + (e?.target?.name || "Unnamed Object") + "'. Tell Reinaldo this name so we can link it!");
             }
         });
       })
