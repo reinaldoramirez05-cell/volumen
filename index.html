@@ -96,11 +96,10 @@
         document.body.classList.add('loaded');
         
         spline.addEventListener('mouseDown', (e) => {
-            const name = e?.target?.name?.toLowerCase() || '';
-            console.log('Spline object hit:', name);
-            if (name.includes('play') || name.includes('center') || name.includes('iPod') || name.includes('button')) {
-                window.location.href = 'home.html';
-            }
+            const name = e?.target?.name || 'unknown';
+            console.log('Spline hit:', name);
+            // Go to magazine on any click to the 3D iPod
+            window.location.href = 'home.html';
         });
       })
       .catch((e) => {

@@ -87,7 +87,7 @@
 <body>
     <div id="loader">Loading Environment...</div>
     <canvas id="canvas3d"></canvas>
-    <a href="index.html" class="enter-btn">PRESS PLAY</a>
+    <a href="home.html" class="enter-btn">PRESS PLAY</a>
 
     <script type="module">
         import { Application } from 'https://esm.sh/@splinetool/runtime';
@@ -101,11 +101,10 @@
                 document.body.classList.add('loaded');
                 
                 spline.addEventListener('mouseDown', (e) => {
-                    const name = e?.target?.name?.toLowerCase() || '';
-                    console.log('Spline object hit:', name);
-                    if (name.includes('play') || name.includes('center') || name.includes('iPod') || name.includes('button')) {
-                        window.location.href = 'index.html';
-                    }
+                    const name = e?.target?.name || 'unknown';
+                    console.log('Spline hit:', name);
+                    // Go to magazine on any click to the 3D iPod
+                    window.location.href = 'home.html';
                 });
             })
             .catch((e) => {
