@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volumen - Interactive</title>
     <style>
-        body,
-        html {
+        body, html {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -34,60 +32,78 @@
             width: 100vw;
             height: 100vh;
             display: block;
-            /* crucial for interactions */
             pointer-events: auto;
             opacity: 0;
             transition: opacity 1.5s ease;
         }
 
-        .enter-btn {
+        .play-btn {
             position: absolute;
-            bottom: 12vh;
+            bottom: 15vh;
             left: 50%;
             transform: translateX(-50%);
-            font-family: sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            padding: 10px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
-            background: rgba(0, 0, 0, 0.3);
-            -webkit-backdrop-filter: blur(5px);
-            backdrop-filter: blur(5px);
-            transition: all 0.3s;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(191, 45, 31, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 10;
             opacity: 0;
             pointer-events: none;
+            text-decoration: none;
         }
 
-        .enter-btn:hover {
-            color: #fff;
-            background: rgba(255, 255, 255, 0.1);
+        .play-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+            transition: fill 0.3s;
+            margin-left: 4px;
+        }
+
+        .play-btn:hover {
+            background: rgba(191, 45, 31, 0.9);
             border-color: #fff;
+            transform: translateX(-50%) scale(1.1);
+            box-shadow: 0 0 30px rgba(191, 45, 31, 0.4);
         }
 
-        /* Fade in button and canvas when loaded */
-        body.loaded #canvas3d {
-            opacity: 1;
-        }
-
-        body.loaded .enter-btn {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        body.loaded #loader {
+        .play-btn::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 1px solid #bf2d1f;
             opacity: 0;
+            animation: pulse-ring 2s infinite;
         }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        body.loaded #canvas3d { opacity: 1; }
+        body.loaded .play-btn { opacity: 1; pointer-events: auto; }
+        body.loaded #loader { opacity: 0; }
     </style>
 </head>
-
 <body>
     <div id="loader">Loading Environment...</div>
     <canvas id="canvas3d"></canvas>
-    <a href="home.html" class="enter-btn">PRESS PLAY</a>
+    
+    <a href="index.html" class="play-btn">
+        <svg viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </a>
 
     <script type="module">
         import { Application } from 'https://esm.sh/@splinetool/runtime';
@@ -97,21 +113,19 @@
 
         spline.load('https://prod.spline.design/g0MvNt8Ko9rrWfZe/scene.splinecode')
             .then(() => {
-                console.log("3D engine ready. Interactivity initialized.");
                 document.body.classList.add('loaded');
                 
-                spline.addEventListener('mouseDown', (e) => {
-                    const name = e?.target?.name || 'unknown';
-                    console.log('Spline hit:', name);
-                    // Go to magazine on any click to the 3D iPod
-                    window.location.href = 'home.html';
+                spline.addEventListener('mouseDown', () => {
+                    window.location.href = 'index.html';
+                });
+
+                canvas.addEventListener('click', () => {
+                    window.location.href = 'index.html';
                 });
             })
             .catch((e) => {
-                console.error("Spline load failed:", e);
                 document.getElementById('loader').innerText = "Load Failed";
             });
     </script>
 </body>
-
 </html>
