@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<\!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,138 +7,33 @@
   <meta name="description" content="Explore the full Volumen archive: exclusive band interviews, front-row concert photography, and deep dives into the bilingual rock scene of Austin and beyond.">
   <meta name="keywords" content="music editorial, rock journalism, bilingual magazine archive, concert photo review, Austin music scene, Latin rock history">
 
-  <!-- Open Graph / Facebook -->
+  <\!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://volumen.media/editorial">
   <meta property="og:title" content="Editorial Archive | Volumen Magazine">
   <meta property="og:description" content="The soul of the bilingual rock scene. Interviews, photos, and roots.">
   <meta property="og:image" content="https://volumen.media/photos/guitarist-stage.jpg">
 
-  <!-- Twitter -->
+  <\!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:title" content="Editorial Archive | Volumen Magazine">
   <meta property="twitter:description" content="Dive into the stories and imagery of modern rock culture.">
   <meta property="twitter:image" content="https://volumen.media/photos/guitarist-stage.jpg">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
+  <\!-- Canonical tag -->
+  <link rel="canonical" href="https://volumen.media/editorial">
+
+  <\!-- Preconnect hints for Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <\!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
+  <\!-- Shared styles -->
+  <link rel="stylesheet" href="styles.css">
+
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --black: #080808;
-    --white: #f2ece0;
-    --red:   #bf2d1f;
-    --gold:  #c9a040;
-    --gray:  #181818;
-    --mid:   #444;
-    --dim:   #2a2a2a;
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--black);
-    color: var(--white);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 300;
-    overflow-x: hidden;
-    cursor: none;
-  }
-
-  /* ── CURSOR ── */
-  .cursor {
-    width: 10px; height: 10px;
-    background: var(--red);
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
-    mix-blend-mode: difference;
-  }
-
-  @media (hover: none) and (pointer: coarse) {
-    .cursor { display: none; }
-    body { cursor: auto; }
-  }
-
-  .cursor.hover { width: 40px; height: 40px; background: var(--gold); }
-
-  /* ── GRAIN ── */
-  .grain {
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 9998; opacity: 0.35;
-  }
-
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0;
-    z-index: 100;
-    padding: 24px 6vw;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(8,8,8,0.85);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-  }
-
-  nav::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 6vw; right: 6vw;
-    height: 1px;
-    background: linear-gradient(to right, var(--red), transparent 60%);
-  }
-
-  .nav-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 10px;
-    color: var(--white);
-    text-decoration: none;
-  }
-  .nav-logo span { color: var(--red); }
-
-  .nav-links {
-    display: flex;
-    gap: 40px;
-    list-style: none;
-  }
-
-  .nav-links a {
-    font-size: 10px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--mid);
-    text-decoration: none;
-    transition: color 0.3s;
-  }
-  .nav-links a:hover,
-  .nav-links a.active { color: var(--gold); }
-
-  .nav-lang {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
-
-  .lang-btn {
-    font-size: 10px;
-    letter-spacing: 3px;
-    color: var(--mid);
-    background: none;
-    border: none;
-    cursor: none;
-    text-transform: uppercase;
-    transition: color 0.3s;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .lang-btn.active { color: var(--red); }
-  .lang-btn:hover   { color: var(--white); }
-  .lang-sep { color: var(--dim); font-size: 10px; }
-
   /* ── PAGE HERO ── */
   .page-hero {
     padding: 160px 6vw 80px;
@@ -629,43 +524,6 @@
   .reveal.delay-2 { transition-delay: 0.24s; }
   .reveal.delay-3 { transition-delay: 0.36s; }
 
-  /* ── FOOTER ── */
-  footer {
-    padding: 48px 6vw;
-    border-top: 1px solid #111;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 24px;
-  }
-
-  .footer-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 32px;
-    letter-spacing: 8px;
-  }
-  .footer-logo span { color: var(--red); }
-
-  .footer-copy {
-    font-size: 10px;
-    letter-spacing: 3px;
-    color: var(--mid);
-    text-transform: uppercase;
-  }
-
-  .footer-social { display: flex; gap: 24px; }
-
-  .footer-social a {
-    font-size: 10px;
-    letter-spacing: 3px;
-    color: var(--mid);
-    text-decoration: none;
-    text-transform: uppercase;
-    transition: color 0.3s;
-  }
-  .footer-social a:hover { color: var(--gold); }
-
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
     .featured-article {
@@ -681,17 +539,6 @@
     .filter-bar { padding: 20px 6vw; top: 60px; }
     .articles-area { padding: 40px 6vw 80px; }
   }
-
-  @media (max-width: 600px) {
-    nav { padding: 16px 4vw; }
-    .nav-logo { font-size: 16px; letter-spacing: 4px; }
-    .nav-links { gap: 12px; }
-    .nav-links a { font-size: 8px; letter-spacing: 1px; }
-    
-    .filter-bar { gap: 4px; }
-    .filter-btn { padding: 8px 12px; font-size: 11px; }
-    footer { flex-direction: column; align-items: flex-start; }
-  }
 </style>
 </head>
 <body>
@@ -699,8 +546,8 @@
 <div class="cursor" id="cursor"></div>
 <div class="grain"></div>
 
-<!-- NAV -->
-<nav>
+<\!-- NAV -->
+<nav aria-label="Main navigation">
   <a href="home.html" class="nav-logo"><span>V</span>OLUMEN</a>
   <ul class="nav-links">
     <li><a href="home.html#manifesto">About / Acerca</a></li>
@@ -717,16 +564,16 @@
   </div>
 </nav>
 
-<!-- PAGE HERO -->
+<\!-- PAGE HERO -->
 <section class="page-hero">
   <div class="page-hero-bg"></div>
   <div class="page-hero-bg-text">V</div>
-  <div class="page-hero-label">The Magazine · La Revista</div>
+  <div class="page-hero-label" data-en="The Magazine" data-es="La Revista">The Magazine · La Revista</div>
   <h1 class="page-hero-title">THE<br><span>EDITORIAL</span></h1>
-  <p class="page-hero-sub">Band interviews, live photography, scene news, and cultural roots — everything Latin rock, in both languages.</p>
+  <p class="page-hero-sub" data-en="Band interviews, live photography, scene news, and cultural roots — everything Latin rock, in both languages." data-es="Entrevistas, fotografía en vivo, noticias de la escena y raíces culturales — todo el rock latino, en ambos idiomas.">Band interviews, live photography, scene news, and cultural roots — everything Latin rock, in both languages.</p>
 </section>
 
-<!-- FILTER BAR -->
+<\!-- FILTER BAR -->
 <div class="filter-bar" id="filter-bar">
   <button class="filter-btn active" data-filter="all" id="filter-all">All</button>
   <span class="filter-sep">·</span>
@@ -740,10 +587,10 @@
   <span class="filter-count" id="article-count">— articles</span>
 </div>
 
-<!-- ARTICLES -->
+<\!-- ARTICLES -->
 <main class="articles-area">
 
-  <!-- ═══════════════════════════════════════════════
+  <\!-- ═══════════════════════════════════════════════
        HOW TO ADD A NEW ARTICLE:
 
        FEATURED (large): Copy the <article class="featured-article"> block below.
@@ -753,10 +600,10 @@
        Replace the title, excerpt, date, and image src.
        ═══════════════════════════════════════════════ -->
 
-  <!-- FEATURED ARTICLE -->
+  <\!-- FEATURED ARTICLE -->
   <article class="featured-article reveal" data-category="interview">
     <div class="featured-img">
-      <img src="photos/band-monochrome.jpg" alt="Band on stage, monochrome" loading="lazy" class="img-pos-20">
+      <img src="photos/band-monochrome.jpg" alt="Band on stage, monochrome" loading="lazy" width="1200" height="800" class="img-pos-20">
     </div>
     <div class="featured-body">
       <div>
@@ -780,13 +627,13 @@
     </div>
   </article>
 
-  <!-- ARTICLE GRID -->
+  <\!-- ARTICLE GRID -->
   <div class="articles-grid" id="articles-grid">
 
-    <!-- PHOTO REVIEW -->
+    <\!-- PHOTO REVIEW -->
     <article class="article-card reveal delay-1" data-category="photo">
       <div class="card-img">
-        <img src="photos/wide-stage-view.jpg" alt="Wide view of the band and audience under blue lights" loading="lazy">
+        <img src="photos/wide-stage-view.jpg" alt="Wide view of the band and audience under blue lights" loading="lazy" width="1200" height="800">
       </div>
       <div class="card-body">
         <div class="card-tag-row">
@@ -805,10 +652,10 @@
       </div>
     </article>
 
-    <!-- SCENE -->
+    <\!-- SCENE -->
     <article class="article-card reveal delay-2" data-category="scene">
       <div class="card-img">
-        <img src="photos/viloria-crowd.jpg" alt="Viloria crowd" loading="lazy">
+        <img src="photos/viloria-crowd.jpg" alt="Viloria crowd" loading="lazy" width="1200" height="800">
       </div>
       <div class="card-body">
         <div class="card-tag-row">
@@ -827,10 +674,10 @@
       </div>
     </article>
 
-    <!-- ROOTS -->
+    <\!-- ROOTS -->
     <article class="article-card reveal delay-3" data-category="roots">
       <div class="card-img">
-        <img src="photos/singer-closeup.jpg" alt="Singer close-up" loading="lazy">
+        <img src="photos/singer-closeup.jpg" alt="Singer close-up" loading="lazy" width="1200" height="800">
       </div>
       <div class="card-body">
         <div class="card-tag-row">
@@ -849,10 +696,10 @@
       </div>
     </article>
 
-    <!-- INTERVIEW -->
+    <\!-- INTERVIEW -->
     <article class="article-card reveal delay-1" data-category="interview">
       <div class="card-img">
-        <img src="photos/singer-bw.jpg" alt="Vocalist in sequined jacket, black and white" loading="lazy" class="img-pos-20">
+        <img src="photos/singer-bw.jpg" alt="Vocalist in sequined jacket, black and white" loading="lazy" width="1200" height="800" class="img-pos-20">
       </div>
       <div class="card-body">
         <div class="card-tag-row">
@@ -871,10 +718,10 @@
       </div>
     </article>
 
-    <!-- SCENE -->
+    <\!-- SCENE -->
     <article class="article-card reveal delay-2" data-category="scene">
       <div class="card-img">
-        <img src="photos/drummer-neon.jpg" alt="Drummer under neon lights with colorful background" loading="lazy">
+        <img src="photos/drummer-neon.jpg" alt="Drummer under neon lights with colorful background" loading="lazy" width="1200" height="800">
       </div>
       <div class="card-body">
         <div class="card-tag-row">
@@ -893,10 +740,10 @@
       </div>
     </article>
 
-    <!-- ROOTS -->
+    <\!-- ROOTS -->
     <article class="article-card reveal delay-3" data-category="roots">
       <div class="card-img">
-        <img src="photos/drummer-rear.jpg" alt="Band on stage from behind drummer looking at a crowd" loading="lazy">
+        <img src="photos/drummer-rear.jpg" alt="Band on stage from behind drummer looking at a crowd" loading="lazy" width="1200" height="800">
       </div>
       <div class="card-body">
         <div class="card-tag-row">
@@ -915,54 +762,33 @@
       </div>
     </article>
 
-    <!-- EMPTY STATE (shown when filter has no results) -->
+    <\!-- EMPTY STATE (shown when filter has no results) -->
     <div class="empty-state" id="empty-state">
       <div class="empty-v">V</div>
       <div class="empty-title">Coming Soon</div>
       <div class="empty-sub">More articles dropping soon · Próximamente</div>
     </div>
 
-  </div><!-- /articles-grid -->
+  </div><\!-- /articles-grid -->
 </main>
 
-<!-- FOOTER -->
+<\!-- FOOTER -->
 <footer>
   <div class="footer-logo"><span>V</span>OLUMEN</div>
   <div class="footer-copy">© 2026 Volumen Magazine · Austin, Texas · All Rights Reserved</div>
   <div class="footer-social">
-    <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener">Instagram</a>
-    <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener">Twitter / X</a>
+    <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener" aria-label="Instagram (opens in new tab)">Instagram</a>
+    <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener" aria-label="Twitter / X (opens in new tab)">Twitter / X</a>
     <a href="contact.html">Contact</a>
   </div>
 </footer>
 
 <script>
-  // Custom cursor
-  const cursor = document.getElementById('cursor');
-  document.addEventListener('mousemove', e => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top  = e.clientY + 'px';
-  });
-
-  document.querySelectorAll('a, button, .article-card, .featured-article').forEach(el => {
-    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-  });
-
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  const revealObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
-    });
-  }, { threshold: 0.08 });
-  reveals.forEach(r => revealObserver.observe(r));
-
   // ── CATEGORY FILTER ──
-  const filterBtns    = document.querySelectorAll('.filter-btn');
-  const allArticles   = document.querySelectorAll('[data-category]');
-  const emptyState    = document.getElementById('empty-state');
-  const articleCount  = document.getElementById('article-count');
+  const filterBtns   = document.querySelectorAll('.filter-btn');
+  const allArticles  = document.querySelectorAll('[data-category]');
+  const emptyState   = document.getElementById('empty-state');
+  const articleCount = document.getElementById('article-count');
 
   function updateCount(visible) {
     articleCount.textContent = `${visible} article${visible !== 1 ? 's' : ''}`;
@@ -989,16 +815,8 @@
 
   // Initial count
   updateCount(allArticles.length);
-
-  // Lang toggle
-  document.getElementById('btn-en').addEventListener('click', function() {
-    this.classList.add('active');
-    document.getElementById('btn-es').classList.remove('active');
-  });
-  document.getElementById('btn-es').addEventListener('click', function() {
-    this.classList.add('active');
-    document.getElementById('btn-en').classList.remove('active');
-  });
 </script>
+
+<script src="main.js" defer></script>
 </body>
 </html>

@@ -21,166 +21,21 @@
   <meta property="twitter:title" content="Volumen Magazine | Bilingual Rock & Culture">
   <meta property="twitter:description" content="Experience the collision of cultures in the US rock scene. Photography, interviews, and beyond.">
   <meta property="twitter:image" content="https://volumen.media/photos/concert-wide.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
     rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preload" as="image" href="photos/concert-wide.jpg">
+  <link rel="canonical" href="https://volumen.media/home">
   <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --black: #080808;
-      --white: #f2ece0;
-      --red: #bf2d1f;
-      --gold: #c9a040;
-      --gray: #181818;
-      --mid: #444;
-      --dim: #2a2a2a;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      background: var(--black);
-      color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
-      overflow-x: hidden;
-      cursor: none;
-    }
 
     /* CUSTOM CURSOR */
-    .cursor {
-      width: 10px;
-      height: 10px;
-      background: var(--red);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
-      mix-blend-mode: difference;
-    }
-
-    @media (hover: none) and (pointer: coarse) {
-      .cursor {
-        display: none;
-      }
-
-      body {
-        cursor: auto;
-      }
-    }
-
-    .cursor.hover {
-      width: 40px;
-      height: 40px;
-      background: var(--gold);
-    }
 
     /* GRAIN */
-    .grain {
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 9998;
-      opacity: 0.35;
-    }
 
     /* NAV */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      padding: 24px 6vw;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      mix-blend-mode: normal;
-    }
-
-    nav::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 6vw;
-      right: 6vw;
-      height: 1px;
-      background: linear-gradient(to right, var(--red), transparent 60%);
-    }
-
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 22px;
-      letter-spacing: 10px;
-      color: var(--white);
-      text-decoration: none;
-    }
-
-    .nav-logo span {
-      color: var(--red);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 40px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-size: 10px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--mid);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .nav-links a:hover {
-      color: var(--gold);
-    }
-
-    .nav-lang {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .lang-btn {
-      font-size: 10px;
-      letter-spacing: 3px;
-      color: var(--mid);
-      background: none;
-      border: none;
-      cursor: none;
-      text-transform: uppercase;
-      transition: color 0.3s;
-      font-family: 'DM Sans', sans-serif;
-    }
-
-    .lang-btn.active {
-      color: var(--red);
-    }
-
-    .lang-btn:hover {
-      color: var(--white);
-    }
-
-    .lang-sep {
-      color: var(--dim);
-      font-size: 10px;
-    }
 
     /* HERO */
     #hero {
@@ -851,56 +706,9 @@
     }
 
     /* FOOTER */
-    footer {
-      padding: 48px 6vw;
-      border-top: 1px solid #111;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 24px;
-    }
-
-    .footer-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 32px;
-      letter-spacing: 8px;
-    }
-
-    .footer-logo span {
-      color: var(--red);
-    }
-
-    .footer-copy {
-      font-size: 10px;
-      letter-spacing: 3px;
-      color: var(--mid);
-      text-transform: uppercase;
-    }
-
-    .footer-social {
-      display: flex;
-      gap: 24px;
-    }
-
-    .footer-social a {
-      font-size: 10px;
-      letter-spacing: 3px;
-      color: var(--mid);
-      text-decoration: none;
-      text-transform: uppercase;
-      transition: color 0.3s;
-    }
-
-    .footer-social a:hover {
-      color: var(--gold);
-    }
 
     /* RESPONSIVE REFINEMENTS */
-    @media (max-width: 768px) {
-      #hero {
-        padding: 120px 6vw 60px;
-      }
+    
 
       #manifesto {
         padding: 60px 6vw;
@@ -917,47 +725,9 @@
       #signup {
         padding: 60px 6vw;
       }
-
-      .nav-links {
-        gap: 20px;
-      }
-
-      .nav-links a {
-        font-size: 9px;
-        letter-spacing: 2px;
-      }
-
-      .nav-lang {
-        gap: 8px;
-      }
     }
 
     @media (max-width: 480px) {
-      nav {
-        padding: 16px 4vw;
-      }
-
-      .nav-logo {
-        font-size: 16px;
-        letter-spacing: 4px;
-      }
-
-      .nav-links {
-        gap: 12px;
-      }
-
-      .nav-links a {
-        font-size: 8px;
-        letter-spacing: 1px;
-      }
-
-      .nav-lang {
-        gap: 6px;
-      }
-
-      .lang-btn {
-        font-size: 8px;
-      }
 
       .hero-title {
         letter-spacing: 1px;
@@ -969,43 +739,11 @@
     }
 
     /* ANIMATIONS */
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(24px);
-      }
 
       to {
         opacity: 1;
         transform: translateY(0);
       }
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(32px);
-      transition: opacity 0.9s ease, transform 0.9s ease;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .reveal.delay-1 {
-      transition-delay: 0.15s;
-    }
-
-    .reveal.delay-2 {
-      transition-delay: 0.3s;
-    }
-
-    .reveal.delay-3 {
-      transition-delay: 0.45s;
-    }
-
-    .reveal.delay-4 {
-      transition-delay: 0.6s;
     }
 
     /* GALLERY */
@@ -1212,6 +950,19 @@
       }
     }
   </style>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Volumen Magazine",
+  "url": "https://volumen.media",
+  "description": "The first bilingual rock magazine in the US, based in Austin, Texas.",
+  "sameAs": [
+    "https://instagram.com/reinaldo.photos",
+    "https://twitter.com/reinaldor93"
+  ]
+}
+</script>
 </head>
 
 <body>
@@ -1220,14 +971,14 @@
   <div class="grain"></div>
 
   <!-- NAV -->
-  <nav>
-    <a href="#" class="nav-logo"><span>V</span>OLUMEN</a>
+  <nav aria-label="Main navigation">
+    <a href="#" class="nav-logo" aria-current="page"><span>V</span>OLUMEN</a>
     <ul class="nav-links">
-      <li><a href="#manifesto">About / Acerca</a></li>
+      <li><a href="#manifesto" data-en="About" data-es="Acerca">About / Acerca</a></li>
       <li><a href="editorial.html">Editorial</a></li>
-      <li><a href="#gallery">Photos / Fotos</a></li>
-      <li><a href="contact.html">Contact / Contacto</a></li>
-      <li><a href="#signup">Subscribe / Suscríbete</a></li>
+      <li><a href="#gallery" data-en="Photos" data-es="Fotos">Photos / Fotos</a></li>
+      <li><a href="contact.html" data-en="Contact" data-es="Contacto">Contact / Contacto</a></li>
+      <li><a href="#signup" data-en="Subscribe" data-es="Suscríbete">Subscribe / Suscríbete</a></li>
     </ul>
     <div class="nav-lang">
       <button class="lang-btn active" id="btn-en">EN</button>
@@ -1241,14 +992,14 @@
 
     <!-- BACKGROUND PHOTO — swap src with your own concert photo -->
     <div class="hero-photo">
-      <img src="photos/concert-wide.jpg" alt="Concert background" />
+      <img src="photos/concert-wide.jpg" alt="Concert background" width="1920" height="1080" />
     </div>
 
     <div class="hero-bg-v">V</div>
 
     <div class="issue-tag">
       <div class="issue-dot"></div>
-      <span class="issue-text">Coming Soon · Próximamente · Austin, TX</span>
+      <span class="issue-text" data-en="Coming Soon · Austin, TX" data-es="Próximamente · Austin, TX">Coming Soon · Próximamente · Austin, TX</span>
     </div>
 
     <h1 class="hero-title">
@@ -1273,7 +1024,7 @@
 
     <div class="scroll-hint">
       <div class="scroll-line"></div>
-      <span class="scroll-text">Scroll / Desplázate</span>
+      <span class="scroll-text" data-en="Scroll" data-es="Desplázate">Scroll / Desplázate</span>
     </div>
   </section>
 
@@ -1348,7 +1099,7 @@
 
       <!-- Hero shot: guitarist low-angle -->
       <div class="gallery-item hero-shot reveal delay-1">
-        <img src="photos/guitarist-floor.jpg" alt="Guitarist on stage" loading="lazy" />
+        <img src="photos/guitarist-floor.jpg" alt="Guitarist on stage" width="1200" height="800" loading="lazy" />
         <div class="gallery-badge">PHOTO REVIEW</div>
         <div class="gallery-caption">
           <div class="caption-tag">En Vivo · Live</div>
@@ -1358,7 +1109,7 @@
 
       <!-- Top-right: wide stage panorama -->
       <div class="gallery-item top-right reveal delay-2">
-        <img src="photos/concert-wide.jpg" alt="Full band on stage" loading="lazy" />
+        <img src="photos/concert-wide.jpg" alt="Full band on stage" width="1200" height="800" loading="lazy" />
         <div class="gallery-badge">THE SCENE</div>
         <div class="gallery-caption">
           <div class="caption-tag">Escena · Show</div>
@@ -1368,7 +1119,7 @@
 
       <!-- Bottom-right: Viloria crowd shot -->
       <div class="gallery-item bot-mid reveal delay-3">
-        <img src="photos/viloria-crowd.jpg" alt="Viloria crowd show" loading="lazy" />
+        <img src="photos/viloria-crowd.jpg" alt="Viloria crowd show" width="1200" height="800" loading="lazy" />
         <div class="gallery-badge">ROOTS</div>
         <div class="gallery-caption">
           <div class="caption-tag">Raíces · Scene</div>
@@ -1378,7 +1129,7 @@
 
       <!-- Bottom-right: singer close-up -->
       <div class="gallery-item bot-right reveal delay-4">
-        <img src="photos/singer-closeup.jpg" alt="Singer close up" loading="lazy" />
+        <img src="photos/singer-closeup.jpg" alt="Singer close up" width="1200" height="800" loading="lazy" />
         <div class="gallery-badge">INTERVIEW</div>
         <div class="gallery-caption">
           <div class="caption-tag">En Foco · Close</div>
@@ -1411,7 +1162,7 @@
           <input type="email" name="email" placeholder="Your email / Tu correo" id="email-input" autocomplete="email"
             required>
         </div>
-        <button class="signup-btn" id="signup-btn" onclick="handleSignup()">
+        <button class="signup-btn" aria-label="Subscribe to newsletter" id="signup-btn" onclick="handleSignup()">
           <span class="btn-text">SUBSCRIBE / SUSCRÍBETE</span>
           <span class="btn-spinner"></span>
         </button>
@@ -1439,33 +1190,14 @@
     <div class="footer-logo"><span>V</span>OLUMEN</div>
     <div class="footer-copy">© 2026 Volumen Magazine · Austin, Texas · All Rights Reserved</div>
     <div class="footer-social">
-      <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener">Instagram</a>
-      <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener">Twitter / X</a>
+      <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener" aria-label="Instagram (opens in new tab)">Instagram</a>
+      <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener" aria-label="Twitter / X (opens in new tab)">Twitter / X</a>
       <a href="contact.html">Contact</a>
     </div>
   </footer>
 
   <script>
-    // Custom cursor
-    const cursor = document.getElementById('cursor');
-    document.addEventListener('mousemove', e => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
     });
-
-    document.querySelectorAll('a, button, .pillar-card, input').forEach(el => {
-      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-    });
-
-    // Scroll reveal
-    const reveals = document.querySelectorAll('.reveal');
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
-      });
-    }, { threshold: 0.12 });
-    reveals.forEach(r => revealObserver.observe(r));
 
     // ─── FORMSPREE CONFIG ────────────────────────────────────────────────
     // 1. Go to https://formspree.io and create a free account
@@ -1536,13 +1268,9 @@
     document.getElementById('name-input').addEventListener('keydown', e => {
       if (e.key === 'Enter') handleSignup();
     });
-
-    // Add .gallery-item to cursor hover targets
-    document.querySelectorAll('.gallery-item').forEach(el => {
-      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
     });
   </script>
+  <script src="main.js" defer></script>
 </body>
 
 </html>
