@@ -115,7 +115,7 @@
     <div id="loader">Loading Environment...</div>
     <canvas id="canvas3d"></canvas>
     
-    <a href="index.html" class="play-btn" title="Enter Volumen">
+    <a href="home.html" class="play-btn" title="Enter Volumen">
         <svg viewBox="0 0 24 24">
             <path d="M8 5v14l11-7z" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -133,11 +133,11 @@
                 document.body.classList.add('loaded');
                 
                 spline.addEventListener('mouseDown', () => {
-                    window.location.href = 'index.html';
+                    window.location.href = 'home.html';
                 });
 
                 canvas.addEventListener('click', () => {
-                    window.location.href = 'index.html';
+                    window.location.href = 'home.html';
                 });
             })
             .catch((e) => {

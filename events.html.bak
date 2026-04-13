@@ -20,21 +20,128 @@
   <meta property="twitter:title" content="Live Events & Show Guide | Volumen Magazine">
   <meta property="twitter:description" content="The pulse of Austin's live music scene. Guides, dates, and venues.">
   <meta property="twitter:image" content="https://volumen.media/photos/concert-wide.jpg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="canonical" href="https://volumen.media/events">
   <style>
-    
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    
+    :root {
+      --black: #080808;
+      --white: #f2ece0;
+      --red: #bf2d1f;
+      --gold: #c9a040;
+      --gray: #141414;
+      --mid: #444;
+      --dim: #2a2a2a;
+    }
 
-    
+    html {
+      scroll-behavior: smooth;
+    }
 
-    
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── CURSOR ── */
+    .cursor {
+      width: 10px;
+      height: 10px;
+      background: var(--red);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+      mix-blend-mode: difference;
+    }
+
+    @media (hover: none) {
+      .cursor {
+        display: none;
+      }
+
+      body {
+        cursor: auto;
+      }
+    }
+
+    .cursor.hover {
+      width: 40px;
+      height: 40px;
+      background: var(--gold);
+    }
+
+    /* ── GRAIN ── */
+    .grain {
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0.35;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 24px 6vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(8, 8, 8, 0.85);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 10px;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-logo span {
+      color: var(--red);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--gold);
+    }
 
     /* ── HERO ── */
     .hero {
@@ -281,6 +388,51 @@
       text-transform: uppercase;
     }
 
+    /* ── FOOTER ── */
+    footer {
+      padding: 100px 6vw 40px;
+      border-top: 1px solid #111;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 40px;
+      letter-spacing: 14px;
+      color: #333;
+    }
+
+    .footer-logo span {
+      color: var(--red);
+    }
+
+    .footer-copy {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #444;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 32px;
+    }
+
+    .footer-social a {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-social a:hover {
+      color: var(--gold);
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
       .event-card {
@@ -319,34 +471,29 @@
   <div class="cursor" id="cursor"></div>
   <div class="grain"></div>
 
-  <nav aria-label="Main navigation">
+  <nav>
     <a href="home.html" class="nav-logo"><span>V</span>OLUMEN</a>
     <ul class="nav-links">
-      <li><a href="home.html" data-en="Home" data-es="Inicio">Home</a></li>
+      <li><a href="home.html">Home</a></li>
       <li><a href="editorial.html">Editorial</a></li>
-      <li><a href="events.html" class="active" data-en="Live Events" data-es="Shows en Vivo">Live Events</a></li>
-      <li><a href="contact.html" data-en="Contact" data-es="Contacto">Contact</a></li>
+      <li><a href="events.html" class="active">Live Events</a></li>
+      <li><a href="contact.html">Contact</a></li>
     </ul>
-    <div class="nav-lang">
-      <button type="button" class="lang-btn active" id="btn-en">EN</button>
-      <span class="lang-sep">/</span>
-      <button type="button" class="lang-btn" id="btn-es">ES</button>
-    </div>
   </nav>
 
   <header class="hero">
     <div class="hero-bg"></div>
     <div class="hero-content">
-      <div class="hero-label" data-en="AUSTIN SCENE GUIDE" data-es="GUÍA DE LA ESCENA DE AUSTIN">AUSTIN SCENE GUIDE</div>
+      <div class="hero-label">AUSTIN SCENE GUIDE</div>
       <h1 class="hero-title">THE <span>LIVE</span> SESSIONS</h1>
-      <p class="hero-sub" data-en="The definitive calendar for Latin Rock, Psych, and Heavy Sounds in the heart of Texas." data-es="El calendario definitivo de Rock Latino, Psicodelia y Sonidos Pesados en el corazón de Texas.">The definitive calendar for Latin Rock, Psych, and Heavy Sounds in the heart of Texas.</p>
+      <p class="hero-sub">The definitive calendar for Latin Rock, Psych, and Heavy Sounds in the heart of Texas.</p>
     </div>
   </header>
 
   <main>
     <section class="events-section">
       <div class="section-header">
-        <h2 class="section-title" data-en="UPCOMING SHOWS" data-es="PRÓXIMOS SHOWS">UPCOMING SHOWS</h2>
+        <h2 class="section-title">UPCOMING SHOWS</h2>
         <div class="event-filters">
           <div class="filter-tab active">ALL SHOWS</div>
           <div class="filter-tab">FESTIVALS</div>
@@ -405,21 +552,21 @@
       </div>
       <div class="spotlight-grid">
         <div class="venue-card">
-          <img src="photos/wide-stage-view.jpg" alt="The Mohawk Austin" width="1200" height="800">
+          <img src="photos/wide-stage-view.jpg" alt="The Mohawk Austin">
           <div class="venue-overlay">
             <div class="venue-tag">ICONIC SPOT</div>
             <h3 class="venue-name">THE MOHAWK</h3>
           </div>
         </div>
         <div class="venue-card">
-          <img src="photos/viloria-crowd.jpg" alt="Hotel Vegas Austin" width="1200" height="800">
+          <img src="photos/viloria-crowd.jpg" alt="Hotel Vegas Austin">
           <div class="venue-overlay">
             <div class="venue-tag">UNDERGROUND HEART</div>
             <h3 class="venue-name">HOTEL VEGAS</h3>
           </div>
         </div>
         <div class="venue-card">
-          <img src="photos/drummer-rear.jpg" alt="Emo's Austin" width="1200" height="800">
+          <img src="photos/drummer-rear.jpg" alt="Emo's Austin">
           <div class="venue-overlay">
             <div class="venue-tag">BIG STAGE</div>
             <h3 class="venue-name">EMO'S AUSTIN</h3>
@@ -433,14 +580,24 @@
     <div class="footer-logo"><span>V</span>OLUMEN</div>
     <div class="footer-copy">© 2026 Volumen Magazine · Austin, Texas · All Rights Reserved</div>
     <div class="footer-social">
-      <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener" aria-label="Instagram (opens in new tab)">Instagram</a>
-      <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener" aria-label="Twitter / X (opens in new tab)">Twitter / X</a>
+      <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener">Twitter / X</a>
       <a href="contact.html">Contact</a>
     </div>
   </footer>
 
   <script>
-    
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+    document.querySelectorAll('a, .filter-tab').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
 
     // Tab switching effect (Visual only)
     document.querySelectorAll('.filter-tab').forEach(tab => {
@@ -451,7 +608,6 @@
     });
   </script>
 
-<script src="main.js" defer></script>
 </body>
 
 </html>

@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Viloria — Band Profile | Volumen Magazine</title>
+  <meta name="description"
+    content="Viloria band profile on Volumen Magazine. Bilingual bio, discography, Spotify player, and every piece of Volumen coverage of Austin's most compelling Latin rock act.">
+  <meta name="keywords"
+    content="Viloria band, Austin Latin rock, bilingual rock band, rock en español Austin, Volumen band profile">
+
+  <meta property="og:type" content="profile">
+  <meta property="og:url" content="https://volumen.media/band/viloria">
+  <meta property="og:title" content="Viloria | Volumen Band Profile">
+  <meta property="og:description"
+    content="The full Viloria archive — bio, discography, Spotify, and every Volumen story about them.">
+  <meta property="og:image" content="https://volumen.media/photos/viloria-crowd.jpg">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="Viloria | Volumen Band Profile">
+  <meta property="twitter:image" content="https://volumen.media/photos/viloria-crowd.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="canonical" href="https://volumen.media/band/viloria">
+
+  <style>
+    /* ─────────────────────────────────────────
+       BAND HERO — Full-bleed photo header
+    ───────────────────────────────────────── */
+    .band-hero {
+      height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      padding: 6vw;
+      overflow: hidden;
+    }
+
+    .band-hero-bg {
+      position: absolute;
+      inset: 0;
+    }
+
+    .band-hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.45) contrast(1.1);
+      animation: heroZoom 24s ease-in-out infinite alternate;
+    }
+
+    @keyframes heroZoom {
+      from {
+        transform: scale(1);
+      }
+
+      to {
+        transform: scale(1.04);
+      }
+    }
+
+    .band-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(8, 8, 8, 1) 0%, rgba(8, 8, 8, 0.4) 40%, transparent 70%),
+        linear-gradient(to right, rgba(8, 8, 8, 0.3) 0%, transparent 60%);
+    }
+
+    .band-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1000px;
+    }
+
+    .band-hero-label {
+      font-size: 9px;
+      letter-spacing: 6px;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .band-hero-label::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--red);
+    }
+
+    .band-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(64px, 14vw, 200px);
+      line-height: 0.85;
+      letter-spacing: 4px;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+
+    .band-genre-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .band-genre-tag {
+      font-size: 9px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border: 1px solid rgba(242, 236, 224, 0.15);
+      color: rgba(242, 236, 224, 0.45);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .band-origin {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #555;
+      text-transform: uppercase;
+    }
+
+    .band-origin span {
+      color: var(--gold);
+    }
+
+    /* ─────────────────────────────────────────
+       QUICK STATS BAR
+    ───────────────────────────────────────── */
+    .band-stats {
+      background: var(--gray);
+      padding: 28px 6vw;
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid #111;
+      overflow-x: auto;
+    }
+
+    .band-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 0 40px;
+      border-right: 1px solid #1a1a1a;
+      flex-shrink: 0;
+    }
+
+    .band-stat:first-child {
+      padding-left: 0;
+    }
+
+    .band-stat:last-child {
+      border-right: none;
+    }
+
+    .band-stat-label {
+      font-size: 8px;
+      letter-spacing: 4px;
+      color: var(--mid);
+      text-transform: uppercase;
+    }
+
+    .band-stat-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 2px;
+      color: var(--white);
+    }
+
+    .band-stat-value span {
+      color: var(--red);
+    }
+
+    /* ─────────────────────────────────────────
+       BIO SECTION — Bilingual grid
+    ───────────────────────────────────────── */
+    .band-bio-section {
+      padding: 100px 6vw;
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      gap: 0 60px;
+      border-bottom: 1px solid #111;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .band-bio-section {
+        grid-template-columns: 1fr;
+        gap: 48px 0;
+      }
+
+      .band-bio-divider {
+        display: none;
+      }
+    }
+
+    .band-bio-divider {
+      background: #1a1a1a;
+      align-self: stretch;
+    }
+
+
+    .band-bio-lang {
+      font-size: 8px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .band-bio-lang::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: rgba(201, 160, 64, 0.3);
+    }
+
+    .band-bio-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(28px, 3.5vw, 48px);
+      letter-spacing: 2px;
+      line-height: 1;
+      margin-bottom: 24px;
+    }
+
+    .band-bio-title span {
+      color: var(--red);
+    }
+
+    .band-bio-body {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(15px, 1.5vw, 18px);
+      line-height: 1.8;
+      color: #888;
+    }
+
+    .band-bio-body-es {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(14px, 1.4vw, 17px);
+      line-height: 1.8;
+      color: #6a5838;
+    }
+
+    /* ── LANGUAGE TOGGLE — bio visibility ── */
+    body:not(.lang-es) .band-bio-side:last-of-type,
+    body:not(.lang-es) .band-bio-divider {
+      display: none;
+    }
+    body:not(.lang-es) .band-bio-section {
+      grid-template-columns: 1fr;
+    }
+    body.lang-es .band-bio-side:first-of-type,
+    body.lang-es .band-bio-divider {
+      display: none;
+    }
+    body.lang-es .band-bio-section {
+      grid-template-columns: 1fr;
+    }
+
+    /* ─────────────────────────────────────────
+       PHOTO STRIP
+    ───────────────────────────────────────── */
+    .band-photos {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 3px;
+      border-bottom: 1px solid #111;
+    }
+
+    .band-photo-item {
+      position: relative;
+      overflow: hidden;
+      background: #0d0d0d;
+    }
+
+    .band-photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      filter: grayscale(20%) brightness(0.85);
+      transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.5s ease;
+    }
+
+    .band-photo-item:hover img {
+      transform: scale(1.04);
+      filter: grayscale(0%) brightness(1);
+    }
+
+    .band-photo-item:first-child {
+      aspect-ratio: 16 / 9;
+      grid-row: span 2;
+    }
+
+    .band-photo-item:not(:first-child) {
+      aspect-ratio: 4 / 3;
+    }
+
+    @media (max-width: 700px) {
+      .band-photos {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .band-photo-item:first-child {
+        grid-column: span 2;
+        grid-row: auto;
+      }
+    }
+
+    /* ─────────────────────────────────────────
+       DISCOGRAPHY
+    ───────────────────────────────────────── */
+    .band-discography {
+      padding: 80px 6vw;
+      border-bottom: 1px solid #111;
+    }
+
+    .band-section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
+
+    .band-section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(28px, 4vw, 56px);
+      letter-spacing: 3px;
+      line-height: 1;
+    }
+
+    .band-section-title span {
+      color: var(--red);
+    }
+
+    .band-section-sub {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--mid);
+      text-transform: uppercase;
+    }
+
+    .discography-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+    }
+
+    @media (max-width: 700px) {
+      .discography-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 440px) {
+      .discography-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .album-card {
+      background: var(--gray);
+      overflow: hidden;
+      position: relative;
+      transition: background 0.4s;
+    }
+
+    .album-card:hover {
+      background: #1e1e1e;
+    }
+
+    .album-art {
+      aspect-ratio: 1;
+      background: #0f0f0f;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Generative album art placeholder */
+    .album-art-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px;
+      color: #1a1a1a;
+      letter-spacing: 4px;
+      position: relative;
+    }
+
+    .album-art-placeholder.red-tint {
+      background: linear-gradient(135deg, #0d0d0d, #1a0808);
+    }
+
+    .album-art-placeholder.gold-tint {
+      background: linear-gradient(135deg, #0d0d0d, #0d0c08);
+    }
+
+    .album-art-placeholder.dark {
+      background: linear-gradient(135deg, #0a0a0a, #111);
+    }
+
+    .album-body {
+      padding: 20px;
+    }
+
+    .album-type {
+      font-size: 8px;
+      letter-spacing: 4px;
+      color: var(--mid);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .album-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 2px;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .album-year {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: #444;
+    }
+
+    /* ─────────────────────────────────────────
+       SPOTIFY EMBED
+    ───────────────────────────────────────── */
+    .band-spotify {
+      padding: 80px 6vw;
+      border-bottom: 1px solid #111;
+      background: var(--gray);
+    }
+
+    .band-spotify-inner {
+      max-width: 900px;
+    }
+
+    .spotify-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 9px;
+      letter-spacing: 5px;
+      color: var(--mid);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .spotify-icon {
+      width: 20px;
+      height: 20px;
+      fill: #1DB954;
+    }
+
+    .spotify-embed {
+      border-radius: 0;
+    }
+
+    /* ─────────────────────────────────────────
+       VOLUMEN COVERAGE
+    ───────────────────────────────────────── */
+    .band-coverage {
+      padding: 80px 6vw 100px;
+      border-bottom: 1px solid #111;
+    }
+
+    .coverage-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+      margin-top: 48px;
+    }
+
+    @media (max-width: 800px) {
+      .coverage-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .coverage-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .coverage-card {
+      background: var(--gray);
+      overflow: hidden;
+      position: relative;
+      transition: background 0.4s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .coverage-card:hover {
+      background: #1c1c1c;
+    }
+
+    .coverage-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--red);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .coverage-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .coverage-card-img {
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: #0d0d0d;
+    }
+
+    .coverage-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(20%) brightness(0.85);
+      transition: transform 0.7s ease, filter 0.4s ease;
+    }
+
+    .coverage-card:hover .coverage-card-img img {
+      transform: scale(1.05);
+      filter: grayscale(0%) brightness(1);
+    }
+
+    .coverage-card-body {
+      padding: 24px 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .coverage-card-type {
+      font-size: 8px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      display: inline-block;
+      margin-bottom: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      align-self: flex-start;
+    }
+
+    .coverage-card-type.interview {
+      background: var(--red);
+      color: var(--white);
+    }
+
+    .coverage-card-type.essay {
+      background: var(--gold);
+      color: var(--black);
+    }
+
+    .coverage-card-type.video {
+      background: #1a1a1a;
+      color: var(--white);
+      border: 1px solid #2a2a2a;
+    }
+
+    .coverage-card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(18px, 2vw, 24px);
+      letter-spacing: 2px;
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: 8px;
+      flex: 1;
+    }
+
+    .coverage-card-link {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 12px;
+      letter-spacing: 4px;
+      color: var(--mid);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.3s, gap 0.3s;
+      margin-top: 16px;
+      border-top: 1px solid #1a1a1a;
+      padding-top: 14px;
+    }
+
+    .coverage-card-link:hover {
+      color: var(--red);
+      gap: 14px;
+    }
+
+    .coverage-card-link svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* ─────────────────────────────────────────
+       SUBMIT CTA
+    ───────────────────────────────────────── */
+    .band-submit-cta {
+      padding: 80px 6vw;
+      background: var(--gray);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      flex-wrap: wrap;
+      border-top: 1px solid #111;
+    }
+
+    .band-submit-left h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(28px, 4vw, 52px);
+      letter-spacing: 3px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .band-submit-left h2 span {
+      color: var(--red);
+    }
+
+    .band-submit-left p {
+      font-size: 13px;
+      color: #555;
+      max-width: 400px;
+      line-height: 1.65;
+    }
+
+    .band-submit-btn {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      letter-spacing: 6px;
+      color: var(--white);
+      text-decoration: none;
+      border: 1px solid rgba(191, 45, 31, 0.4);
+      padding: 16px 32px;
+      transition: background 0.3s, border-color 0.3s;
+      flex-shrink: 0;
+      display: inline-block;
+    }
+
+    .band-submit-btn:hover {
+      background: var(--red);
+      border-color: var(--red);
+    }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .band-bio-section {
+        padding: 60px 6vw;
+      }
+
+      .band-discography,
+      .band-spotify,
+      .band-coverage {
+        padding: 60px 6vw 60px;
+      }
+
+      .band-stats {
+        gap: 0;
+      }
+
+      .band-stat {
+        padding: 0 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="scroll-progress" id="scroll-progress"></div>
+  <div class="cursor" id="cursor"></div>
+  <div class="grain"></div>
+
+  <!-- NAV -->
+  <nav aria-label="Main navigation">
+    <a href="../home.html" class="nav-logo"><span>V</span>OLUMEN</a>
+    <ul class="nav-links">
+      <li><a href="../home.html#manifesto">About / Acerca</a></li>
+      <li><a href="../editorial.html" class="active">Editorial</a></li>
+      <li><a href="../interviews.html">Interviews</a></li>
+      <li><a href="../home.html#gallery">Photos / Fotos</a></li>
+      <li><a href="../submit.html">Submit / Envía</a></li>
+      <li><a href="../contact.html">Contact / Contacto</a></li>
+    </ul>
+    <div class="nav-lang">
+      <button type="button" class="lang-btn active" id="btn-en">EN</button>
+      <span class="lang-sep">/</span>
+      <button type="button" class="lang-btn" id="btn-es">ES</button>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════
+     BAND HERO
+═══════════════════════════════════════════════════ -->
+  <header class="band-hero">
+    <div class="band-hero-bg">
+      <img src="../photos/viloria-crowd.jpg" alt="Viloria performing live, full crowd at an Austin venue"
+        loading="eager">
+    </div>
+    <div class="band-hero-overlay"></div>
+    <div class="band-hero-content">
+      <div class="band-hero-label" data-en="Band Profile · Austin, TX" data-es="Perfil de Banda · Austin, TX">Band Profile · Austin, TX</div>
+      <h1 class="band-name">VILORIA</h1>
+      <div class="band-genre-row">
+        <span class="band-genre-tag">Rock en Español</span>
+        <span class="band-genre-tag">Latin Rock</span>
+        <span class="band-genre-tag">Alternative</span>
+        <span class="band-origin">Based in <span>Austin, Texas</span></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- STATS BAR -->
+  <div class="band-stats">
+    <div class="band-stat">
+      <span class="band-stat-label" data-en="Founded" data-es="Fundada">Founded</span>
+      <span class="band-stat-value"><span>2019</span></span>
+    </div>
+    <div class="band-stat">
+      <span class="band-stat-label" data-en="Members" data-es="Integrantes">Members</span>
+      <span class="band-stat-value">4</span>
+    </div>
+    <div class="band-stat">
+      <span class="band-stat-label" data-en="Releases" data-es="Lanzamientos">Releases</span>
+      <span class="band-stat-value">3</span>
+    </div>
+    <div class="band-stat">
+      <span class="band-stat-label" data-en="Volumen Coverage" data-es="Cobertura Volumen">Volumen Coverage</span>
+      <span class="band-stat-value"><span>3</span> Pieces</span>
+    </div>
+    <div class="band-stat">
+      <span class="band-stat-label" data-en="Home Venue" data-es="Venue Principal">Home Venue</span>
+      <span class="band-stat-value">Mohawk</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+     BILINGUAL BIO
+═══════════════════════════════════════════════════ -->
+  <section class="band-bio-section">
+
+    <!-- ENGLISH SIDE -->
+    <div class="band-bio-side reveal">
+      <div class="band-bio-lang">English · EN</div>
+      <h2 class="band-bio-title">THE <span>STORY</span></h2>
+      <p class="band-bio-body">
+        Viloria formed in Austin in 2019 out of a shared frustration — the Latin rock scene existed, but it was
+        scattered. Small venues, late slots, crowds that had to hunt for the show. They decided to become the show
+        everyone hunted for.
+      </p>
+      <br>
+      <p class="band-bio-body">
+        Their music sits at the intersection of Rock en Español and American indie — distorted guitars over rhythms
+        pulled from their parents' record collections, lyrics that move between English and Spanish mid-verse without
+        apology or announcement. It's bilingual in the truest sense: not translated, but lived.
+      </p>
+      <br>
+      <p class="band-bio-body">
+        Since 2022 they've been a Mohawk fixture. Their shows are known for crowd participation that blurs the line
+        between audience and performance. Volumen has been there from the beginning.
+      </p>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="band-bio-divider"></div>
+
+    <!-- SPANISH SIDE -->
+    <div class="band-bio-side reveal delay-1">
+      <div class="band-bio-lang">Español · ES</div>
+      <h2 class="band-bio-title">LA <span>HISTORIA</span></h2>
+      <p class="band-bio-body-es">
+        Viloria se formó en Austin en 2019 por una frustración compartida — la escena de rock latino existía, pero
+        estaba dispersa. Venues pequeños, turnos tarde, públicos que tenían que buscar el show. Decidieron convertirse
+        en el show que todos buscan.
+      </p>
+      <br>
+      <p class="band-bio-body-es">
+        Su música se sitúa en la intersección del Rock en Español y el indie americano — guitarras distorsionadas sobre
+        ritmos sacados de las colecciones de discos de sus padres, letras que se mueven entre el inglés y el español a
+        mitad de verso sin disculparse ni anunciarlo. Es bilingüe en el sentido más verdadero: no traducido, sino
+        vivido.
+      </p>
+      <br>
+      <p class="band-bio-body-es">
+        Desde 2022 han sido una constante en Mohawk. Sus shows son conocidos por la participación del público que borra
+        la línea entre audiencia y actuación. Volumen ha estado desde el principio.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+     PHOTO STRIP
+═══════════════════════════════════════════════════ -->
+  <div class="band-photos">
+    <div class="band-photo-item">
+      <img src="../photos/concert-wide.jpg" alt="Viloria full concert — wide stage view, packed crowd" loading="lazy">
+    </div>
+    <div class="band-photo-item">
+      <img src="../photos/singer-swirl.jpg" alt="Viloria vocalist in motion" loading="lazy">
+    </div>
+    <div class="band-photo-item">
+      <img src="../photos/guitarist-stage.jpg" alt="Viloria guitarist on stage" loading="lazy">
+    </div>
+    <div class="band-photo-item">
+      <img src="../photos/drummer-neon.jpg" alt="Viloria drummer under neon lights" loading="lazy">
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+     DISCOGRAPHY
+═══════════════════════════════════════════════════ -->
+  <section class="band-discography reveal">
+    <div class="band-section-header">
+      <h2 class="band-section-title" data-en="DISCO<span>GRAPHY</span>" data-es="DISCO<span>GRAFÍA</span>">DISCO<span>GRAPHY</span></h2>
+      <span class="band-section-sub" data-en="3 Releases" data-es="3 Lanzamientos">3 Releases</span>
+    </div>
+
+    <div class="discography-grid">
+      <!-- Album 1 -->
+      <div class="album-card">
+        <div class="album-art">
+          <div class="album-art-placeholder red-tint">V</div>
+        </div>
+        <div class="album-body">
+          <div class="album-type">Full Length · LP</div>
+          <div class="album-title">SIN FRONTERAS</div>
+          <div class="album-year">2024</div>
+        </div>
+      </div>
+      <!-- Album 2 -->
+      <div class="album-card">
+        <div class="album-art">
+          <div class="album-art-placeholder gold-tint">V</div>
+        </div>
+        <div class="album-body">
+          <div class="album-type">Full Length · LP</div>
+          <div class="album-title">RAÍCES ELÉCTRICAS</div>
+          <div class="album-year">2022</div>
+        </div>
+      </div>
+      <!-- EP -->
+      <div class="album-card">
+        <div class="album-art">
+          <div class="album-art-placeholder dark">V</div>
+        </div>
+        <div class="album-body">
+          <div class="album-type">Extended Play · EP</div>
+          <div class="album-title">VOL. I</div>
+          <div class="album-year">2020</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+     SPOTIFY EMBED
+═══════════════════════════════════════════════════ -->
+  <section class="band-spotify reveal">
+    <div class="band-spotify-inner">
+      <div class="spotify-label">
+        <svg class="spotify-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
+        </svg>
+        <span data-en="Listen on Spotify" data-es="Escucha en Spotify">Listen on Spotify</span>
+      </div>
+      <!--
+      ⚠️  Replace SPOTIFY_ARTIST_ID below with Viloria's real Spotify artist ID.
+          Find it by going to their Spotify page → Share → Copy Link → the ID is at the end.
+          Example: https://open.spotify.com/artist/4Z8W4fkeB5StTs5hOCO50a
+          Then update src to: https://open.spotify.com/embed/artist/4Z8W4fkeB5StTs5hOCO50a
+    -->
+      <iframe id="spotify-embed"
+        src="https://open.spotify.com/embed/artist/4Z8W4fkeB5StTs5hOCO50a?utm_source=generator&theme=0" width="100%"
+        height="352" frameborder="0" allowfullscreen
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"
+        title="Viloria on Spotify" class="spotify-embed"></iframe>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+     VOLUMEN COVERAGE
+═══════════════════════════════════════════════════ -->
+  <section class="band-coverage">
+    <div class="band-section-header reveal">
+      <h2 class="band-section-title" data-en="VOLUMEN <span>COVERAGE</span>" data-es="COBERTURA <span>VOLUMEN</span>">VOLUMEN <span>COVERAGE</span></h2>
+      <span class="band-section-sub" data-en="3 Pieces" data-es="3 Artículos">3 Pieces</span>
+    </div>
+
+    <div class="coverage-grid">
+      <!-- Photo Essay -->
+      <div class="coverage-card reveal">
+        <div class="coverage-card-img">
+          <img src="../photos/concert-wide.jpg" alt="A Night With Viloria photo essay cover" loading="lazy">
+        </div>
+        <div class="coverage-card-body">
+          <span class="coverage-card-type essay" data-en="Photo Essay" data-es="Ensayo Fotográfico">Photo Essay</span>
+          <div class="coverage-card-title">A NIGHT WITH VILORIA</div>
+          <a href="../photo-essay.html" class="coverage-card-link" id="link-photo-essay">
+            <span data-en="View Essay" data-es="Ver Ensayo">View Essay</span>
+            <svg viewBox="0 0 24 24">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Interview -->
+      <div class="coverage-card reveal delay-1">
+        <div class="coverage-card-img">
+          <img src="../photos/band-monochrome.jpg" alt="Viloria interview cover" loading="lazy">
+        </div>
+        <div class="coverage-card-body">
+          <span class="coverage-card-type interview" data-en="Interview" data-es="Entrevista">Interview</span>
+          <div class="coverage-card-title">ECHOES OF THE UNDERGROUND</div>
+          <a href="../interviews.html" class="coverage-card-link" id="link-interview">
+            <span data-en="Read Interview" data-es="Leer Entrevista">Read Interview</span>
+            <svg viewBox="0 0 24 24">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Pit Video -->
+      <div class="coverage-card reveal delay-2">
+        <div class="coverage-card-img">
+          <img src="../photos/guitarist-floor.jpg" alt="30 Seconds in the Pit — Viloria" loading="lazy">
+        </div>
+        <div class="coverage-card-body">
+          <span class="coverage-card-type video" data-en="30 Sec. Video" data-es="Video 30 Seg.">30 Sec. Video</span>
+          <div class="coverage-card-title">30 SECONDS IN THE PIT</div>
+          <a href="../pit-video.html" class="coverage-card-link" id="link-pit-video">
+            <span data-en="Watch Clip" data-es="Ver Clip">Watch Clip</span>
+            <svg viewBox="0 0 24 24">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUBMIT CTA -->
+  <div class="band-submit-cta reveal">
+    <div class="band-submit-left">
+      <h2 data-en="YOUR BAND<br>ON <span>VOLUMEN?</span>" data-es="¿TU BANDA<br>EN <span>VOLUMEN?</span>">YOUR BAND<br>ON <span>VOLUMEN?</span></h2>
+      <p data-en="Volumen is always looking for the next story. Submit your band and tell us about your upcoming Austin shows." data-es="Volumen siempre busca la próxima historia. Envía tu banda y cuéntanos sobre tus próximos shows en Austin.">Volumen is always looking for the next story. Submit your band and tell us about your upcoming Austin shows.
+      </p>
+    </div>
+    <a href="../submit.html" class="band-submit-btn" id="submit-band-link" data-en="Submit Your Band →" data-es="Envía Tu Banda →">Submit Your Band →</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo"><span>V</span>OLUMEN</div>
+    <div class="footer-copy">© 2026 Volumen Magazine · Austin, Texas · All Rights Reserved</div>
+    <div class="footer-social">
+      <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener"
+        aria-label="Instagram (opens in new tab)">Instagram</a>
+      <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener"
+        aria-label="Twitter / X (opens in new tab)">Twitter / X</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    // ── SCROLL PROGRESS ──
+    const progressBar = document.getElementById('scroll-progress');
+    if (progressBar) {
+      window.addEventListener('scroll', () => {
+        const scrolled = window.scrollY;
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        progressBar.style.width = (total > 0 ? (scrolled / total) * 100 : 0) + '%';
+      }, { passive: true });
+    }
+
+    // ── REVEAL ANIMATION ──
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ── CUSTOM CURSOR ──
+    const cursor = document.getElementById('cursor');
+    if (cursor && window.matchMedia('(hover: hover)').matches) {
+      document.addEventListener('mousemove', e => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+      }, { passive: true });
+      document.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+      });
+    }
+
+    // ── LANGUAGE TOGGLE ──
+    const btnEn = document.getElementById('btn-en');
+    const btnEs = document.getElementById('btn-es');
+    function setLang(lang) {
+      document.body.classList.toggle('lang-es', lang === 'es');
+      btnEn.classList.toggle('active', lang === 'en');
+      btnEs.classList.toggle('active', lang === 'es');
+      localStorage.setItem('volumen-lang', lang);
+      document.querySelectorAll('[data-en][data-es]').forEach(el => {
+        el.innerHTML = lang === 'es' ? el.dataset.es : el.dataset.en;
+      });
+    }
+    if (btnEn) btnEn.addEventListener('click', () => setLang('en'));
+    if (btnEs) btnEs.addEventListener('click', () => setLang('es'));
+    const savedLang = localStorage.getItem('volumen-lang');
+    if (savedLang) setLang(savedLang);
+  </script>
+
+</body>
+
+</html>

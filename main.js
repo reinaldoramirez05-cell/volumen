@@ -52,4 +52,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // Restore saved language preference on every page load
   const savedLang = localStorage.getItem('volumen-lang');
   if (savedLang === 'es') applyLang('es');
+
+  // ── SCROLL PROGRESS BAR ───────────────────────────────
+  // Activates on any page that has <div id="scroll-progress">
+
+  const progressBar = document.getElementById('scroll-progress');
+  if (progressBar) {
+    const updateProgress = () => {
+      const scrollTop  = window.scrollY;
+      const docHeight  = document.documentElement.scrollHeight - window.innerHeight;
+      const pct        = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressBar.style.width = pct + '%';
+    };
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+  }
 });

@@ -240,4 +240,236 @@ The navigation on mobile scales down (font shrinks to 8px) but doesn't collapse.
 
 ---
 
-##
+## Executive Summary
+
+Volumen is a well-crafted, visually strong portfolio. The design language is cohesive, the bilingual identity is clear, and the deployment setup (Netlify + Lighthouse tracking) is solid. The optimizations below will improve load speed, SEO, maintainability, and accessibility without changing the look or feel of the site.
+
+The issues are grouped by priority: **High** (fix soon), **Medium** (fix as you grow), and **Low** (nice to have).
+
+---
+
+## HIGH PRIORITY
+
+### 1. Extract Shared CSS Into One External File
+
+**Problem:** Every page (`home.html`, `editorial.html`, `contact.html`, etc.) duplicates hundreds of lines of the same CSS — the nav, cursor, grain overlay, footer, and CSS variables are copy-pasted into each `<style>` tag. This means:
+- The browser can't cache shared styles between pages (re-downloads on every navigation)
+- Updating the nav or brand colors requires editing every single file
+- HTML files are bloated (home.html alone is ~500+ lines of CSS)
+
+**Fix:** Create a `styles/main.css` file with all shared styles, and add a `<link>` tag to every page:
+
+```html
+<link rel="stylesheet" href="/styles/main.css">
+```
+
+Keep only page-specific styles in each file's `<style>` tag. This alone will make every page smaller and navigation feel instant due to browser caching.
+
+---
+
+### 2. Convert Images to WebP Format
+
+**Problem:** All 12 photos in `/photos/` are JPEGs. The largest (`guitarist-tent.jpg`) is 338KB. Modern browsers support WebP, which gives 25–35% smaller files with the same visual quality — important for your concert photography gallery.
+
+**Fix:** Convert each JPEG to WebP and use the `<picture>` element for fallback support:
+
+```html
+<picture>
+  <source srcset="photos/guitarist-floor.webp" type="image/webp">
+  <img src="photos/guitarist-floor.jpg" alt="Guitarist on stage" loading="lazy">
+</picture>
+```
+
+You can batch-convert with: `cwebp -q 85 guitarist-floor.jpg -o guitarist-floor.webp`  
+Or use Squoosh (squoosh.app) for a free browser-based converter.
+
+**Estimated savings:** ~600KB–800KB total across all images.
+
+---
+
+### 3. Add `width` and `height` Attributes to All Images
+
+**Problem:** None of the `<img>` tags have `width` and `height` attributes. This causes **Cumulative Layout Shift (CLS)** — the page "jumps" as images load because the browser doesn't know how much space to reserve. Google PageSpeed and Core Web Vitals penalize this.
+
+**Fix:** Add dimensions to every `<img>`:
+
+```html
+<img src="photos/concert-wide.jpg" width="1200" height="800" alt="Full band on stage" loading="lazy">
+```
+
+---
+
+### 4. Fix Sitemap to Use Clean URLs
+
+**Problem:** Your `sitemap.xml` lists URLs with `.html` extensions (e.g., `volumen.media/home.html`) but your `netlify.toml` redirects clean URLs like `volumen.media/home` to those pages. Search engines will index the `.html` versions, creating potential duplicate content issues.
+
+**Fix:** Update `sitemap.xml` to use the clean URL versions:
+
+```xml
+<loc>https://volumen.media/home</loc>  <!-- not home.html -->
+<loc>https://volumen.media/editorial</loc>
+<loc>https://volumen.media/interviews</loc>
+```
+
+Also remove `landing.html` from the sitemap — users never reach it directly and it's a duplicate of `index.html`.
+
+---
+
+### 5. Fix the Catch-All Netlify Redirect
+
+**Problem:** In `netlify.toml`, the rule `/* → /index.html` (status 200) means that visiting any broken URL — like `/typo` or `/old-page` — silently serves the 3D Spline landing page instead of a real 404. This confuses users and hurts SEO.
+
+**Fix:** Remove the catch-all redirect and add a proper `404.html` page instead:
+
+```toml
+# Remove this:
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+```
+
+Create a `404.html` page with your brand style and a link back to home. Netlify automatically serves it for any unmatched route.
+
+---
+
+## MEDIUM PRIORITY
+
+### 6. Add `rel="preconnect"` for Google Fonts
+
+**Problem:** Each page loads fonts from Google Fonts without preconnect hints, which means the browser doesn't start connecting to `fonts.googleapis.com` until it encounters the `<link>` tag. This adds ~100–200ms of latency on first load.
+
+**Fix:** Add these two lines above your font `<link>` tag on every page:
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+```
+
+---
+
+### 7. Add a Spline Fallback for Mobile and Slow Connections
+
+**Problem:** The `index.html` 3D landing page loads Spline from an external CDN (`esm.sh`). On mobile or slow connections, the scene may never load, leaving users stuck on a black screen with "Loading Environment..." and no way to proceed — the enter button is hidden until `body.loaded` is set, which only happens after Spline loads successfully.
+
+**Fix:** Add a timeout fallback so the enter button appears even if Spline fails to load:
+
+```javascript
+// In index.html, after spline.load():
+const fallbackTimer = setTimeout(() => {
+  document.body.classList.add('loaded'); // Show the button anyway
+}, 8000); // 8 second timeout
+
+spline.load('https://prod.spline.design/...')
+  .then(() => {
+    clearTimeout(fallbackTimer);
+    document.body.classList.add('loaded');
+  });
+```
+
+---
+
+### 8. Make the Language Toggle Actually Switch Content
+
+**Problem:** The EN/ES toggle buttons on every page only change their own visual state (one turns red) but don't actually switch any content to Spanish. Your site has beautifully written bilingual copy, but users can't browse in Spanish-only mode. This is a missed opportunity given Volumen's core identity.
+
+**Fix (Simple):** Add `data-en` and `data-es` attributes to all bilingual text elements, and toggle their content with JS when the language button is clicked:
+
+```html
+<div class="bi-text" data-en="For the music lovers..." data-es="Para los amantes...">
+  For the music lovers...
+</div>
+```
+
+```javascript
+document.getElementById('btn-es').addEventListener('click', () => {
+  document.querySelectorAll('[data-es]').forEach(el => {
+    el.textContent = el.dataset.es;
+  });
+});
+```
+
+---
+
+### 9. Preload the Hero Image
+
+**Problem:** The hero background image in `home.html` (`concert-wide.jpg`) is the largest image a user sees first, but it's not preloaded — the browser discovers it only when it parses the CSS/HTML. This delays the Largest Contentful Paint (LCP) score.
+
+**Fix:** Add a preload hint in the `<head>`:
+
+```html
+<link rel="preload" as="image" href="photos/concert-wide.jpg">
+```
+
+Once you convert to WebP, update this to point to the `.webp` version.
+
+---
+
+### 10. Add `<link rel="canonical">` to Every Page
+
+**Problem:** Since both `home.html` and `/home` serve the same content (due to Netlify redirects), search engines might see duplicate pages. A canonical tag tells them which URL is the "real" one.
+
+**Fix:** Add to every page's `<head>`:
+
+```html
+<!-- home.html -->
+<link rel="canonical" href="https://volumen.media/home">
+
+<!-- editorial.html -->
+<link rel="canonical" href="https://volumen.media/editorial">
+```
+
+---
+
+## LOW PRIORITY (Nice to Have)
+
+### 11. Add a Web App Manifest for PWA Support
+
+Adds an installable "Add to Home Screen" experience on mobile. Create a `manifest.json` and link it:
+
+```html
+<link rel="manifest" href="/manifest.json">
+```
+
+This is especially impactful for a music magazine — fans checking setlists or photos at shows on mobile will appreciate it.
+
+---
+
+### 12. Consider Astro or 11ty for Future Scaling
+
+As you add more content (more editorials, interviews, show coverage), maintaining everything in raw HTML will become difficult. Your README already mentions this. When you're ready, **Astro** is the best choice for this kind of content site — it's component-based but outputs pure static HTML, supports image optimization out of the box, and has zero JS by default.
+
+---
+
+### 13. Add `aria-label` to Icon-Only Links
+
+The Instagram and Twitter links in the footer contain only text ("Instagram", "Twitter / X") which is fine. But the play button on `index.html` has only an SVG icon with no text and no `aria-label`:
+
+```html
+<!-- Current -->
+<a href="home.html" class="play-btn" title="Enter Volumen">
+
+<!-- Better -->
+<a href="home.html" class="play-btn" title="Enter Volumen" aria-label="Enter Volumen Magazine">
+```
+
+---
+
+## Quick Wins Summary
+
+| Fix | Effort | Impact |
+|-----|--------|--------|
+| Fix sitemap clean URLs | 5 min | SEO ✅ |
+| Add preconnect for fonts | 5 min | Performance ✅ |
+| Add preload for hero image | 5 min | LCP score ✅ |
+| Add image width/height attributes | 15 min | CLS score ✅ |
+| Fix catch-all redirect + 404 page | 20 min | SEO + UX ✅ |
+| Add Spline timeout fallback | 15 min | Mobile UX ✅ |
+| Convert images to WebP | 30 min | Load speed ✅ |
+| Extract shared CSS to file | 1–2 hrs | Maintainability ✅ |
+| Implement language toggle | 2–3 hrs | Bilingual identity ✅ |
+
+---
+
+*Report generated by automated Volumen site analysis · April 2026*

@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Night With Viloria — Photo Essay | Volumen Magazine</title>
+  <meta name="description" content="A full-bleed, scroll-driven photo essay from a Viloria show at Mohawk, Austin. Every frame captured by Reinaldo Ramirez for Volumen Magazine.">
+  <meta name="keywords" content="photo essay, Viloria Austin, concert photography, bilingual rock, Volumen magazine, live music Texas">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://volumen.media/photo-essay">
+  <meta property="og:title" content="A Night With Viloria — Photo Essay | Volumen Magazine">
+  <meta property="og:description" content="A scroll-driven photo essay. Photography by Reinaldo Ramirez.">
+  <meta property="og:image" content="https://volumen.media/photos/concert-wide.jpg">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="A Night With Viloria | Volumen Photo Essay">
+  <meta property="twitter:image" content="https://volumen.media/photos/concert-wide.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="canonical" href="https://volumen.media/photo-essay">
+
+  <style>
+    /* ─────────────────────────────────────────
+       AUDIO TOGGLE (fixed to bottom-right)
+    ───────────────────────────────────────── */
+    .audio-toggle {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 500;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(8, 8, 8, 0.88);
+      border: 1px solid rgba(191, 45, 31, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+      transition: background 0.3s, border-color 0.3s, transform 0.25s;
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+
+    .audio-toggle:hover {
+      background: rgba(191, 45, 31, 0.12);
+      border-color: var(--red);
+      transform: scale(1.1);
+    }
+
+    .audio-toggle.playing { border-color: var(--red); }
+
+    .audio-toggle svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--mid);
+      transition: fill 0.3s;
+    }
+
+    .audio-toggle:hover svg,
+    .audio-toggle.playing svg { fill: var(--red); }
+
+    .audio-toggle .icon-play  { display: block; }
+    .audio-toggle .icon-pause { display: none; }
+    .audio-toggle.playing .icon-play  { display: none; }
+    .audio-toggle.playing .icon-pause { display: block; }
+
+    .audio-label {
+      position: fixed;
+      bottom: 44px;
+      right: 88px;
+      z-index: 500;
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--mid);
+      text-transform: uppercase;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+      white-space: nowrap;
+    }
+
+    .audio-toggle:hover ~ .audio-label { opacity: 1; }
+
+    /* ─────────────────────────────────────────
+       ESSAY HERO
+    ───────────────────────────────────────── */
+    .essay-hero {
+      height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .essay-hero-bg {
+      position: absolute;
+      inset: 0;
+    }
+
+    .essay-hero-bg img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.32) contrast(1.15);
+      animation: heroZoom 22s ease-in-out infinite alternate;
+    }
+
+    @keyframes heroZoom {
+      from { transform: scale(1); }
+      to   { transform: scale(1.06); }
+    }
+
+    .essay-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(8,8,8,0.3) 0%, transparent 30%, transparent 55%, rgba(8,8,8,0.92) 100%),
+        linear-gradient(to right, rgba(8,8,8,0.15) 0%, transparent 60%);
+    }
+
+    .essay-hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 6vw;
+    }
+
+    .essay-label {
+      font-size: 9px;
+      letter-spacing: 6px;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+
+    .essay-label::before,
+    .essay-label::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--red);
+    }
+
+    .essay-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(56px, 13vw, 170px);
+      line-height: 0.88;
+      letter-spacing: 4px;
+      color: var(--white);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.5s forwards;
+    }
+
+    .essay-title span { color: var(--red); }
+
+    .essay-venue {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(13px, 1.3vw, 17px);
+      color: #666;
+      margin-bottom: 56px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.7s forwards;
+    }
+
+    .essay-scroll-cue {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      opacity: 0;
+      animation: fadeUp 1s ease 1.1s forwards;
+    }
+
+    .essay-scroll-line {
+      width: 1px;
+      height: 52px;
+      background: linear-gradient(to bottom, var(--red), transparent);
+      animation: scrollPulse 2.2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.25; transform: scaleY(0.7); }
+      50%       { opacity: 1;    transform: scaleY(1); }
+    }
+
+    .essay-scroll-text {
+      font-size: 8px;
+      letter-spacing: 5px;
+      color: var(--mid);
+      text-transform: uppercase;
+    }
+
+    /* ─────────────────────────────────────────
+       ESSAY FRAMES (full-bleed photos)
+    ───────────────────────────────────────── */
+    .essay-frame {
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .essay-frame img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.1s linear;
+    }
+
+    /* Bottom gradient for caption readability */
+    .essay-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(8,8,8,0.55) 0%, transparent 25%, transparent 55%, rgba(8,8,8,0.8) 100%);
+      pointer-events: none;
+    }
+
+    /* ─────────────────────────────────────────
+       PHOTO CAPTION
+    ───────────────────────────────────────── */
+    .essay-caption {
+      position: absolute;
+      bottom: 40px;
+      left: 6vw;
+      right: 6vw;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      z-index: 3;
+    }
+
+    .essay-caption-text {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: rgba(242, 236, 224, 0.65);
+      text-transform: uppercase;
+      max-width: 60%;
+    }
+
+    .essay-caption-en  { display: block; }
+    .essay-caption-es  { display: none; color: var(--gold); }
+    body.lang-es .essay-caption-en { display: none; }
+    body.lang-es .essay-caption-es { display: block; }
+
+    .essay-photo-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 56px;
+      line-height: 1;
+      color: rgba(191, 45, 31, 0.18);
+      letter-spacing: 2px;
+      flex-shrink: 0;
+      z-index: 3;
+    }
+
+    /* ─────────────────────────────────────────
+       TEXT SECTIONS
+    ───────────────────────────────────────── */
+    .essay-text-section {
+      padding: 110px 6vw;
+      display: flex;
+      justify-content: center;
+      border-bottom: 1px solid #0d0d0d;
+      background: var(--black);
+    }
+
+    .essay-text-inner {
+      max-width: 700px;
+      width: 100%;
+    }
+
+    .essay-lang-tag {
+      font-size: 9px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      opacity: 0.8;
+    }
+
+    .essay-lang-tag::after {
+      content: '';
+      display: block;
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, rgba(201,160,64,0.3), transparent);
+    }
+
+    .essay-paragraph-en {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(18px, 2vw, 23px);
+      line-height: 1.78;
+      color: #bbb4a4;
+    }
+
+    .essay-paragraph-es {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(16px, 1.8vw, 21px);
+      line-height: 1.78;
+      color: #7a6840;
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid #1a1a1a;
+      display: none;
+    }
+
+    body.lang-es .essay-paragraph-en { display: none; }
+    body.lang-es .essay-paragraph-es { display: block; }
+
+    /* ─────────────────────────────────────────
+       PULL QUOTE
+    ───────────────────────────────────────── */
+    .essay-quote {
+      padding: 96px 6vw;
+      text-align: center;
+      background: var(--gray);
+      border-top: 1px solid #0f0f0f;
+      border-bottom: 1px solid #0f0f0f;
+    }
+
+    .essay-quote blockquote {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(30px, 4.5vw, 68px);
+      line-height: 1.12;
+      letter-spacing: 3px;
+      color: var(--white);
+      max-width: 1000px;
+      margin: 0 auto 20px;
+    }
+
+    .essay-quote blockquote span { color: var(--red); }
+
+    .essay-quote cite {
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--mid);
+      text-transform: uppercase;
+      font-style: normal;
+    }
+
+    /* ─────────────────────────────────────────
+       REVEAL ANIMATION
+    ───────────────────────────────────────── */
+    .essay-reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 1.15s ease, transform 1.15s ease;
+    }
+
+    .essay-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─────────────────────────────────────────
+       FINAL CTA
+    ───────────────────────────────────────── */
+    .essay-cta {
+      height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .essay-cta-bg {
+      position: absolute;
+      inset: 0;
+    }
+
+    .essay-cta-bg img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: brightness(0.15) grayscale(100%);
+    }
+
+    .essay-cta-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(8,8,8,0.5);
+    }
+
+    .essay-cta-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 6vw;
+    }
+
+    .essay-cta-label {
+      font-size: 9px;
+      letter-spacing: 6px;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .essay-cta-label::before,
+    .essay-cta-label::after {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--red);
+    }
+
+    .essay-cta-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(40px, 7vw, 96px);
+      letter-spacing: 4px;
+      color: var(--white);
+      margin-bottom: 16px;
+      line-height: 0.95;
+    }
+
+    .essay-cta-sub {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(14px, 1.4vw, 18px);
+      color: #555;
+      margin-bottom: 52px;
+      line-height: 1.7;
+    }
+
+    .essay-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      letter-spacing: 6px;
+      color: var(--white);
+      text-decoration: none;
+      border: 1px solid rgba(191,45,31,0.5);
+      padding: 18px 40px;
+      transition: background 0.3s, border-color 0.3s, gap 0.3s;
+    }
+
+    .essay-cta-btn:hover {
+      background: var(--red);
+      border-color: var(--red);
+      gap: 24px;
+    }
+
+    .essay-cta-btn svg {
+      width: 16px; height: 16px;
+      stroke: currentColor; fill: none; stroke-width: 2;
+      transition: transform 0.3s;
+    }
+
+    .essay-cta-btn:hover svg { transform: translateX(4px); }
+
+    /* ─────────────────────────────────────────
+       PHOTOGRAPHY CREDIT
+    ───────────────────────────────────────── */
+    .essay-credit {
+      padding: 48px 6vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid #111;
+      flex-wrap: wrap;
+      gap: 20px;
+      background: var(--black);
+    }
+
+    .essay-cta-sub-es { color: #444; }
+
+    .essay-credit-label {
+      font-size: 9px;
+      letter-spacing: 4px;
+      color: var(--mid);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .essay-credit-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 4px;
+      color: var(--white);
+    }
+
+    .essay-back {
+      font-size: 9px;
+      letter-spacing: 4px;
+      color: var(--mid);
+      text-decoration: none;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: color 0.3s;
+    }
+
+    .essay-back:hover { color: var(--gold); }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .essay-text-section { padding: 80px 6vw; }
+      .essay-caption { flex-direction: column; gap: 8px; align-items: flex-start; }
+      .essay-photo-num { font-size: 40px; }
+      .audio-toggle { bottom: 18px; right: 18px; width: 42px; height: 42px; }
+      .audio-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS -->
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+
+<!-- GRAIN -->
+<div class="grain"></div>
+
+<!-- AMBIENT AUDIO -->
+<!-- ⚠️  Drop a 15-second ambient loop as photos/ambient.mp3 to activate audio toggle -->
+<audio id="essay-audio" loop preload="none">
+  <source src="photos/ambient.mp3" type="audio/mpeg">
+</audio>
+
+<!-- AUDIO TOGGLE -->
+<button class="audio-toggle" id="audio-toggle" aria-label="Toggle ambient audio" title="Ambient Audio">
+  <svg class="icon-play" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="6,4 20,12 6,20"/>
+  </svg>
+  <svg class="icon-pause" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <rect x="5" y="4" width="4" height="16"/>
+    <rect x="15" y="4" width="4" height="16"/>
+  </svg>
+</button>
+<span class="audio-label">Ambient audio</span>
+
+<!-- NAV -->
+<nav aria-label="Main navigation">
+  <a href="home.html" class="nav-logo"><span>V</span>OLUMEN</a>
+  <ul class="nav-links">
+    <li><a href="home.html#manifesto">About / Acerca</a></li>
+    <li><a href="editorial.html" class="active">Editorial</a></li>
+    <li><a href="interviews.html">Interviews</a></li>
+    <li><a href="home.html#gallery">Photos / Fotos</a></li>
+    <li><a href="submit.html">Submit / Envía</a></li>
+    <li><a href="contact.html">Contact / Contacto</a></li>
+  </ul>
+  <div class="nav-lang">
+    <button type="button" class="lang-btn active" id="btn-en">EN</button>
+    <span class="lang-sep">/</span>
+    <button type="button" class="lang-btn" id="btn-es">ES</button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════
+     ESSAY HERO
+═══════════════════════════════════════════════════ -->
+<section class="essay-hero">
+  <div class="essay-hero-bg">
+    <img src="photos/concert-wide.jpg" alt="Full crowd at a Viloria show, Mohawk Austin, March 2026" loading="eager">
+  </div>
+  <div class="essay-hero-overlay"></div>
+  <div class="essay-hero-content">
+    <div class="essay-label">Photo Essay · Vol. 01 · Issue 001</div>
+    <h1 class="essay-title">A NIGHT<br>WITH <span>VILORIA</span></h1>
+    <p class="essay-venue">Mohawk · Austin, TX · March 2026 · Photography: Reinaldo Ramirez</p>
+    <div class="essay-scroll-cue">
+      <div class="essay-scroll-line"></div>
+      <span class="essay-scroll-text">Scroll to experience · Desplázate para vivir</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     FRAME 01 — Wide Stage
+═══════════════════════════════════════════════════ -->
+<div class="essay-frame essay-reveal" role="img" aria-label="Wide view of the stage under blue lights">
+  <img src="photos/wide-stage-view.jpg" alt="Wide stage view under vivid blue lighting" loading="lazy">
+  <div class="essay-caption">
+    <div class="essay-caption-text">
+      <span class="essay-caption-en">Blue light. Empty stage. 9:47 PM.</span>
+      <span class="essay-caption-es">Luz azul. Escenario vacío. 9:47 PM.</span>
+    </div>
+    <div class="essay-photo-num">01</div>
+  </div>
+</div>
+
+<!-- TEXT 01 -->
+<div class="essay-text-section">
+  <div class="essay-text-inner essay-reveal">
+    <div class="essay-lang-tag">Mohawk · Austin, TX</div>
+    <p class="essay-paragraph-en">
+      The room was already full before a single note was played. Mohawk's outdoor stage caught the last of Austin's March air — cool enough to keep energy high, warm enough to forget the world outside those string lights. Something was about to happen. You could feel it before you could name it.
+    </p>
+    <p class="essay-paragraph-es">
+      La sala ya estaba llena antes de que sonara una sola nota. El escenario al aire libre de Mohawk atrapó el último aire de marzo en Austin — lo suficientemente frío para mantener la energía alta, lo suficientemente cálido para olvidar el mundo fuera de esas luces. Algo estaba a punto de pasar. Lo podías sentir antes de nombrarlo.
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     FRAME 02 — Drummer with Crowd
+═══════════════════════════════════════════════════ -->
+<div class="essay-frame essay-reveal" role="img" aria-label="Drummer seen from behind, crowd stretching forward">
+  <img src="photos/drummer-rear.jpg" alt="Drummer's perspective from the stage looking out at the crowd" loading="lazy">
+  <div class="essay-caption">
+    <div class="essay-caption-text">
+      <span class="essay-caption-en">Then the drummer sat down.</span>
+      <span class="essay-caption-es">Entonces el baterista tomó su lugar.</span>
+    </div>
+    <div class="essay-photo-num">02</div>
+  </div>
+</div>
+
+<!-- TEXT 02 -->
+<div class="essay-text-section">
+  <div class="essay-text-inner essay-reveal">
+    <div class="essay-lang-tag">9:52 PM</div>
+    <p class="essay-paragraph-en">
+      It always starts with the drummer. Not a crash or a rim shot — just the act of sitting down. The crowd senses it before they see it. Bodies shift forward. Phones go up, then slowly come back down. Nobody wants to experience this through a screen.
+    </p>
+    <p class="essay-paragraph-es">
+      Siempre comienza con el baterista. No con un crash ni un rim shot — solo el acto de sentarse. El público lo siente antes de verlo. Los cuerpos avanzan. Los teléfonos suben, luego bajan. Nadie quiere vivir esto a través de una pantalla.
+    </p>
+  </div>
+</div>
+
+<!-- PULL QUOTE 01 -->
+<div class="essay-quote essay-reveal">
+  <blockquote>"Nobody wants to experience this <span>through a screen.</span>"</blockquote>
+  <cite>— Volumen · A Night With Viloria · March 2026</cite>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     FRAME 03 — Guitarist on Stage
+═══════════════════════════════════════════════════ -->
+<div class="essay-frame essay-reveal" role="img" aria-label="Guitarist performing on stage">
+  <img src="photos/guitarist-stage.jpg" alt="Lead guitarist on stage, commanding and precise" loading="lazy">
+  <div class="essay-caption">
+    <div class="essay-caption-text">
+      <span class="essay-caption-en">The guitar does the talking the words can't.</span>
+      <span class="essay-caption-es">La guitarra dice lo que las palabras no pueden.</span>
+    </div>
+    <div class="essay-photo-num">03</div>
+  </div>
+</div>
+
+<!-- TEXT 03 -->
+<div class="essay-text-section">
+  <div class="essay-text-inner essay-reveal">
+    <div class="essay-lang-tag">First song</div>
+    <p class="essay-paragraph-en">
+      Three songs in and the air had changed. There's a specific quiet that happens inside loud rooms — a paradox that live music creates when everyone locks into the same frequency. The guitar was doing that. Pulling attention inward, not outward. The room got smaller and larger at the same time.
+    </p>
+    <p class="essay-paragraph-es">
+      Tres canciones adentro y el aire había cambiado. Hay un silencio específico que ocurre dentro de los cuartos ruidosos — una paradoja que la música en vivo crea cuando todos sintonizamos la misma frecuencia. La guitarra lo estaba haciendo. Jalando la atención hacia adentro. La sala se hizo más pequeña y más grande al mismo tiempo.
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     FRAME 04 — The Crowd
+═══════════════════════════════════════════════════ -->
+<div class="essay-frame essay-reveal" role="img" aria-label="The Viloria crowd, full room, everyone engaged">
+  <img src="photos/viloria-crowd.jpg" alt="The Viloria crowd at Mohawk, fully engaged" loading="lazy">
+  <div class="essay-caption">
+    <div class="essay-caption-text">
+      <span class="essay-caption-en">Austin knows every word.</span>
+      <span class="essay-caption-es">Austin se sabe cada letra.</span>
+    </div>
+    <div class="essay-photo-num">04</div>
+  </div>
+</div>
+
+<!-- TEXT 04 -->
+<div class="essay-text-section">
+  <div class="essay-text-inner essay-reveal">
+    <div class="essay-lang-tag">The crowd</div>
+    <p class="essay-paragraph-en">
+      This is what sets Viloria apart. The audience doesn't just watch — they participate. Hands up in the parts they've been waiting for. Two languages, one room, zero translation needed. When a band breaks that barrier, the crowd becomes part of the performance. Not a backdrop. A collaborator.
+    </p>
+    <p class="essay-paragraph-es">
+      Esto es lo que distingue a Viloria. El público no solo mira — participa. Manos arriba en los momentos que llevan esperando. Dos idiomas, una sala, cero traducción necesaria. Cuando una banda rompe esa barrera, el público se convierte en parte del show. No un fondo. Un colaborador.
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     FRAME 05 — Guitarist Tent
+═══════════════════════════════════════════════════ -->
+<div class="essay-frame essay-reveal" role="img" aria-label="Guitarist performing under an outdoor tent stage">
+  <img src="photos/guitarist-tent.jpg" alt="Guitarist under an outdoor tent, warm ambient light" loading="lazy">
+  <div class="essay-caption">
+    <div class="essay-caption-text">
+      <span class="essay-caption-en">Even the outdoor stages become cathedrals.</span>
+      <span class="essay-caption-es">Hasta los escenarios al aire libre se vuelven catedrales.</span>
+    </div>
+    <div class="essay-photo-num">05</div>
+  </div>
+</div>
+
+<!-- TEXT 05 -->
+<div class="essay-text-section">
+  <div class="essay-text-inner essay-reveal">
+    <div class="essay-lang-tag">Texas light</div>
+    <p class="essay-paragraph-en">
+      There's a specific light that only exists at outdoor rock shows in Texas. Golden, dusty, cut by stage rigs and whatever the sky is doing. It doesn't photograph the same way twice. You have to be there to understand why people drive four hours for a two-hour set.
+    </p>
+    <p class="essay-paragraph-es">
+      Hay una luz específica que solo existe en los conciertos de rock al aire libre en Texas. Dorada, polvorienta, cortada por las luces del escenario y lo que el cielo esté haciendo. No se fotografía igual nunca dos veces. Tienes que estar ahí para entender por qué la gente maneja cuatro horas por un set de dos.
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     FRAME 06 — Singer Swirl
+═══════════════════════════════════════════════════ -->
+<div class="essay-frame essay-reveal" role="img" aria-label="Vocalist in full motion, lights swirling behind">
+  <img src="photos/singer-swirl.jpg" alt="Vocalist deeply in the performance, swirling stage lights" loading="lazy">
+  <div class="essay-caption">
+    <div class="essay-caption-text">
+      <span class="essay-caption-en">By the fifth song, the room belonged to them.</span>
+      <span class="essay-caption-es">En la quinta canción, la sala ya era de ellos.</span>
+    </div>
+    <div class="essay-photo-num">06</div>
+  </div>
+</div>
+
+<!-- TEXT 06 -->
+<div class="essay-text-section">
+  <div class="essay-text-inner essay-reveal">
+    <div class="essay-lang-tag">The peak</div>
+    <p class="essay-paragraph-en">
+      The vocalist doesn't perform so much as channel. There's a moment in every great show where the performer stops being a performer and becomes a conduit. Every song a transmission. Every lyric something borrowed from the air between the stage and the back wall.
+    </p>
+    <p class="essay-paragraph-es">
+      El vocalista no actúa tanto como canaliza. Hay un momento en cada gran show donde el artista deja de ser artista y se convierte en conducto. Cada canción una transmisión. Cada letra algo tomado prestado del aire entre el escenario y la pared del fondo.
+    </p>
+  </div>
+</div>
+
+<!-- PULL QUOTE 02 -->
+<div class="essay-quote essay-reveal">
+  <blockquote>"The performer stops being a performer<br>and <span>becomes a conduit.</span>"</blockquote>
+  <cite>— Volumen · A Night With Viloria · March 2026</cite>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     FRAME 07 — Drummer Neon
+═══════════════════════════════════════════════════ -->
+<div class="essay-frame essay-reveal" role="img" aria-label="Drummer under neon colored stage lights">
+  <img src="photos/drummer-neon.jpg" alt="Drummer performing under vivid neon stage lighting" loading="lazy">
+  <div class="essay-caption">
+    <div class="essay-caption-text">
+      <span class="essay-caption-en">Neon and noise — the rhythm section holds everything together.</span>
+      <span class="essay-caption-es">Neón y ruido — la sección rítmica sostiene todo.</span>
+    </div>
+    <div class="essay-photo-num">07</div>
+  </div>
+</div>
+
+<!-- TEXT 07 -->
+<div class="essay-text-section">
+  <div class="essay-text-inner essay-reveal">
+    <div class="essay-lang-tag">The rhythm</div>
+    <p class="essay-paragraph-en">
+      The rhythm section held everything together the way a spine holds everything upright — invisible until it's gone. The drummer played like someone with something to say, not just something to keep. Every fill a sentence. Every rest a breath.
+    </p>
+    <p class="essay-paragraph-es">
+      La sección rítmica sostuvo todo de la manera en que una columna vertebral mantiene todo erguido — invisible hasta que desaparece. El baterista tocó como alguien con algo que decir, no solo algo que mantener. Cada fill, una oración. Cada pausa, una respiración.
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     FRAME 08 — Guitarist Floor Level
+═══════════════════════════════════════════════════ -->
+<div class="essay-frame essay-reveal" role="img" aria-label="Guitarist shot from floor level looking up">
+  <img src="photos/guitarist-floor.jpg" alt="Guitarist from floor-level perspective, front row view" loading="lazy">
+  <div class="essay-caption">
+    <div class="essay-caption-text">
+      <span class="essay-caption-en">Floor level. Front row. The only place to be.</span>
+      <span class="essay-caption-es">Nivel del suelo. Primera fila. El único lugar.</span>
+    </div>
+    <div class="essay-photo-num">08</div>
+  </div>
+</div>
+
+<!-- TEXT 08 -->
+<div class="essay-text-section">
+  <div class="essay-text-inner essay-reveal">
+    <div class="essay-lang-tag">From the pit</div>
+    <p class="essay-paragraph-en">
+      From down here, the guitar is everything. The sound pressure alone is a physical experience — not unpleasant, but unmistakable. You feel it in your chest before your ears register it. This is what the photograph tries to approximate. It never quite gets there. You have to come back next show.
+    </p>
+    <p class="essay-paragraph-es">
+      Desde aquí abajo, la guitarra lo es todo. La presión del sonido por sí sola es una experiencia física — no desagradable, pero inconfundible. La sientes en el pecho antes de que tus oídos la registren. Esto es lo que la fotografía intenta aproximar. Nunca llega del todo. Tienes que volver al próximo show.
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     FRAME 09 — Singer Closeup
+═══════════════════════════════════════════════════ -->
+<div class="essay-frame essay-reveal" role="img" aria-label="Vocalist in close detail, mid performance">
+  <img src="photos/singer-closeup.jpg" alt="Vocalist in close detail, mid-performance emotion" loading="lazy">
+  <div class="essay-caption">
+    <div class="essay-caption-text">
+      <span class="essay-caption-en">Close enough to see the sweat, the effort, the belief.</span>
+      <span class="essay-caption-es">Suficientemente cerca para ver el sudor, el esfuerzo, la fe.</span>
+    </div>
+    <div class="essay-photo-num">09</div>
+  </div>
+</div>
+
+<!-- TEXT 09 -->
+<div class="essay-text-section">
+  <div class="essay-text-inner essay-reveal">
+    <div class="essay-lang-tag">Intimacy</div>
+    <p class="essay-paragraph-en">
+      There's intimacy in proximity. A microphone between you and the front row is just a prop. What you're actually watching is someone believe in something hard enough to do it in public, every night, in a different city, for rooms that are sometimes half-empty and sometimes exactly like this.
+    </p>
+    <p class="essay-paragraph-es">
+      Hay intimidad en la proximidad. Un micrófono entre tú y la primera fila es solo un accesorio. Lo que realmente estás viendo es a alguien creer en algo con suficiente fuerza para hacerlo en público, cada noche, en una ciudad diferente, para salas que a veces están medio vacías y a veces exactamente así.
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     FRAME 10 — Singer B&W
+═══════════════════════════════════════════════════ -->
+<div class="essay-frame essay-reveal" role="img" aria-label="Vocalist in sequined jacket, black and white">
+  <img src="photos/singer-bw.jpg" alt="Vocalist in black and white portrait, sequined jacket" loading="lazy">
+  <div class="essay-caption">
+    <div class="essay-caption-text">
+      <span class="essay-caption-en">The encore. Everyone knows it's coming. Nobody's ready.</span>
+      <span class="essay-caption-es">El encore. Todos saben que viene. Nadie está listo.</span>
+    </div>
+    <div class="essay-photo-num">10</div>
+  </div>
+</div>
+
+<!-- TEXT 10 -->
+<div class="essay-text-section">
+  <div class="essay-text-inner essay-reveal">
+    <div class="essay-lang-tag">The encore</div>
+    <p class="essay-paragraph-en">
+      The set ended. The lights came up halfway. The crowd refused to leave. This is the part of a show that doesn't exist in recordings — the negotiation between a room and a band, the collective refusal to let something good end. And so they came back.
+    </p>
+    <p class="essay-paragraph-es">
+      El set terminó. Las luces subieron a medias. El público se negó a irse. Esta es la parte de un show que no existe en las grabaciones — la negociación entre una sala y una banda, la negativa colectiva a dejar que algo bueno termine. Y así que regresaron.
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     FRAME 11 — Band Monochrome (Final Photo)
+═══════════════════════════════════════════════════ -->
+<div class="essay-frame essay-reveal" role="img" aria-label="Full band on stage, monochrome, the final bow">
+  <img src="photos/band-monochrome.jpg" alt="Viloria full band on stage in monochrome, final moment" loading="lazy">
+  <div class="essay-caption">
+    <div class="essay-caption-text">
+      <span class="essay-caption-en">And then it was over. Mohawk, March 2026.</span>
+      <span class="essay-caption-es">Y luego terminó. Mohawk, marzo 2026.</span>
+    </div>
+    <div class="essay-photo-num">11</div>
+  </div>
+</div>
+
+<!-- FINAL TEXT -->
+<div class="essay-text-section">
+  <div class="essay-text-inner essay-reveal">
+    <div class="essay-lang-tag">After</div>
+    <p class="essay-paragraph-en">
+      House lights up. The kind of quiet that follows loud things. Everyone stood there a little longer than they needed to — recalibrating to the ordinary world. Outside, Austin kept moving. Inside, for a few more minutes, nobody had to.
+    </p>
+    <p class="essay-paragraph-es">
+      Luces encendidas. El tipo de silencio que sigue a las cosas ruidosas. Todos se quedaron un poco más de lo necesario — recalibrándose al mundo ordinario. Afuera, Austin seguía moviéndose. Adentro, por unos minutos más, nadie tenía que hacerlo.
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     CTA — READ THE INTERVIEW
+═══════════════════════════════════════════════════ -->
+<section class="essay-cta">
+  <div class="essay-cta-bg">
+    <img src="photos/band-monochrome.jpg" alt="" role="presentation" loading="lazy">
+  </div>
+  <div class="essay-cta-overlay"></div>
+  <div class="essay-cta-content essay-reveal">
+    <div class="essay-cta-label">The full story continues</div>
+    <h2 class="essay-cta-title">READ THE<br>INTERVIEW</h2>
+    <p class="essay-cta-sub">
+      We sat down with Viloria before the show.<br>
+      <em class="essay-cta-sub-es">Nos sentamos con Viloria antes del show.</em>
+    </p>
+    <a href="interviews.html" class="essay-cta-btn" id="read-interview-cta">
+      Read the Interview
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- PHOTOGRAPHY CREDIT -->
+<div class="essay-credit">
+  <div class="essay-credit-left">
+    <div class="essay-credit-label">Photography &amp; Text</div>
+    <div class="essay-credit-name">Reinaldo Ramirez · Volumen Magazine · © 2026</div>
+  </div>
+  <a href="editorial.html" class="essay-back" id="back-editorial">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="19" y1="12" x2="5" y2="12"/>
+      <polyline points="12 19 5 12 12 5"/>
+    </svg>
+    Back to Editorial
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span>V</span>OLUMEN</div>
+  <div class="footer-copy">© 2026 Volumen Magazine · Austin, Texas · All Rights Reserved</div>
+  <div class="footer-social">
+    <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener" aria-label="Instagram (opens in new tab)">Instagram</a>
+    <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener" aria-label="Twitter / X (opens in new tab)">Twitter / X</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</footer>
+
+<script>
+  // ── SCROLL PROGRESS ──
+  const progressBar = document.getElementById('scroll-progress');
+  if (progressBar) {
+    const updateProgress = () => {
+      const scrolled = window.scrollY;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = (total > 0 ? (scrolled / total) * 100 : 0) + '%';
+    };
+    window.addEventListener('scroll', updateProgress, { passive: true });
+  }
+
+  // ── INTERSECTION OBSERVER — essay reveals ──
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // Unobserve after visible to save resources
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.13, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.essay-reveal').forEach(el => revealObserver.observe(el));
+
+  // ── AMBIENT AUDIO TOGGLE ──
+  const audio = document.getElementById('essay-audio');
+  const audioBtn = document.getElementById('audio-toggle');
+  let audioActive = false;
+
+  audioBtn.addEventListener('click', () => {
+    if (!audioActive) {
+      audio.volume = 0.28;
+      audio.play().then(() => {
+        audioActive = true;
+        audioBtn.classList.add('playing');
+      }).catch(() => {
+        // File missing or autoplay blocked — silent failure
+      });
+    } else {
+      audio.pause();
+      audio.currentTime = 0;
+      audioActive = false;
+      audioBtn.classList.remove('playing');
+    }
+  });
+
+  // ── CUSTOM CURSOR ──
+  const cursor = document.getElementById('cursor');
+  if (cursor && window.matchMedia('(hover: hover)').matches) {
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    }, { passive: true });
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+  }
+
+  // ── LANGUAGE TOGGLE ──
+  const btnEn = document.getElementById('btn-en');
+  const btnEs = document.getElementById('btn-es');
+  function setLang(lang) {
+    document.body.classList.toggle('lang-es', lang === 'es');
+    btnEn.classList.toggle('active', lang === 'en');
+    btnEs.classList.toggle('active', lang === 'es');
+    localStorage.setItem('volumen-lang', lang);
+  }
+  if (btnEn) btnEn.addEventListener('click', () => setLang('en'));
+  if (btnEs) btnEs.addEventListener('click', () => setLang('es'));
+  const savedLang = localStorage.getItem('volumen-lang');
+  if (savedLang) setLang(savedLang);
+</script>
+
+</body>
+</html>

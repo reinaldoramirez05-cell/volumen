@@ -266,6 +266,87 @@ footer {
   outline-offset: 2px;
 }
 
+/* ═══════════════════════════════════════════════════════
+   SCROLL PROGRESS INDICATOR
+   Add <div class="scroll-progress"></div> to any page
+   ═══════════════════════════════════════════════════════ */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--red);
+  z-index: 200;
+  transition: width 0.05s linear;
+  box-shadow: 0 0 8px rgba(191, 45, 31, 0.6);
+}
+
+/* ═══════════════════════════════════════════════════════
+   VIEW TRANSITIONS API — cinematic page-to-page animation
+   Supported: Chrome 111+, Edge 111+, Safari 18+
+   Falls back silently on unsupported browsers
+   ═══════════════════════════════════════════════════════ */
+
+@view-transition {
+  navigation: auto;
+}
+
+/* Old page: fade out to black */
+::view-transition-old(root) {
+  animation: vt-fade-out 0.35s cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+/* New page: fade in from black */
+::view-transition-new(root) {
+  animation: vt-fade-in 0.4s cubic-bezier(0, 0, 0.2, 1) 0.3s both;
+}
+
+@keyframes vt-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes vt-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Flash the V logo at the midpoint — shown while screen is black */
+::view-transition-image-pair(root) {
+  isolation: isolate;
+}
+
+/* V overlay that appears between pages */
+body::after {
+  content: 'V';
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(80px, 20vw, 200px);
+  color: var(--red);
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  pointer-events: none;
+  opacity: 0;
+  letter-spacing: 0.05em;
+}
+
+/* Animate V during transition — flash at midpoint */
+:root:active-view-transition body::after {
+  animation: vt-v-flash 0.7s ease both;
+}
+
+@keyframes vt-v-flash {
+  0%   { opacity: 0; transform: scale(0.8); }
+  45%  { opacity: 1; transform: scale(1);   }
+  55%  { opacity: 1; transform: scale(1);   }
+  100% { opacity: 0; transform: scale(1.1); }
+}
+
 /* RESPONSIVE NAV */
 @media (max-width: 768px) {
   .nav-links {

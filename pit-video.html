@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>30 Seconds in the Pit | Volumen Magazine</title>
+  <meta name="description" content="30 raw seconds from the front row. No edit, no cut, no filter. Volumen's vertical video series from Austin's bilingual rock scene.">
+  <meta name="keywords" content="concert video, pit footage, live rock video, Austin music, bilingual rock, Volumen magazine, vertical video">
+
+  <meta property="og:type" content="video.other">
+  <meta property="og:url" content="https://volumen.media/pit-video">
+  <meta property="og:title" content="30 Seconds in the Pit | Volumen">
+  <meta property="og:description" content="Raw, handheld, 30 seconds from the front row. No edit. No cut.">
+  <meta property="og:image" content="https://volumen.media/photos/guitarist-floor.jpg">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="30 Seconds in the Pit | Volumen Magazine">
+  <meta property="twitter:image" content="https://volumen.media/photos/guitarist-floor.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="canonical" href="https://volumen.media/pit-video">
+
+  <style>
+    /* ─────────────────────────────────────────
+       PAGE HERO
+    ───────────────────────────────────────── */
+    .pit-hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding: 140px 6vw 80px;
+    }
+
+    .pit-hero-bg {
+      position: absolute;
+      inset: 0;
+    }
+
+    .pit-hero-bg img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+      filter: brightness(0.2) contrast(1.2);
+    }
+
+    .pit-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right, rgba(8,8,8,0.96) 0%, rgba(8,8,8,0.6) 55%, transparent 100%),
+        linear-gradient(to bottom, transparent 40%, rgba(8,8,8,0.9) 100%);
+    }
+
+    .pit-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+    }
+
+    .pit-label {
+      font-size: 9px;
+      letter-spacing: 6px;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+
+    .pit-label::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--red);
+    }
+
+    .pit-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 11vw, 140px);
+      line-height: 0.9;
+      letter-spacing: 3px;
+      color: var(--white);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.4s forwards;
+    }
+
+    .pit-title span { color: var(--red); }
+
+    .pit-tagline {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(15px, 1.6vw, 20px);
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 48px;
+      max-width: 480px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.6s forwards;
+    }
+
+    .pit-specs {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.8s forwards;
+    }
+
+    .pit-spec {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .pit-spec-label {
+      font-size: 8px;
+      letter-spacing: 4px;
+      color: var(--mid);
+      text-transform: uppercase;
+    }
+
+    .pit-spec-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 2px;
+      color: var(--white);
+    }
+
+    .pit-spec-value span { color: var(--red); }
+
+    /* ─────────────────────────────────────────
+       VIDEO SECTION
+    ───────────────────────────────────────── */
+    .pit-video-section {
+      padding: 100px 6vw 80px;
+      display: flex;
+      gap: 80px;
+      align-items: flex-start;
+      border-top: 1px solid #111;
+    }
+
+    .pit-video-column {
+      flex: 0 0 auto;
+      width: min(380px, 100%);
+    }
+
+    .pit-video-wrapper {
+      aspect-ratio: 9 / 16;
+      background: #0a0a0a;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #1a1a1a;
+    }
+
+    .pit-video-wrapper video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Placeholder shown when no video file exists */
+    .pit-video-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      text-align: center;
+      padding: 24px;
+      pointer-events: none;
+    }
+
+    video:not([src]) ~ .pit-video-placeholder,
+    video[src=""] ~ .pit-video-placeholder,
+    video[src="photos/pit-clip.mp4"]:not([controls])  ~ .pit-video-placeholder {
+      display: flex;
+    }
+
+    .placeholder-v {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px;
+      color: #1a1a1a;
+      line-height: 1;
+    }
+
+    .placeholder-text {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: #2a2a2a;
+      text-transform: uppercase;
+      line-height: 1.8;
+    }
+
+    .pit-video-meta {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .pit-video-meta-label {
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--mid);
+      text-transform: uppercase;
+    }
+
+    .pit-duration {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 3px;
+      color: var(--red);
+    }
+
+    /* ─────────────────────────────────────────
+       VIDEO EDITORIAL TEXT
+    ───────────────────────────────────────── */
+    .pit-editorial {
+      flex: 1;
+      padding-top: 20px;
+    }
+
+    .pit-editorial-label {
+      font-size: 9px;
+      letter-spacing: 5px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pit-editorial-label::after {
+      content: '';
+      display: block;
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, rgba(201,160,64,0.3), transparent);
+      max-width: 120px;
+    }
+
+    .pit-editorial-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(28px, 3.5vw, 48px);
+      letter-spacing: 2px;
+      line-height: 1.05;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .pit-editorial-title-es {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(13px, 1.2vw, 16px);
+      color: var(--gold);
+      margin-bottom: 28px;
+    }
+
+    .pit-editorial-copy {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(16px, 1.6vw, 20px);
+      line-height: 1.75;
+      color: #999;
+      margin-bottom: 24px;
+    }
+
+    .pit-editorial-copy-es {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(14px, 1.4vw, 18px);
+      line-height: 1.75;
+      color: #5a4e35;
+      padding-top: 20px;
+      border-top: 1px solid #1a1a1a;
+      display: none;
+    }
+
+    body.lang-es .pit-editorial-copy     { display: none; }
+    body.lang-es .pit-editorial-copy-es  { display: block; }
+
+    .pit-shoot-info {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 36px;
+      padding-top: 36px;
+      border-top: 1px solid #111;
+    }
+
+    .pit-shoot-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .pit-shoot-label {
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--mid);
+      text-transform: uppercase;
+      min-width: 90px;
+    }
+
+    .pit-shoot-value {
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: var(--white);
+    }
+
+    .pit-read-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px;
+      letter-spacing: 5px;
+      color: var(--white);
+      text-decoration: none;
+      margin-top: 40px;
+      transition: color 0.3s, gap 0.3s;
+    }
+
+    .pit-read-btn:hover { color: var(--red); gap: 18px; }
+
+    .pit-read-btn svg {
+      width: 16px; height: 16px;
+      stroke: currentColor; fill: none; stroke-width: 2;
+    }
+
+    /* ─────────────────────────────────────────
+       INSTAGRAM REEL CTA
+    ───────────────────────────────────────── */
+    .pit-reel-section {
+      padding: 80px 6vw 100px;
+      border-top: 1px solid #111;
+    }
+
+    .pit-reel-header {
+      margin-bottom: 48px;
+    }
+
+    .pit-reel-header-label {
+      font-size: 9px;
+      letter-spacing: 5px;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .pit-reel-header-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(28px, 4vw, 56px);
+      letter-spacing: 3px;
+      line-height: 1;
+    }
+
+    .pit-reel-card {
+      background: var(--gray);
+      border: 1px solid #1a1a1a;
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 40px;
+      align-items: center;
+      max-width: 900px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.4s;
+    }
+
+    .pit-reel-card:hover { border-color: #2a2a2a; }
+
+    .pit-reel-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--red), var(--gold));
+    }
+
+    .pit-reel-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+
+    .pit-reel-icon svg {
+      width: 28px; height: 28px;
+      fill: white;
+    }
+
+    .pit-reel-label {
+      font-size: 9px;
+      letter-spacing: 4px;
+      color: var(--mid);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .pit-reel-handle {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 3px;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .pit-reel-caption {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .pit-reel-caption strong {
+      color: var(--white);
+      font-weight: 400;
+    }
+
+    .pit-reel-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--white);
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+
+    .pit-reel-link:hover { transform: scale(1.05); }
+
+    .pit-reel-link-btn {
+      background: linear-gradient(135deg, #f09433 0%, #dc2743 50%, #bc1888 100%);
+      padding: 14px 28px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      letter-spacing: 4px;
+      color: white;
+      white-space: nowrap;
+    }
+
+    .pit-reel-link-sub {
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--mid);
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    /* ─────────────────────────────────────────
+       TRAFFIC LOOP CALLOUT
+    ───────────────────────────────────────── */
+    .pit-loop {
+      padding: 80px 6vw;
+      background: var(--gray);
+      border-top: 1px solid #0f0f0f;
+      text-align: center;
+    }
+
+    .pit-loop-label {
+      font-size: 9px;
+      letter-spacing: 5px;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .pit-loop-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .pit-loop-step {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(18px, 2.5vw, 28px);
+      letter-spacing: 3px;
+      color: var(--white);
+    }
+
+    .pit-loop-step.highlight { color: var(--red); }
+    .pit-loop-step.gold      { color: var(--gold); }
+
+    .pit-reel-title-highlight { color: var(--red); }
+
+    .pit-reel-caption-es {
+      color: #444;
+      font-style: italic;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .pit-loop-arrow {
+      width: 24px;
+      height: 1px;
+      background: var(--dim);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .pit-loop-arrow::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: -3px;
+      width: 6px;
+      height: 6px;
+      border-right: 1px solid var(--dim);
+      border-top: 1px solid var(--dim);
+      transform: rotate(45deg);
+    }
+
+    .pit-loop-sub {
+      font-size: 12px;
+      color: var(--mid);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .pit-video-section {
+        flex-direction: column;
+        gap: 48px;
+        padding: 60px 6vw;
+      }
+      .pit-video-column { width: 100%; max-width: 380px; }
+      .pit-reel-card { grid-template-columns: 1fr; gap: 28px; padding: 32px; }
+      .pit-reel-link { align-items: flex-start; }
+    }
+
+    @media (max-width: 600px) {
+      .pit-hero { padding: 120px 6vw 60px; }
+      .pit-video-column { max-width: 100%; }
+      .pit-loop-flow { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scroll-progress"></div>
+<div class="cursor" id="cursor"></div>
+<div class="grain"></div>
+
+<!-- NAV -->
+<nav aria-label="Main navigation">
+  <a href="home.html" class="nav-logo"><span>V</span>OLUMEN</a>
+  <ul class="nav-links">
+    <li><a href="home.html#manifesto">About / Acerca</a></li>
+    <li><a href="editorial.html" class="active">Editorial</a></li>
+    <li><a href="interviews.html">Interviews</a></li>
+    <li><a href="home.html#gallery">Photos / Fotos</a></li>
+    <li><a href="submit.html">Submit / Envía</a></li>
+    <li><a href="contact.html">Contact / Contacto</a></li>
+  </ul>
+  <div class="nav-lang">
+    <button type="button" class="lang-btn active" id="btn-en">EN</button>
+    <span class="lang-sep">/</span>
+    <button type="button" class="lang-btn" id="btn-es">ES</button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════ -->
+<section class="pit-hero">
+  <div class="pit-hero-bg">
+    <img src="photos/guitarist-floor.jpg" alt="Guitarist shot from floor level, front row pit perspective" loading="eager">
+  </div>
+  <div class="pit-hero-overlay"></div>
+  <div class="pit-hero-content">
+    <div class="pit-label">Video Series · Vol. 01</div>
+    <h1 class="pit-title"><span>30</span> SECONDS<br>IN THE PIT</h1>
+    <p class="pit-tagline" data-en="Raw. Handheld. Uncut. One clip from the front row — no edit, no filter, no algorithm." data-es="Crudo. En mano. Sin corte. Un clip desde la primera fila — sin edición, sin filtro, sin algoritmo.">
+      Raw. Handheld. Uncut. One clip from the front row — no edit, no filter, no algorithm.
+    </p>
+    <div class="pit-specs">
+      <div class="pit-spec">
+        <span class="pit-spec-label">Duration</span>
+        <span class="pit-spec-value"><span>0:30</span></span>
+      </div>
+      <div class="pit-spec">
+        <span class="pit-spec-label">Format</span>
+        <span class="pit-spec-value">9:16</span>
+      </div>
+      <div class="pit-spec">
+        <span class="pit-spec-label">Hosted</span>
+        <span class="pit-spec-value">Direct</span>
+      </div>
+      <div class="pit-spec">
+        <span class="pit-spec-label">Edit</span>
+        <span class="pit-spec-value">None</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     VIDEO PLAYER + EDITORIAL
+═══════════════════════════════════════════════════ -->
+<section class="pit-video-section">
+
+  <!-- VERTICAL VIDEO PLAYER -->
+  <div class="pit-video-column reveal">
+    <div class="pit-video-wrapper">
+      <!--
+        ⚠️  TO ACTIVATE: Drop your 30-second .mp4 into the photos/ folder,
+            name it pit-clip.mp4, and the video will appear automatically.
+            Recommended: H.264, 9:16 ratio, 1080×1920px or similar.
+      -->
+      <video
+        id="pit-video"
+        src="photos/pit-clip.mp4"
+        controls
+        playsinline
+        x-webkit-playsinline
+        preload="metadata"
+        poster="photos/guitarist-floor.jpg"
+        aria-label="30 Seconds in the Pit — Viloria at Mohawk, Austin"
+      ></video>
+
+      <!-- Fallback placeholder shown if video can't load -->
+      <div class="pit-video-placeholder" id="video-placeholder">
+        <div class="placeholder-v">V</div>
+        <div class="placeholder-text">
+          Drop pit-clip.mp4<br>into photos/ to activate
+        </div>
+      </div>
+    </div>
+
+    <div class="pit-video-meta">
+      <span class="pit-video-meta-label">Viloria · Mohawk Austin · March 2026</span>
+      <span class="pit-duration">0:30</span>
+    </div>
+  </div>
+
+  <!-- EDITORIAL COPY -->
+  <div class="pit-editorial reveal delay-1">
+    <div class="pit-editorial-label">The Clip</div>
+    <h2 class="pit-editorial-title">VILORIA — FRONT ROW, MOHAWK</h2>
+    <div class="pit-editorial-title-es">Viloria — Primera fila, Mohawk</div>
+
+    <p class="pit-editorial-copy">
+      This is the part that doesn't make it into reviews. The moment between songs where the crowd doesn't stop — they just get louder. Handheld, natural light from the stage rigs, shot from the pit rail with the bassist three feet away.
+    </p>
+    <p class="pit-editorial-copy-es">
+      Esta es la parte que no llega a las reseñas. El momento entre canciones donde el público no para — simplemente se pone más ruidoso. En mano, luz natural del escenario, grabado desde el frente con el bajista a un metro de distancia.
+    </p>
+
+    <div class="pit-shoot-info">
+      <div class="pit-shoot-row">
+        <span class="pit-shoot-label">Shot by</span>
+        <span class="pit-shoot-value">Reinaldo Ramirez</span>
+      </div>
+      <div class="pit-shoot-row">
+        <span class="pit-shoot-label">Venue</span>
+        <span class="pit-shoot-value">Mohawk · Austin, TX</span>
+      </div>
+      <div class="pit-shoot-row">
+        <span class="pit-shoot-label">Date</span>
+        <span class="pit-shoot-value">March 2026</span>
+      </div>
+      <div class="pit-shoot-row">
+        <span class="pit-shoot-label">Equipment</span>
+        <span class="pit-shoot-value">Handheld · No stabilizer · No filter</span>
+      </div>
+    </div>
+
+    <a href="photo-essay.html" class="pit-read-btn" id="view-essay-link">
+      See the full photo essay
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     INSTAGRAM REEL CTA
+═══════════════════════════════════════════════════ -->
+<section class="pit-reel-section reveal">
+  <div class="pit-reel-header">
+    <div class="pit-reel-header-label">Watch it there too</div>
+    <h2 class="pit-reel-header-title">ALSO ON<br><span class="pit-reel-title-highlight">INSTAGRAM REELS</span></h2>
+  </div>
+
+  <div class="pit-reel-card">
+    <div>
+      <div class="pit-reel-icon" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+        </svg>
+      </div>
+      <div class="pit-reel-label">The Reel ends with:</div>
+      <div class="pit-reel-handle">@reinaldo.photos</div>
+      <p class="pit-reel-caption">
+        30 handheld seconds from Viloria's pit at Mohawk.<br>
+        <strong>"Full story on volumen.media"</strong> — every Reel ends here.
+        <br><br>
+        <em class="pit-reel-caption-es">Cada Reel termina en volumen.media.</em>
+      </p>
+    </div>
+    <a href="https://instagram.com/reinaldo.photos" class="pit-reel-link" target="_blank" rel="noopener" aria-label="Watch on Instagram Reels (opens in new tab)" id="instagram-reel-link">
+      <div class="pit-reel-link-btn">Watch Reel</div>
+      <div class="pit-reel-link-sub">Opens Instagram</div>
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     THE TRAFFIC LOOP
+═══════════════════════════════════════════════════ -->
+<div class="pit-loop reveal">
+  <div class="pit-loop-label">The Content Loop</div>
+  <div class="pit-loop-flow">
+    <span class="pit-loop-step">Instagram Reel</span>
+    <div class="pit-loop-arrow"></div>
+    <span class="pit-loop-step highlight">volumen.media</span>
+    <div class="pit-loop-arrow"></div>
+    <span class="pit-loop-step">Photo Essay</span>
+    <div class="pit-loop-arrow"></div>
+    <span class="pit-loop-step">Interview</span>
+    <div class="pit-loop-arrow"></div>
+    <span class="pit-loop-step gold">Band Profile</span>
+  </div>
+  <div class="pit-loop-sub">Every 30-second clip is a door into deeper content</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span>V</span>OLUMEN</div>
+  <div class="footer-copy">© 2026 Volumen Magazine · Austin, Texas · All Rights Reserved</div>
+  <div class="footer-social">
+    <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener" aria-label="Instagram (opens in new tab)">Instagram</a>
+    <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener" aria-label="Twitter / X (opens in new tab)">Twitter / X</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</footer>
+
+<script>
+  // ── SCROLL PROGRESS ──
+  const progressBar = document.getElementById('scroll-progress');
+  if (progressBar) {
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = (total > 0 ? (scrolled / total) * 100 : 0) + '%';
+    }, { passive: true });
+  }
+
+  // ── VIDEO LOAD CHECK — hide placeholder if video loads ──
+  const video = document.getElementById('pit-video');
+  const placeholder = document.getElementById('video-placeholder');
+  if (video && placeholder) {
+    video.addEventListener('loadeddata', () => {
+      placeholder.style.display = 'none';
+    });
+    video.addEventListener('error', () => {
+      placeholder.style.display = 'flex';
+    });
+  }
+
+  // ── REVEAL ON SCROLL ──
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // ── CUSTOM CURSOR ──
+  const cursor = document.getElementById('cursor');
+  if (cursor && window.matchMedia('(hover: hover)').matches) {
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    }, { passive: true });
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+  }
+
+  // ── LANGUAGE TOGGLE ──
+  const btnEn = document.getElementById('btn-en');
+  const btnEs = document.getElementById('btn-es');
+  function setLang(lang) {
+    document.body.classList.toggle('lang-es', lang === 'es');
+    btnEn.classList.toggle('active', lang === 'en');
+    btnEs.classList.toggle('active', lang === 'es');
+    // Update data-en/data-es elements
+    document.querySelectorAll('[data-en][data-es]').forEach(el => {
+      el.textContent = lang === 'es' ? el.dataset.es : el.dataset.en;
+    });
+    localStorage.setItem('volumen-lang', lang);
+  }
+  if (btnEn) btnEn.addEventListener('click', () => setLang('en'));
+  if (btnEs) btnEs.addEventListener('click', () => setLang('es'));
+  const savedLang = localStorage.getItem('volumen-lang');
+  if (savedLang) setLang(savedLang);
+</script>
+
+</body>
+</html>
