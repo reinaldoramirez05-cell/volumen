@@ -20,6 +20,8 @@
   <meta property="twitter:title" content="Live Events & Show Guide | Volumen Magazine">
   <meta property="twitter:description" content="The pulse of Austin's live music scene. Guides, dates, and venues.">
   <meta property="twitter:image" content="https://volumen.media/photos/concert-wide.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
     rel="stylesheet">
@@ -272,6 +274,18 @@
       padding-left: 20px;
     }
 
+    .event-card.past {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+    .event-card.past .event-date {
+      color: var(--mid);
+      text-decoration: line-through;
+    }
+    .event-card.past .ticket-btn {
+      display: none;
+    }
+
     .event-date {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 28px;
@@ -476,6 +490,7 @@
     <ul class="nav-links">
       <li><a href="home.html">Home</a></li>
       <li><a href="editorial.html">Editorial</a></li>
+      <li><a href="interviews.html">Interviews</a></li>
       <li><a href="events.html" class="active">Live Events</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
@@ -502,47 +517,69 @@
       </div>
 
       <!-- EVENT 1 -->
-      <div class="event-card">
+      <div class="event-card" data-date="2026-04-12">
         <div class="event-date">APR 12 <span>SATURDAY</span></div>
         <div class="event-info">
           <h3 class="event-title">SXSW RECAP: POST-SCENE SHOWCASE</h3>
           <p class="event-venue">📍 THE MOHAWK — AUSTIN, TX</p>
           <p class="event-meta">DOORS 8:00 PM • 18+</p>
         </div>
-        <a href="https://mohawkaustin.com" target="_blank" rel="noopener" class="ticket-btn">TICKETS →</a>
+        <a href="https://mohawkaustin.com" target="_blank" rel="noopener noreferrer" class="ticket-btn">TICKETS →</a>
       </div>
 
       <!-- EVENT 2 -->
-      <div class="event-card">
+      <div class="event-card" data-date="2026-04-28">
         <div class="event-date">APR 28 <span>SUNDAY</span></div>
         <div class="event-info">
           <h3 class="event-title">AUSTIN PSYCH FEST 2026</h3>
           <p class="event-venue">📍 THE FAR OUT LOUNGE</p>
           <p class="event-meta">FESTIVAL PASSES REQUIRED • ALL AGES</p>
         </div>
-        <a href="https://levitation.fm" target="_blank" rel="noopener" class="ticket-btn">BUY PASS →</a>
+        <a href="https://levitation.fm" target="_blank" rel="noopener noreferrer" class="ticket-btn">BUY PASS →</a>
       </div>
 
       <!-- EVENT 3 -->
-      <div class="event-card">
+      <div class="event-card" data-date="2026-05-05">
         <div class="event-date">MAY 05 <span>TUESDAY</span></div>
         <div class="event-info">
           <h3 class="event-title">LOS ESPANTOS + GUEST BAND</h3>
           <p class="event-venue">📍 HOTEL VEGAS — AUSTIN, TX</p>
           <p class="event-meta">DOORS 9:00 PM • 21+</p>
         </div>
-        <a href="https://texashotelvegas.com" target="_blank" rel="noopener" class="ticket-btn">TICKETS →</a>
+        <a href="https://texashotelvegas.com" target="_blank" rel="noopener noreferrer" class="ticket-btn">TICKETS →</a>
       </div>
 
       <!-- EVENT 4 -->
-      <div class="event-card">
+      <div class="event-card" data-date="2026-05-15">
         <div class="event-date">MAY 15 <span>FRIDAY</span></div>
         <div class="event-info">
           <h3 class="event-title">VOLUMEN PRESENTS: RAZA ROCK NIGHT</h3>
           <p class="event-venue">📍 EMOS AUSTIN</p>
           <p class="event-meta">DOORS 7:00 PM • ALL AGES</p>
         </div>
-        <a href="https://www.emosaustin.com" target="_blank" rel="noopener" class="ticket-btn">TICKETS →</a>
+        <a href="https://www.emosaustin.com" target="_blank" rel="noopener noreferrer" class="ticket-btn">TICKETS →</a>
+      </div>
+
+      <!-- EVENT 5 -->
+      <div class="event-card" data-date="2026-06-07">
+        <div class="event-date">JUN 07 <span>SUNDAY</span></div>
+        <div class="event-info">
+          <h3 class="event-title">NOCHE DE RIFFS: LATIN ROCK SHOWCASE</h3>
+          <p class="event-venue">📍 STUBB'S WALLER CREEK AMPHITHEATER</p>
+          <p class="event-meta">DOORS 6:00 PM · ALL AGES · FREE ADMISSION</p>
+        </div>
+        <a href="https://stubbsaustin.com" target="_blank" rel="noopener noreferrer" class="ticket-btn">INFO →</a>
+      </div>
+
+      <!-- EVENT 6 -->
+      <div class="event-card" data-date="2026-07-19">
+        <div class="event-date">JUL 19 <span>SATURDAY</span></div>
+        <div class="event-info">
+          <h3 class="event-title">VOLUMEN PRESENTS: VERANO EN VIVO</h3>
+          <p class="event-venue">📍 CEDAR STREET COURTYARD — AUSTIN, TX</p>
+          <p class="event-meta">DOORS 8:00 PM · 21+ · LIMITED CAPACITY</p>
+        </div>
+        <a href="contact.html" class="ticket-btn">RSVP →</a>
       </div>
     </section>
 
@@ -580,8 +617,8 @@
     <div class="footer-logo"><span>V</span>OLUMEN</div>
     <div class="footer-copy">© 2026 Volumen Magazine · Austin, Texas · All Rights Reserved</div>
     <div class="footer-social">
-      <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener">Instagram</a>
-      <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener">Twitter / X</a>
+      <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener noreferrer">Twitter / X</a>
       <a href="contact.html">Contact</a>
     </div>
   </footer>
@@ -605,6 +642,16 @@
         document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
         this.classList.add('active');
       });
+    });
+
+    // Mark past events as dimmed
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    document.querySelectorAll('.event-card[data-date]').forEach(card => {
+      const eventDate = new Date(card.dataset.date + 'T00:00:00');
+      if (eventDate < today) {
+        card.classList.add('past');
+      }
     });
   </script>
 

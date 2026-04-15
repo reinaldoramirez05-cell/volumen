@@ -19,6 +19,8 @@
   <meta property="twitter:title" content="Editorial Archive | Volumen Magazine">
   <meta property="twitter:description" content="Dive into the stories and imagery of modern rock culture.">
   <meta property="twitter:image" content="https://volumen.media/photos/guitarist-stage.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -436,6 +438,27 @@
 
   .read-btn:hover svg { transform: translateX(4px); }
 
+  .read-btn--soon {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: not-allowed;
+    opacity: 0.4;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .read-btn--soon svg {
+    width: 16px; height: 16px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.5;
+  }
+
   /* ── ARTICLES GRID ── */
   .articles-grid {
     display: grid;
@@ -704,8 +727,9 @@
   <a href="home.html" class="nav-logo"><span>V</span>OLUMEN</a>
   <ul class="nav-links">
     <li><a href="home.html#manifesto">About / Acerca</a></li>
-    <li><a href="editorial.html">Editorial</a></li>
+    <li><a href="editorial.html" class="active">Editorial</a></li>
     <li><a href="interviews.html">Interviews</a></li>
+    <li><a href="events.html">Live Events</a></li>
     <li><a href="home.html#gallery">Photos / Fotos</a></li>
     <li><a href="contact.html">Contact / Contacto</a></li>
     <li><a href="home.html#signup">Subscribe / Suscríbete</a></li>
@@ -742,16 +766,6 @@
 
 <!-- ARTICLES -->
 <main class="articles-area">
-
-  <!-- ═══════════════════════════════════════════════
-       HOW TO ADD A NEW ARTICLE:
-
-       FEATURED (large): Copy the <article class="featured-article"> block below.
-       REGULAR CARD:     Copy any <article class="article-card"> block.
-
-       Set data-category to one of: interview | photo | scene | roots
-       Replace the title, excerpt, date, and image src.
-       ═══════════════════════════════════════════════ -->
 
   <!-- FEATURED ARTICLE -->
   <article class="featured-article reveal" data-category="interview">
@@ -797,10 +811,10 @@
         <div class="card-title-es">Luz morada, guitarra en llamas</div>
         <p class="card-excerpt">Denim, sunglasses, and a Flying V under purple smoke — a front-row look at one of Latin rock's most commanding stage presences. Photo: Reinaldo.photos</p>
         <div class="card-footer">
-          <a href="#" class="read-btn">
-            View
+          <button class="read-btn--soon" title="Coming soon · Próximamente" aria-disabled="true" disabled>
+            Coming Soon
             <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
+          </button>
         </div>
       </div>
     </article>
@@ -819,10 +833,10 @@
         <div class="card-title-es">La próxima ola de Austin</div>
         <p class="card-excerpt">String lights, intimate rooms, and an audience that knew every word. Viloria is redefining what a Latin rock show feels like.</p>
         <div class="card-footer">
-          <a href="#" class="read-btn">
-            Read
+          <button class="read-btn--soon" title="Coming soon · Próximamente" aria-disabled="true" disabled>
+            Coming Soon
             <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
+          </button>
         </div>
       </div>
     </article>
@@ -841,10 +855,10 @@
         <div class="card-title-es">La diáspora toca fuerte</div>
         <p class="card-excerpt">A long-form essay on how Rock en Español crossed borders and became the sound of a generation that refused to choose one identity.</p>
         <div class="card-footer">
-          <a href="#" class="read-btn">
-            Read
+          <button class="read-btn--soon" title="Coming soon · Próximamente" aria-disabled="true" disabled>
+            Coming Soon
             <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
+          </button>
         </div>
       </div>
     </article>
@@ -885,10 +899,10 @@
         <div class="card-title-es">Nuevos lanzamientos: Primavera 2026</div>
         <p class="card-excerpt">The records we've had on repeat — from emerging Austin acts to heavyweights coming off a Latin American tour cycle.</p>
         <div class="card-footer">
-          <a href="#" class="read-btn">
-            Read
+          <button class="read-btn--soon" title="Coming soon · Próximamente" aria-disabled="true" disabled>
+            Coming Soon
             <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
+          </button>
         </div>
       </div>
     </article>
@@ -907,10 +921,10 @@
         <div class="card-title-es">Perfil de ciudad: San Antonio</div>
         <p class="card-excerpt">Where Tex-Mex roots meet electric guitar — tracing how San Antonio quietly became one of the most important cities in Latin rock history.</p>
         <div class="card-footer">
-          <a href="#" class="read-btn">
-            Read
+          <button class="read-btn--soon" title="Coming soon · Próximamente" aria-disabled="true" disabled>
+            Coming Soon
             <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
+          </button>
         </div>
       </div>
     </article>
@@ -930,8 +944,8 @@
   <div class="footer-logo"><span>V</span>OLUMEN</div>
   <div class="footer-copy">© 2026 Volumen Magazine · Austin, Texas · All Rights Reserved</div>
   <div class="footer-social">
-    <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener">Instagram</a>
-    <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener">Twitter / X</a>
+    <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener noreferrer">Instagram</a>
+    <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener noreferrer">Twitter / X</a>
     <a href="contact.html">Contact</a>
   </div>
 </footer>

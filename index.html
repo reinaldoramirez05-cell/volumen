@@ -110,10 +110,40 @@
     body.loaded #canvas3d { opacity: 1; }
     body.loaded .play-btn { opacity: 1; pointer-events: auto; }
     body.loaded #loader { opacity: 0; }
+
+    /* Spline failure fallback */
+    body.spline-failed #loader {
+      opacity: 1;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      text-align: center;
+    }
+    body.spline-failed #loader-title {
+      font-family: sans-serif;
+      font-size: 36px;
+      letter-spacing: 0.5em;
+      color: #bf2d1f;
+    }
+    body.spline-failed #loader-sub {
+      color: #888;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+    }
+    body.spline-failed .play-btn {
+      opacity: 1;
+      pointer-events: auto;
+    }
   </style>
 </head>
 <body>
-  <div id="loader">Loading Environment...</div>
+  <div id="loader">
+    <span id="loader-title" style="display:none">VOLUMEN</span>
+    <span id="loader-msg">Loading Environment...</span>
+    <span id="loader-sub"></span>
+  </div>
   <canvas id="canvas3d"></canvas>
   
   <a href="home.html" class="play-btn" title="Enter Volumen">
@@ -124,15 +154,30 @@
   
   <script type="module">
     import { Application } from 'https://esm.sh/@splinetool/runtime';
-    
+
     const canvas = document.getElementById('canvas3d');
     const spline = new Application(canvas);
-    
+
+    function showFallback(msg) {
+      document.body.classList.add('spline-failed');
+      document.getElementById('loader-title').style.display = '';
+      document.getElementById('loader-msg').style.display = 'none';
+      document.getElementById('loader-sub').textContent = msg;
+    }
+
+    // Safety net: if scene stalls for 10s with no resolve or reject
+    const splineTimeout = setTimeout(() => {
+      if (!document.body.classList.contains('loaded')) {
+        showFallback('Interactive scene took too long to load — click below to enter.');
+      }
+    }, 10000);
+
     // Load the latest interactive scene (updated version)
     spline.load('https://prod.spline.design/MtWcRxLtOpiwFlQb/scene.splinecode')
       .then(() => {
+        clearTimeout(splineTimeout);
         document.body.classList.add('loaded');
-        
+
         // Fallback: Check if interaction on Spline works
         spline.addEventListener('mouseDown', (e) => {
             window.location.href = 'home.html';
@@ -143,8 +188,9 @@
              window.location.href = 'home.html';
         });
       })
-      .catch((e) => {
-        document.getElementById('loader').innerText = "Load Failed";
+      .catch(() => {
+        clearTimeout(splineTimeout);
+        showFallback('Interactive scene unavailable — click below to enter.');
       });
   </script>
 </body>
