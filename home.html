@@ -1214,6 +1214,19 @@
       }
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Volumen Magazine",
+    "url": "https://volumen.media",
+    "description": "The first bilingual rock magazine in the US, based in Austin, Texas.",
+    "sameAs": [
+      "https://instagram.com/reinaldo.photos",
+      "https://twitter.com/reinaldor93"
+    ]
+  }
+  </script>
 </head>
 
 <body>
@@ -1222,16 +1235,16 @@
   <div class="grain"></div>
 
   <!-- NAV -->
-  <nav>
+  <nav aria-label="Main navigation">
     <a href="home.html" class="nav-logo"><span>V</span>OLUMEN</a>
     <ul class="nav-links">
-      <li><a href="#manifesto">About / Acerca</a></li>
+      <li><a href="#manifesto" data-en="About" data-es="Acerca">About / Acerca</a></li>
       <li><a href="editorial.html">Editorial</a></li>
       <li><a href="interviews.html">Interviews</a></li>
       <li><a href="events.html">Live Events</a></li>
-      <li><a href="#gallery">Photos / Fotos</a></li>
-      <li><a href="contact.html">Contact / Contacto</a></li>
-      <li><a href="#signup">Subscribe / Suscríbete</a></li>
+      <li><a href="#gallery" data-en="Photos" data-es="Fotos">Photos / Fotos</a></li>
+      <li><a href="contact.html" data-en="Contact" data-es="Contacto">Contact / Contacto</a></li>
+      <li><a href="#signup" data-en="Subscribe" data-es="Suscríbete">Subscribe / Suscríbete</a></li>
     </ul>
     <div class="nav-lang">
       <button class="lang-btn active" id="btn-en">EN</button>
@@ -1252,7 +1265,7 @@
 
     <div class="issue-tag">
       <div class="issue-dot"></div>
-      <span class="issue-text">Coming Soon · Próximamente · Austin, TX</span>
+      <span class="issue-text" data-en="Coming Soon · Austin, TX" data-es="Próximamente · Austin, TX">Coming Soon · Próximamente · Austin, TX</span>
     </div>
 
     <h1 class="hero-title">
@@ -1277,7 +1290,7 @@
 
     <div class="scroll-hint">
       <div class="scroll-line"></div>
-      <span class="scroll-text">Scroll / Desplázate</span>
+      <span class="scroll-text" data-en="Scroll" data-es="Desplázate">Scroll / Desplázate</span>
     </div>
   </section>
 
@@ -1415,7 +1428,7 @@
           <input type="email" name="email" placeholder="Your email / Tu correo" id="email-input" autocomplete="email"
             required>
         </div>
-        <button class="signup-btn" id="signup-btn" onclick="handleSignup()">
+        <button class="signup-btn" aria-label="Subscribe to newsletter" id="signup-btn" onclick="handleSignup()">
           <span class="btn-text">SUBSCRIBE / SUSCRÍBETE</span>
           <span class="btn-spinner"></span>
         </button>
@@ -1443,8 +1456,8 @@
     <div class="footer-logo"><span>V</span>OLUMEN</div>
     <div class="footer-copy">© 2026 Volumen Magazine · Austin, Texas · All Rights Reserved</div>
     <div class="footer-social">
-      <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener noreferrer">Instagram</a>
-      <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener noreferrer">Twitter / X</a>
+      <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener noreferrer" aria-label="Instagram (opens in new tab)">Instagram</a>
+      <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener noreferrer" aria-label="Twitter / X (opens in new tab)">Twitter / X</a>
       <a href="contact.html">Contact</a>
     </div>
   </footer>

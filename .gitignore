@@ -1,0 +1,18 @@
+# Nested duplicate checkout — do not track or deploy
+/volumen/
+
+# Editor / agent local state
+.claude/
+.vscode/
+
+# Dart / Flutter build artifacts (mcp_server)
+mcp_server/.dart_tool/
+mcp_server/pubspec.lock
+mcp_server/build/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp PR bodies
+.pr-body.tmp.md

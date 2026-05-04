@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Volumen — The Newsletter | Volumen Magazine</title>
+  <meta name="description" content="El Volumen: one photo, one band rec, one upcoming Austin show, one sentence in Spanish. A weekly newsletter from the bilingual rock scene.">
+  <meta name="keywords" content="El Volumen newsletter, bilingual rock newsletter, Austin music newsletter, Latin rock weekly, Volumen magazine email">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://volumen.media/newsletter">
+  <meta property="og:title" content="El Volumen — The Newsletter">
+  <meta property="og:description" content="Weekly. One photo. One band. One show. One sentence in Spanish. Always yours.">
+  <meta property="og:image" content="https://volumen.media/photos/band-monochrome.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="canonical" href="https://volumen.media/newsletter">
+
+  <style>
+    /* ─────────────────────────────────────────
+       PAGE HERO
+    ───────────────────────────────────────── */
+    .nl-hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 140px 6vw 80px;
+      overflow: hidden;
+      border-bottom: 1px solid #111;
+    }
+
+    .nl-hero-bg {
+      position: absolute;
+      inset: 0;
+    }
+
+    .nl-hero-bg img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.15) grayscale(60%);
+    }
+
+    .nl-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right, rgba(8,8,8,0.97) 0%, rgba(8,8,8,0.7) 55%, transparent 100%),
+        linear-gradient(to bottom, transparent 50%, rgba(8,8,8,0.9) 100%);
+    }
+
+    .nl-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+    }
+
+    .nl-label {
+      font-size: 9px;
+      letter-spacing: 6px;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+
+    .nl-label::before {
+      content: '✦';
+      color: var(--red);
+      font-size: 10px;
+    }
+
+    .nl-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(56px, 12vw, 160px);
+      line-height: 0.88;
+      letter-spacing: 4px;
+      color: var(--white);
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.4s forwards;
+    }
+
+    .nl-title span { color: var(--red); }
+
+    .nl-title-sub {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(20px, 3.5vw, 44px);
+      letter-spacing: 8px;
+      color: #333;
+      margin-bottom: 36px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.55s forwards;
+    }
+
+    .nl-tagline {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(15px, 1.6vw, 20px);
+      color: #666;
+      line-height: 1.65;
+      margin-bottom: 48px;
+      max-width: 520px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.7s forwards;
+    }
+
+    /* ─────────────────────────────────────────
+       SIGNUP HERO FORM
+    ───────────────────────────────────────── */
+    .nl-hero-form {
+      display: flex;
+      gap: 2px;
+      max-width: 480px;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.9s forwards;
+    }
+
+    .nl-hero-form input {
+      flex: 1;
+      background: rgba(17,17,17,0.85);
+      border: 1px solid #222;
+      border-right: none;
+      padding: 16px 20px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.3s;
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+    }
+
+    .nl-hero-form input:focus { border-color: var(--red); }
+    .nl-hero-form input::placeholder { color: #333; }
+
+    .nl-hero-form button {
+      background: var(--red);
+      border: none;
+      padding: 16px 28px;
+      color: var(--white);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 15px;
+      letter-spacing: 4px;
+      cursor: none;
+      transition: background 0.3s;
+      white-space: nowrap;
+    }
+
+    .nl-hero-form button:hover { background: #a02318; }
+
+    .nl-hero-note {
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: #2a2a2a;
+      text-transform: uppercase;
+      margin-top: 12px;
+      opacity: 0;
+      animation: fadeUp 1s ease 1.1s forwards;
+    }
+
+    /* ─────────────────────────────────────────
+       FORMAT SECTION — "What's inside"
+    ───────────────────────────────────────── */
+    .nl-format {
+      padding: 100px 6vw;
+      border-bottom: 1px solid #111;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 0 80px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .nl-format { grid-template-columns: 1fr; gap: 48px; }
+    }
+
+    .nl-format-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px;
+      letter-spacing: 6px;
+      color: var(--red);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+      align-self: flex-start;
+      padding-top: 8px;
+    }
+
+    @media (max-width: 900px) {
+      .nl-format-label { writing-mode: horizontal-tb; transform: none; }
+    }
+
+    .nl-format-items {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nl-format-item {
+      background: var(--gray);
+      padding: 32px 36px;
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+      transition: background 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nl-format-item:hover { background: #1e1e1e; }
+
+    .nl-format-item::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--red);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.4s ease;
+    }
+
+    .nl-format-item:hover::before { transform: scaleY(1); }
+
+    .nl-format-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      color: #1e1e1e;
+      line-height: 1;
+      flex-shrink: 0;
+      transition: color 0.4s;
+    }
+
+    .nl-format-item:hover .nl-format-num { color: #2a2a2a; }
+
+    .nl-format-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 3px;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .nl-format-desc {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    /* ─────────────────────────────────────────
+       SAMPLE ISSUE — Email mockup
+    ───────────────────────────────────────── */
+    .nl-sample {
+      padding: 100px 6vw;
+      background: var(--gray);
+      border-bottom: 1px solid #0f0f0f;
+    }
+
+    .nl-sample-header {
+      margin-bottom: 60px;
+    }
+
+    .nl-sample-label {
+      font-size: 9px;
+      letter-spacing: 6px;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .nl-sample-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(28px, 4vw, 52px);
+      letter-spacing: 3px;
+      line-height: 1;
+    }
+
+    .nl-sample-title span { color: var(--red); }
+
+    /* Email card mockup */
+    .email-mockup {
+      max-width: 640px;
+      background: #0d0d0d;
+      border: 1px solid #1a1a1a;
+      font-family: 'DM Sans', sans-serif;
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+    }
+
+    /* Email top bar */
+    .email-topbar {
+      background: #080808;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .email-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+
+    .email-dot.red   { background: #ff5f57; }
+    .email-dot.yellow { background: #febc2e; }
+    .email-dot.green { background: #28c840; }
+
+    .email-address-bar {
+      flex: 1;
+      margin-left: 12px;
+      background: #111;
+      border-radius: 3px;
+      padding: 5px 12px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    /* Email header */
+    .email-header {
+      background: var(--black);
+      padding: 32px 32px 24px;
+      border-bottom: 3px solid var(--red);
+    }
+
+    .email-from {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--mid);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .email-subject {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 3px;
+      color: var(--white);
+    }
+
+    .email-subject span { color: var(--red); }
+
+    /* Email body */
+    .email-body {
+      padding: 0;
+    }
+
+    .email-photo-block {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .email-photo-block img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      filter: grayscale(20%) brightness(0.85);
+    }
+
+    .email-photo-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0; right: 0;
+      background: linear-gradient(to top, rgba(8,8,8,0.9), transparent);
+      padding: 24px 24px 16px;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: rgba(242,236,224,0.6);
+      text-transform: uppercase;
+    }
+
+    .email-section {
+      padding: 28px 32px;
+      border-bottom: 1px solid #111;
+    }
+
+    .email-section:last-child { border-bottom: none; }
+
+    .email-section-num {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 8px;
+      letter-spacing: 4px;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .email-section-num::after {
+      content: '';
+      display: block;
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, #bf2d1f30, transparent);
+    }
+
+    .email-body-text {
+      font-size: 14px;
+      color: #888;
+      line-height: 1.7;
+    }
+
+    .email-body-text strong {
+      color: var(--white);
+      font-weight: 400;
+    }
+
+    .email-spanish-line {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: var(--gold);
+      line-height: 1.6;
+      padding: 12px 0;
+    }
+
+    .email-footer-strip {
+      background: #080808;
+      padding: 20px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .email-footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 6px;
+      color: #2a2a2a;
+    }
+
+    .email-footer-logo span { color: #3a1010; }
+
+    .email-footer-link {
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: #2a2a2a;
+      text-transform: uppercase;
+    }
+
+    /* ─────────────────────────────────────────
+       ARCHIVE
+    ───────────────────────────────────────── */
+    .nl-archive {
+      padding: 80px 6vw;
+      border-bottom: 1px solid #111;
+    }
+
+    .nl-archive-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(28px, 4vw, 52px);
+      letter-spacing: 3px;
+      margin-bottom: 48px;
+      line-height: 1;
+    }
+
+    .nl-archive-title span { color: var(--red); }
+
+    .nl-archive-empty {
+      padding: 80px 0;
+      text-align: center;
+      border: 1px solid #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .archive-v {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px;
+      color: #111;
+      line-height: 1;
+    }
+
+    .archive-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 5px;
+      color: #222;
+    }
+
+    .archive-sub {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: #1a1a1a;
+      text-transform: uppercase;
+    }
+
+    /* ─────────────────────────────────────────
+       BOTTOM SIGNUP
+    ───────────────────────────────────────── */
+    .nl-bottom-signup {
+      padding: 100px 6vw;
+      background: var(--gray);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 80px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .nl-bottom-signup { grid-template-columns: 1fr; gap: 48px; }
+    }
+
+    .nl-signup-left h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(32px, 4.5vw, 64px);
+      letter-spacing: 3px;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+
+    .nl-signup-left h2 span { color: var(--red); }
+
+    .nl-signup-left p {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.75;
+      max-width: 400px;
+    }
+
+    .email-link-profile {
+      color: var(--red);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .email-show-meta {
+      color: #444;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .nl-signup-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-bottom: 2px;
+    }
+
+    .nl-signup-label {
+      font-size: 9px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--mid);
+      padding: 10px 16px;
+      background: #111;
+    }
+
+    .nl-signup-label.es { color: var(--gold); }
+
+    .nl-signup-field input {
+      width: 100%;
+      background: #111;
+      border: none;
+      border-bottom: 1px solid var(--dim);
+      padding: 18px 16px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .nl-signup-field { position: relative; }
+
+    .nl-signup-field input:focus { border-bottom-color: var(--red); }
+    .nl-signup-field input::placeholder { color: #333; }
+
+    .nl-signup-btn {
+      width: 100%;
+      background: var(--red);
+      border: none;
+      padding: 18px;
+      color: var(--white);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 17px;
+      letter-spacing: 6px;
+      cursor: none;
+      transition: background 0.3s, letter-spacing 0.3s;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .nl-signup-btn:hover { background: #a02318; letter-spacing: 8px; }
+
+    .nl-signup-note {
+      font-size: 9px;
+      color: #2a2a2a;
+      letter-spacing: 2px;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nl-hero { padding: 120px 6vw 60px; }
+      .nl-format { padding: 60px 6vw; }
+      .nl-sample { padding: 60px 6vw; }
+      .nl-hero-form { flex-direction: column; }
+      .nl-hero-form input { border-right: 1px solid #222; border-bottom: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scroll-progress"></div>
+<div class="cursor" id="cursor"></div>
+<div class="grain"></div>
+
+<!-- NAV -->
+<nav aria-label="Main navigation">
+  <a href="home.html" class="nav-logo"><span>V</span>OLUMEN</a>
+  <ul class="nav-links">
+    <li><a href="home.html#manifesto">About / Acerca</a></li>
+    <li><a href="editorial.html">Editorial</a></li>
+    <li><a href="interviews.html">Interviews</a></li>
+    <li><a href="home.html#gallery">Photos / Fotos</a></li>
+    <li><a href="submit.html">Submit / Envía</a></li>
+    <li><a href="newsletter.html" class="active">Newsletter</a></li>
+  </ul>
+  <div class="nav-lang">
+    <button type="button" class="lang-btn active" id="btn-en">EN</button>
+    <span class="lang-sep">/</span>
+    <button type="button" class="lang-btn" id="btn-es">ES</button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════ -->
+<section class="nl-hero">
+  <div class="nl-hero-bg">
+    <img src="photos/band-monochrome.jpg" alt="Band on stage — El Volumen newsletter background" loading="eager">
+  </div>
+  <div class="nl-hero-overlay"></div>
+  <div class="nl-hero-content">
+    <div class="nl-label">Weekly Newsletter · Free</div>
+    <h1 class="nl-title">EL<br><span>VOLUMEN</span></h1>
+    <div class="nl-title-sub">THE NEWSLETTER</div>
+    <p class="nl-tagline" data-en="One photo. One band. One upcoming show. One sentence in Spanish. Weekly. Yours." data-es="Una foto. Una banda. Un show próximo. Una oración en español. Semanalmente. Tuyo.">
+      One photo. One band. One upcoming show. One sentence in Spanish. Weekly. Yours.
+    </p>
+    <form class="nl-hero-form" id="nl-hero-form" name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field-nl" novalidate>
+      <input type="hidden" name="form-name" value="newsletter">
+      <p hidden aria-hidden="true"><label>Don't fill: <input name="bot-field-nl" tabindex="-1"></label></p>
+      <input type="email" name="email" id="nl-hero-email" placeholder="your@email.com" required autocomplete="email" aria-label="Email address">
+      <button type="submit" id="nl-hero-btn">Subscribe</button>
+    </form>
+    <p class="nl-hero-note" id="nl-hero-status">No spam. Unsubscribe anytime. · Sin spam. Cancela cuando quieras.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     WHAT'S INSIDE
+═══════════════════════════════════════════════════ -->
+<section class="nl-format reveal">
+  <div class="nl-format-label">The Format</div>
+  <div class="nl-format-items">
+    <div class="nl-format-item">
+      <div class="nl-format-num">01</div>
+      <div class="nl-format-text">
+        <div class="nl-format-title">One Photo</div>
+        <div class="nl-format-desc">A concert photo from the last show Reinaldo shot. No stock images. No phone pics. One real frame from the front row.</div>
+      </div>
+    </div>
+    <div class="nl-format-item">
+      <div class="nl-format-num">02</div>
+      <div class="nl-format-text">
+        <div class="nl-format-title">One Band Recommendation</div>
+        <div class="nl-format-desc">One Austin act to have on your radar this week. A sentence on why. A Spotify link. That's it.</div>
+      </div>
+    </div>
+    <div class="nl-format-item">
+      <div class="nl-format-num">03</div>
+      <div class="nl-format-text">
+        <div class="nl-format-title">One Upcoming Show</div>
+        <div class="nl-format-desc">The one show this week worth rearranging your schedule for. Venue, date, time. We don't pad the list.</div>
+      </div>
+    </div>
+    <div class="nl-format-item">
+      <div class="nl-format-num">04</div>
+      <div class="nl-format-text">
+        <div class="nl-format-title">Una Oración en Español</div>
+        <div class="nl-format-desc">One sentence. In Spanish. Every issue. The rest can be in English — this is the line that stays. Consistente, semanal, nuestro.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     SAMPLE ISSUE
+═══════════════════════════════════════════════════ -->
+<section class="nl-sample reveal">
+  <div class="nl-sample-header">
+    <div class="nl-sample-label">Preview the format</div>
+    <h2 class="nl-sample-title">ISSUE <span>001</span> — SAMPLE</h2>
+  </div>
+
+  <div class="email-mockup">
+    <!-- Browser chrome -->
+    <div class="email-topbar">
+      <div class="email-dot red"></div>
+      <div class="email-dot yellow"></div>
+      <div class="email-dot green"></div>
+      <div class="email-address-bar">El Volumen · Issue 001 · April 2026</div>
+    </div>
+
+    <!-- Email header -->
+    <div class="email-header">
+      <div class="email-from">From: El Volumen &lt;newsletter@volumen.media&gt;</div>
+      <div class="email-subject"><span>EL VOLUMEN</span> · Issue 001 · April 2026</div>
+    </div>
+
+    <!-- Email body -->
+    <div class="email-body">
+
+      <!-- PHOTO SECTION -->
+      <div class="email-photo-block">
+        <img src="photos/wide-stage-view.jpg" alt="This week's photo — wide stage, blue light" loading="lazy">
+        <div class="email-photo-caption">Viloria · Mohawk, Austin TX · March 2026 · Photo: Reinaldo Ramirez</div>
+      </div>
+
+      <!-- BAND REC -->
+      <div class="email-section">
+        <div class="email-section-num">Band of the Week</div>
+        <p class="email-body-text">
+          <strong>Viloria.</strong> Austin-based, bilingual, and the best live show in the city right now. Their 2024 record <em>Sin Fronteras</em> hasn't left the rotation. If you've been sleeping on them, this is the week to wake up.
+          <br><br>
+          → <a href="band/viloria.html" class="email-link-profile">Full profile on Volumen</a>
+        </p>
+      </div>
+
+      <!-- SHOW PICK -->
+      <div class="email-section">
+        <div class="email-section-num">Show of the Week</div>
+        <p class="email-body-text">
+          <strong>Viloria</strong> at Mohawk, Austin TX.<br>
+          <span class="email-show-meta">Friday, April 18 · Doors 8PM · Tickets $12</span>
+          <br><br>
+          Outdoor stage. Some of the best sound in the city. Go early for the opener.
+        </p>
+      </div>
+
+      <!-- UNA ORACIÓN -->
+      <div class="email-section">
+        <div class="email-section-num">Una Oración en Español</div>
+        <p class="email-spanish-line">
+          "La música más honesta que encontrarás esta semana viene de alguien que creció entre dos idiomas — y no eligió ninguno."
+        </p>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="email-footer-strip">
+        <div class="email-footer-logo"><span>V</span>OLUMEN</div>
+        <div class="email-footer-link">volumen.media · Austin, TX · Unsubscribe</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     ARCHIVE
+═══════════════════════════════════════════════════ -->
+<section class="nl-archive reveal">
+  <h2 class="nl-archive-title">ISSUE <span>ARCHIVE</span></h2>
+  <div class="nl-archive-empty">
+    <div class="archive-v">V</div>
+    <div class="archive-text">Issue 001 — Coming Soon</div>
+    <div class="archive-sub">Subscribe below to be first · Suscríbete abajo para ser el primero</div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     BOTTOM SIGNUP SECTION
+═══════════════════════════════════════════════════ -->
+<section class="nl-bottom-signup" id="signup">
+  <div class="nl-signup-left reveal">
+    <h2>JOIN<br><span>EL VOLUMEN</span></h2>
+    <p data-en="Weekly. Free. The bilingual rock scene, in your inbox. One photo, one band, one show, one sentence in Spanish." data-es="Semanal. Gratis. La escena de rock bilingüe, en tu bandeja de entrada. Una foto, una banda, un show, una oración en español.">
+      Weekly. Free. The bilingual rock scene, in your inbox. One photo, one band, one show, one sentence in Spanish.
+    </p>
+  </div>
+
+  <div class="reveal delay-1">
+    <div class="nl-signup-pair">
+      <div class="nl-signup-label">EN · Subscribe</div>
+      <div class="nl-signup-label es">ES · Suscríbete</div>
+    </div>
+
+    <form id="nl-bottom-form" name="newsletter-bottom" method="POST" data-netlify="true" netlify-honeypot="bot-field-nl2" novalidate>
+      <input type="hidden" name="form-name" value="newsletter-bottom">
+      <p hidden aria-hidden="true"><label>Don't fill: <input name="bot-field-nl2" tabindex="-1"></label></p>
+      <div class="nl-signup-field">
+        <input type="email" name="email" id="nl-bottom-email" placeholder="your@email.com" required autocomplete="email" aria-label="Email address">
+      </div>
+      <button type="submit" class="nl-signup-btn" id="nl-bottom-btn">
+        Subscribe · Suscribirse
+      </button>
+    </form>
+    <div class="nl-signup-note" id="nl-bottom-status">Weekly · Free · Unsubscribe anytime</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span>V</span>OLUMEN</div>
+  <div class="footer-copy">© 2026 Volumen Magazine · Austin, Texas · All Rights Reserved</div>
+  <div class="footer-social">
+    <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener" aria-label="Instagram (opens in new tab)">Instagram</a>
+    <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener" aria-label="Twitter / X (opens in new tab)">Twitter / X</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</footer>
+
+<script>
+  // ── SCROLL PROGRESS ──
+  const progressBar = document.getElementById('scroll-progress');
+  if (progressBar) {
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = (total > 0 ? (scrolled / total) * 100 : 0) + '%';
+    }, { passive: true });
+  }
+
+  // ── REVEAL ANIMATION ──
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // ── NETLIFY FORM HANDLER — reusable ──
+  async function handleNewsletterForm(form, statusEl, btnEl) {
+    if (!form) return;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = form.querySelector('input[type="email"]').value.trim();
+      if (!email) { if (statusEl) statusEl.textContent = 'Please enter your email.'; return; }
+
+      if (btnEl) { btnEl.disabled = true; btnEl.textContent = 'Sending...'; }
+
+      try {
+        const response = await fetch('/', {
+          method: 'POST',
+          body: new URLSearchParams(new FormData(form)).toString(),
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        });
+
+        if (response.ok) {
+          if (statusEl) {
+            statusEl.textContent = '✓ You\'re in. First issue coming soon. · ¡Estás dentro!';
+            statusEl.style.color = 'var(--gold)';
+          }
+          form.style.opacity = '0.4';
+          form.style.pointerEvents = 'none';
+        } else {
+          throw new Error('Error');
+        }
+      } catch {
+        if (btnEl) { btnEl.disabled = false; btnEl.textContent = btnEl.dataset.original || 'Subscribe'; }
+        if (statusEl) { statusEl.textContent = 'Error. Try again.'; statusEl.style.color = 'var(--red)'; }
+      }
+    });
+  }
+
+  // Save button text for reset
+  const heroBtn = document.getElementById('nl-hero-btn');
+  const bottomBtn = document.getElementById('nl-bottom-btn');
+  if (heroBtn) heroBtn.dataset.original = heroBtn.textContent;
+  if (bottomBtn) bottomBtn.dataset.original = bottomBtn.textContent;
+
+  handleNewsletterForm(
+    document.getElementById('nl-hero-form'),
+    document.getElementById('nl-hero-status'),
+    heroBtn
+  );
+  handleNewsletterForm(
+    document.getElementById('nl-bottom-form'),
+    document.getElementById('nl-bottom-status'),
+    bottomBtn
+  );
+
+  // ── CUSTOM CURSOR ──
+  const cursor = document.getElementById('cursor');
+  if (cursor && window.matchMedia('(hover: hover)').matches) {
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    }, { passive: true });
+    document.querySelectorAll('a, button, input').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+  }
+
+  // ── LANGUAGE TOGGLE ──
+  const btnEn = document.getElementById('btn-en');
+  const btnEs = document.getElementById('btn-es');
+  function setLang(lang) {
+    document.body.classList.toggle('lang-es', lang === 'es');
+    btnEn.classList.toggle('active', lang === 'en');
+    btnEs.classList.toggle('active', lang === 'es');
+    document.querySelectorAll('[data-en][data-es]').forEach(el => {
+      el.textContent = lang === 'es' ? el.dataset.es : el.dataset.en;
+    });
+    localStorage.setItem('volumen-lang', lang);
+  }
+  if (btnEn) btnEn.addEventListener('click', () => setLang('en'));
+  if (btnEs) btnEs.addEventListener('click', () => setLang('es'));
+  const savedLang = localStorage.getItem('volumen-lang');
+  if (savedLang) setLang(savedLang);
+</script>
+
+</body>
+</html>

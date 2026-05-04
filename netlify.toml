@@ -1,0 +1,61 @@
+[build]
+  publish = "."
+
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+
+# Clean URLs Redirects
+[[redirects]]
+  from = "/home"
+  to = "/home.html"
+  status = 200
+
+[[redirects]]
+  from = "/contact"
+  to = "/contact.html"
+  status = 200
+
+[[redirects]]
+  from = "/editorial"
+  to = "/editorial.html"
+  status = 200
+
+[[redirects]]
+  from = "/interviews"
+  to = "/interviews.html"
+  status = 200
+
+[[redirects]]
+  from = "/events"
+  to = "/events.html"
+  status = 200
+
+# 404 fallback — branded error page instead of Spline loading screen
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
+
+# ─── CACHE HEADERS ───────────────────────────────────────────
+[[headers]]
+  for = "/photos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/styles.css"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/main.js"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# ─── SECURITY HEADERS ────────────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
