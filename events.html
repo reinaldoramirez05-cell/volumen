@@ -488,12 +488,19 @@
   <nav aria-label="Main navigation">
     <a href="home.html" class="nav-logo"><span>V</span>OLUMEN</a>
     <ul class="nav-links">
-      <li><a href="home.html" data-en="Home" data-es="Inicio">Home</a></li>
-      <li><a href="editorial.html">Editorial</a></li>
-      <li><a href="interviews.html">Interviews</a></li>
+      <li><a href="home.html#manifesto" data-en="About" data-es="Acerca">About / Acerca</a></li>
+      <li><a href="editorial.html" data-en="Editorial" data-es="Editorial">Editorial</a></li>
+      <li><a href="interviews.html" data-en="Interviews" data-es="Entrevistas">Interviews</a></li>
       <li><a href="events.html" class="active" data-en="Live Events" data-es="Shows en Vivo">Live Events</a></li>
-      <li><a href="contact.html" data-en="Contact" data-es="Contacto">Contact</a></li>
+      <li><a href="home.html#gallery" data-en="Photos" data-es="Fotos">Photos / Fotos</a></li>
+      <li><a href="contact.html" data-en="Contact" data-es="Contacto">Contact / Contacto</a></li>
+      <li><a href="home.html#signup" data-en="Subscribe" data-es="Suscríbete">Subscribe / Suscríbete</a></li>
     </ul>
+    <div class="nav-lang">
+      <button class="lang-btn active" id="btn-en">EN</button>
+      <span class="lang-sep">/</span>
+      <button class="lang-btn" id="btn-es">ES</button>
+    </div>
   </nav>
 
   <header class="hero">
@@ -654,7 +661,7 @@
       }
     });
   </script>
-
+  <script src="main.js"></script>
 </body>
 
 </html>

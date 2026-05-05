@@ -1536,15 +1536,7 @@
       }
     }
 
-    // Lang toggle (visual only)
-    document.getElementById('btn-en').addEventListener('click', function () {
-      this.classList.add('active');
-      document.getElementById('btn-es').classList.remove('active');
-    });
-    document.getElementById('btn-es').addEventListener('click', function () {
-      this.classList.add('active');
-      document.getElementById('btn-en').classList.remove('active');
-    });
+
 
     // Enter key signup
     document.getElementById('email-input').addEventListener('keydown', e => {
@@ -1560,6 +1552,7 @@
       el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
     });
   </script>
+  <script src="main.js"></script>
 </body>
 
 </html>

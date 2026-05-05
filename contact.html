@@ -558,12 +558,13 @@
 <nav aria-label="Main navigation">
   <a href="home.html" class="nav-logo"><span>V</span>OLUMEN</a>
   <ul class="nav-links">
-    <li><a href="home.html#manifesto">About / Acerca</a></li>
-    <li><a href="editorial.html">Editorial</a></li>
-    <li><a href="interviews.html">Interviews</a></li>
-    <li><a href="events.html">Live Events</a></li>
-    <li><a href="home.html#gallery">Photos / Fotos</a></li>
-    <li><a href="contact.html" class="active">Contact / Contacto</a></li>
+    <li><a href="home.html#manifesto" data-en="About" data-es="Acerca">About / Acerca</a></li>
+    <li><a href="editorial.html" data-en="Editorial" data-es="Editorial">Editorial</a></li>
+    <li><a href="interviews.html" data-en="Interviews" data-es="Entrevistas">Interviews</a></li>
+    <li><a href="events.html" data-en="Live Events" data-es="Shows en Vivo">Live Events</a></li>
+    <li><a href="home.html#gallery" data-en="Photos" data-es="Fotos">Photos / Fotos</a></li>
+    <li><a href="contact.html" class="active" data-en="Contact" data-es="Contacto">Contact / Contacto</a></li>
+    <li><a href="home.html#signup" data-en="Subscribe" data-es="Suscríbete">Subscribe / Suscríbete</a></li>
   </ul>
   <div class="nav-lang">
     <button class="lang-btn active" id="btn-en">EN</button>
@@ -588,18 +589,18 @@
   <div class="contact-left reveal">
     
     <div class="info-block">
-      <h2 class="info-title">DIRECT LINE</h2>
+      <h2 class="info-title" data-en="DIRECT LINE" data-es="LÍNEA DIRECTA">DIRECT LINE</h2>
       <div class="info-item">
-        <span class="info-label">Email / Correo</span>
+        <span class="info-label" data-en="Email" data-es="Correo">Email / Correo</span>
         <a href="mailto:reinaldoramirez05@gmail.com" class="info-value">reinaldoramirez05@gmail.com</a>
       </div>
       <div class="info-item">
-        <span class="info-label">Phone / Teléfono</span>
+        <span class="info-label" data-en="Phone" data-es="Teléfono">Phone / Teléfono</span>
         <a href="tel:+17862597215" class="info-value">+1 (786) 259-7215</a>
       </div>
     </div>
 
-    <h2 class="info-title">FOLLOW THE SCENE</h2>
+    <h2 class="info-title" data-en="FOLLOW THE SCENE" data-es="SIGUE LA ESCENA">FOLLOW THE SCENE</h2>
     <div class="social-grid">
       
       <!-- INSTAGRAM -->
@@ -636,27 +637,27 @@
     <!-- INITIAL FORM WRAPPER -->
     <div class="form-container" id="contact-wrap">
       <div class="form-header">
-        <h2 class="form-title">PITCH US.</h2>
-        <p class="form-sub">Looking to feature your band, submit a photo gallery, or advertise? Drop us a message.</p>
+        <h2 class="form-title" data-en="PITCH US." data-es="ESCRÍBENOS.">PITCH US.</h2>
+        <p class="form-sub" data-en="Looking to feature your band, submit a photo gallery, or advertise? Drop us a message." data-es="¿Buscas promocionar a tu banda, enviar una galería de fotos o anunciarte? Déjanos un mensaje.">Looking to feature your band, submit a photo gallery, or advertise? Drop us a message.</p>
       </div>
 
       <div class="form-group">
-        <label class="form-label">Name / Nombre</label>
+        <label class="form-label" data-en="Name" data-es="Nombre">Name / Nombre</label>
         <input type="text" class="form-control" id="contact-name" placeholder="E.g. Gustavo Cerati">
       </div>
       
       <div class="form-group">
-        <label class="form-label">Email / Correo *</label>
+        <label class="form-label" data-en="Email *" data-es="Correo *">Email / Correo *</label>
         <input type="email" class="form-control" id="contact-email" placeholder="hello@band.com" required>
       </div>
 
       <div class="form-group">
-        <label class="form-label">Message / Mensaje</label>
+        <label class="form-label" data-en="Message" data-es="Mensaje">Message / Mensaje</label>
         <textarea class="form-control" id="contact-message" placeholder="Tell us about the upcoming tour or record..."></textarea>
       </div>
 
       <button class="submit-btn" id="contact-submit" onclick="submitContact()">
-        <span class="btn-text">SEND MESSAGE</span>
+        <span class="btn-text" data-en="SEND MESSAGE" data-es="ENVIAR MENSAJE">SEND MESSAGE</span>
         <span class="btn-spinner"></span>
       </button>
       <div class="form-msg" id="contact-msg"></div>
@@ -710,15 +711,7 @@
   }, { threshold: 0.1 });
   reveals.forEach(r => revealObserver.observe(r));
 
-  // Lang toggle (visual only for now)
-  document.getElementById('btn-en').addEventListener('click', function() {
-    this.classList.add('active');
-    document.getElementById('btn-es').classList.remove('active');
-  });
-  document.getElementById('btn-es').addEventListener('click', function() {
-    this.classList.add('active');
-    document.getElementById('btn-en').classList.remove('active');
-  });
+
 
   // ── CONTACT FORM LOGIC (FORMSPREE) ──
   async function submitContact() {
@@ -781,5 +774,6 @@
     }
   }
 </script>
+<script src="main.js"></script>
 </body>
 </html>
