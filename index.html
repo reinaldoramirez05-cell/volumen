@@ -20,138 +20,500 @@
   <meta property="twitter:title" content="Volumen | Bilingual Rock Magazine">
   <meta property="twitter:description" content="Discover the best of bilingual rock music and photography based in Austin, TX.">
   <meta property="twitter:image" content="https://volumen.media/photos/wide-stage-view.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+    rel="stylesheet">
+
   <style>
-    body, html {
+    :root {
+      --black: #080808;
+      --white: #f2ece0;
+      --red: #bf2d1f;
+      --gold: #c9a040;
+      --gray: #181818;
+      --mid: #444;
+      --dim: #2a2a2a;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    html, body {
       width: 100%;
       height: 100%;
-      background: #000;
+      background: var(--black);
+      overflow: hidden;
+      cursor: none;
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    .cursor {
+      width: 10px;
+      height: 10px;
+      background: var(--red);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+      mix-blend-mode: difference;
+    }
+
+    @media (hover: none) and (pointer: coarse) {
+      .cursor { display: none; }
+      html, body { cursor: auto; }
+    }
+
+    .cursor.hover {
+      width: 40px;
+      height: 40px;
+      background: var(--gold);
+    }
+
+    /* ── GRAIN OVERLAY ── */
+    .grain {
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0.35;
+    }
+
+    /* ── BACKGROUND PHOTO (Ken Burns) ── */
+    .bg-photo {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
       overflow: hidden;
     }
-    
-    #loader {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      font-family: sans-serif;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      font-size: 14px;
-      transition: opacity 1s ease;
-      pointer-events: none;
-    }
 
-    #canvas3d {
-      width: 100vw;
-      height: 100vh;
-      display: block;
-      pointer-events: auto;
-      opacity: 0;
-      transition: opacity 1.5s ease;
-    }
-    
-    .play-btn {
-      position: absolute;
-      bottom: 10vh;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(191, 45, 31, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      -webkit-backdrop-filter: blur(10px);
-      backdrop-filter: blur(10px);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      z-index: 10;
-      opacity: 0;
-      pointer-events: none;
-      text-decoration: none;
-    }
-    
-    .play-btn svg {
-      width: 20px;
-      height: 20px;
-      fill: #fff;
-      transition: fill 0.3s;
-      margin-left: 4px; /* nudge for visual centering */
-    }
-    
-    .play-btn:hover {
-      background: rgba(191, 45, 31, 0.9);
-      border-color: #fff;
-      transform: translateX(-50%) scale(1.1);
-      box-shadow: 0 0 30px rgba(191, 45, 31, 0.4);
-    }
-
-    .play-btn::after {
-      content: '';
-      position: absolute;
+    .bg-photo img {
       width: 100%;
       height: 100%;
-      border-radius: 50%;
-      border: 1px solid var(--red, #bf2d1f);
+      object-fit: cover;
+      object-position: center top;
+      filter: grayscale(100%) contrast(1.1) brightness(0.3);
       opacity: 0;
-      animation: pulse-ring 2s infinite;
+      animation: photoReveal 4s ease 0.8s forwards, kenBurns 25s ease-in-out 0.8s infinite alternate;
     }
 
-    @keyframes pulse-ring {
-      0% { transform: scale(1); opacity: 0.6; }
-      100% { transform: scale(1.5); opacity: 0; }
+    @keyframes photoReveal {
+      from { opacity: 0; }
+      to   { opacity: 0.18; }
     }
 
-    /* Fade in button and canvas when loaded */
-    body.loaded #canvas3d { opacity: 1; }
-    body.loaded .play-btn { opacity: 1; pointer-events: auto; }
-    body.loaded #loader { opacity: 0; }
+    @keyframes kenBurns {
+      from { transform: scale(1); }
+      to   { transform: scale(1.08); }
+    }
 
-    /* Spline failure fallback */
-    body.spline-failed #loader {
-      opacity: 1;
-      pointer-events: none;
+    /* ── MAIN CONTAINER ── */
+    .landing {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      justify-content: center;
+      gap: 0;
+    }
+
+    /* ── RED LINE ── */
+    .red-line {
+      width: 60vw;
+      max-width: 700px;
+      height: 1px;
+      background: var(--red);
+      transform: scaleX(0);
+      transform-origin: left center;
+      animation: drawLine 1s cubic-bezier(0.23, 1, 0.32, 1) 0.3s forwards;
+      margin-bottom: 40px;
+      box-shadow: 0 0 20px rgba(191, 45, 31, 0.3);
+    }
+
+    @keyframes drawLine {
+      from { transform: scaleX(0); }
+      to   { transform: scaleX(1); }
+    }
+
+    /* ── TITLE ── */
+    .title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(60px, 18vw, 220px);
+      line-height: 0.9;
+      letter-spacing: 0.15em;
       text-align: center;
+      -webkit-user-select: none;
+      user-select: none;
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
     }
-    body.spline-failed #loader-title {
-      font-family: sans-serif;
-      font-size: 36px;
-      letter-spacing: 0.5em;
-      color: #bf2d1f;
+
+    .title .letter {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: letterIn 0.7s cubic-bezier(0.23, 1, 0.32, 1) forwards;
     }
-    body.spline-failed #loader-sub {
-      color: #888;
+
+    .title .letter.v-letter {
+      color: var(--red);
+    }
+
+    .title .letter:not(.v-letter) {
+      color: var(--white);
+    }
+
+    /* Stagger each letter */
+    .title .letter:nth-child(1) { animation-delay: 1.0s; }
+    .title .letter:nth-child(2) { animation-delay: 1.1s; }
+    .title .letter:nth-child(3) { animation-delay: 1.2s; }
+    .title .letter:nth-child(4) { animation-delay: 1.3s; }
+    .title .letter:nth-child(5) { animation-delay: 1.4s; }
+    .title .letter:nth-child(6) { animation-delay: 1.5s; }
+    .title .letter:nth-child(7) { animation-delay: 1.6s; }
+
+    @keyframes letterIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── RED LINE (BOTTOM) ── */
+    .red-line-bottom {
+      width: 60vw;
+      max-width: 700px;
+      height: 1px;
+      background: var(--red);
+      transform: scaleX(0);
+      transform-origin: right center;
+      animation: drawLine 1s cubic-bezier(0.23, 1, 0.32, 1) 1.4s forwards;
+      margin-top: 40px;
+      box-shadow: 0 0 20px rgba(191, 45, 31, 0.3);
+    }
+
+    /* ── TAGLINE ── */
+    .tagline {
+      margin-top: 36px;
+      text-align: center;
+      opacity: 0;
+      animation: fadeUp 1s ease 2.2s forwards;
+    }
+
+    .tagline-en {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(13px, 1.6vw, 19px);
+      color: var(--white);
+      letter-spacing: 0.08em;
+      line-height: 1.5;
+      font-weight: 400;
+    }
+
+    .tagline-es {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(12px, 1.3vw, 16px);
+      color: var(--gold);
+      letter-spacing: 0.06em;
+      margin-top: 8px;
+      font-weight: 400;
+    }
+
+    /* ── ENTER BUTTON ── */
+    .enter-btn {
+      position: absolute;
+      bottom: 8vh;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 16px 40px;
+      background: rgba(191, 45, 31, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 40px;
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      text-decoration: none;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 2.8s forwards;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 10;
+    }
+
+    .enter-btn:hover {
+      background: rgba(191, 45, 31, 0.85);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateX(-50%) scale(1.05);
+      box-shadow: 0 0 40px rgba(191, 45, 31, 0.35);
+    }
+
+    .enter-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      letter-spacing: 6px;
+      color: var(--white);
+    }
+
+    .enter-sep {
+      width: 1px;
+      height: 14px;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .enter-text-es {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      letter-spacing: 6px;
+      color: var(--gold);
+    }
+
+    /* Pulse ring */
+    .enter-btn::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 40px;
+      border: 1px solid var(--red);
+      opacity: 0;
+      animation: pulseRing 2.5s ease 3.2s infinite;
+    }
+
+    @keyframes pulseRing {
+      0%   { transform: scale(1); opacity: 0.5; }
+      100% { transform: scale(1.15); opacity: 0; }
+    }
+
+    /* ── ISSUE BADGE (top left) ── */
+    .issue-badge {
+      position: absolute;
+      top: 32px;
+      left: 40px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 2.6s forwards;
+      z-index: 10;
+    }
+
+    .issue-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--red);
+      animation: pulse 2s ease infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.3; transform: scale(0.7); }
+    }
+
+    .issue-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 9px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    /* ── SOCIAL HINT (bottom right) ── */
+    .social-hint {
+      position: absolute;
+      bottom: 32px;
+      right: 40px;
+      display: flex;
+      gap: 20px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 3s forwards;
+      z-index: 10;
+    }
+
+    .social-hint a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--dim);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .social-hint a:hover {
+      color: var(--gold);
+    }
+
+    /* ── YEAR MARK (bottom left) ── */
+    .year-mark {
+      position: absolute;
+      bottom: 32px;
+      left: 40px;
+      font-family: 'Bebas Neue', sans-serif;
       font-size: 11px;
-      letter-spacing: 0.2em;
+      letter-spacing: 4px;
+      color: var(--dim);
+      opacity: 0;
+      animation: fadeUp 0.8s ease 3s forwards;
+      z-index: 10;
     }
-    body.spline-failed .play-btn {
-      opacity: 1;
-      pointer-events: auto;
+
+    /* ── SHARED ANIMATION ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px) translateX(var(--tx, 0));
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) translateX(var(--tx, 0));
+      }
+    }
+
+    /* Fix fadeUp for centered elements */
+    .enter-btn {
+      --tx: -50%;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .red-line, .red-line-bottom {
+        width: 80vw;
+      }
+
+      .tagline {
+        padding: 0 24px;
+      }
+
+      .issue-badge {
+        top: 20px;
+        left: 20px;
+      }
+
+      .social-hint {
+        bottom: 20px;
+        right: 20px;
+        gap: 14px;
+      }
+
+      .year-mark {
+        bottom: 20px;
+        left: 20px;
+      }
+
+      .enter-btn {
+        bottom: 6vh;
+        padding: 14px 32px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .title {
+        letter-spacing: 0.08em;
+      }
+
+      .red-line, .red-line-bottom {
+        width: 90vw;
+        margin-top: 28px;
+        margin-bottom: 28px;
+      }
+
+      .tagline {
+        margin-top: 24px;
+      }
+
+      .enter-btn {
+        padding: 12px 24px;
+      }
+
+      .enter-text, .enter-text-es {
+        font-size: 12px;
+        letter-spacing: 4px;
+      }
+
+      .social-hint {
+        display: none;
+      }
+
+      .year-mark {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
-  <div id="loader">
-    <span id="loader-title" style="display:none">VOLUMEN</span>
-    <span id="loader-msg">Loading Environment...</span>
-    <span id="loader-sub"></span>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="grain"></div>
+
+  <!-- Background concert photo — slow reveal + Ken Burns -->
+  <div class="bg-photo">
+    <img src="photos/wide-stage-view.jpg" alt="" aria-hidden="true" />
   </div>
-  <canvas id="canvas3d"></canvas>
-  
-  <a href="home.html" class="play-btn" title="Enter Volumen">
-    <svg viewBox="0 0 24 24">
-      <path d="M8 5v14l11-7z" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
+
+  <!-- Issue badge -->
+  <div class="issue-badge">
+    <div class="issue-dot"></div>
+    <span class="issue-label">Austin, TX · Est. 2026</span>
+  </div>
+
+  <!-- Main landing content -->
+  <main class="landing">
+    <div class="red-line" aria-hidden="true"></div>
+
+    <h1 class="title">
+      <span class="letter v-letter">V</span>
+      <span class="letter">O</span>
+      <span class="letter">L</span>
+      <span class="letter">U</span>
+      <span class="letter">M</span>
+      <span class="letter">E</span>
+      <span class="letter">N</span>
+    </h1>
+
+    <div class="red-line-bottom" aria-hidden="true"></div>
+
+    <div class="tagline">
+      <div class="tagline-en">The first bilingual rock magazine in the United States</div>
+      <div class="tagline-es">La primera revista bilingüe de rock en EE.UU.</div>
+    </div>
+  </main>
+
+  <!-- Enter button -->
+  <a href="home.html" class="enter-btn" id="enter-btn" title="Enter Volumen">
+    <span class="enter-text">ENTER</span>
+    <span class="enter-sep"></span>
+    <span class="enter-text-es">ENTRAR</span>
   </a>
 
+  <!-- Year mark -->
+  <div class="year-mark">© 2026</div>
+
+  <!-- Social links -->
+  <div class="social-hint">
+    <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener noreferrer">Instagram</a>
+    <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener noreferrer">Twitter / X</a>
+  </div>
+
+  <!-- Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -166,46 +528,18 @@
   }
   </script>
 
-  <script type="module">
-    import { Application } from 'https://esm.sh/@splinetool/runtime';
+  <script>
+    // ── Custom cursor ──
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
 
-    const canvas = document.getElementById('canvas3d');
-    const spline = new Application(canvas);
-
-    function showFallback(msg) {
-      document.body.classList.add('spline-failed');
-      document.getElementById('loader-title').style.display = '';
-      document.getElementById('loader-msg').style.display = 'none';
-      document.getElementById('loader-sub').textContent = msg;
-    }
-
-    // Safety net: if scene stalls for 10s with no resolve or reject
-    const splineTimeout = setTimeout(() => {
-      if (!document.body.classList.contains('loaded')) {
-        showFallback('Interactive scene took too long to load — click below to enter.');
-      }
-    }, 10000);
-
-    // Load the latest interactive scene (updated version)
-    spline.load('https://prod.spline.design/MtWcRxLtOpiwFlQb/scene.splinecode')
-      .then(() => {
-        clearTimeout(splineTimeout);
-        document.body.classList.add('loaded');
-
-        // Fallback: Check if interaction on Spline works
-        spline.addEventListener('mouseDown', (e) => {
-            window.location.href = 'home.html';
-        });
-
-        // Backup: Global canvas click if object detection fails
-        canvas.addEventListener('click', () => {
-             window.location.href = 'home.html';
-        });
-      })
-      .catch(() => {
-        clearTimeout(splineTimeout);
-        showFallback('Interactive scene unavailable — click below to enter.');
-      });
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
   </script>
 </body>
 </html>
