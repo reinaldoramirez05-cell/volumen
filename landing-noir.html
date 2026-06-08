@@ -53,7 +53,7 @@
        HEADER  —  wordmark · live time · language
     ───────────────────────────────────────── */
     header {
-      position: fixed;
+      position: absolute;          /* scrolls away with the hero — no collision with the sticky controls */
       top: 0; left: 0; right: 0;
       z-index: 100;
       padding: 22px var(--pad);
@@ -94,7 +94,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 0 var(--pad);
+      padding: 100px var(--pad) 60px;   /* top pad clears the header on short viewports */
       max-width: 1200px;
     }
 
