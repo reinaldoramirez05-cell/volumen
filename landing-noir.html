@@ -134,46 +134,58 @@
     }
     .intro-hint { transition: opacity 0.4s ease; }
 
-    /* ── 3D "ON" GATE BUTTON (grey → green) ── */
-    .on-btn {
-      font-family: var(--font-disp);
-      font-size: clamp(22px, 3vw, 34px);
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: #4a4a4a;                       /* greyed while disabled */
-      background: #161616;
+    /* ── FLIP SWITCH (locked grey → flips to green ON) ── */
+    .switch {
+      --sw: clamp(134px, 18vw, 170px);
+      position: relative;
+      width: var(--sw); height: 58px;
       border: 1px solid #242424;
-      border-radius: 7px;
-      padding: 13px 56px 15px;
+      border-radius: 32px;
+      background: #131313;
+      box-shadow: inset 0 2px 7px rgba(0,0,0,.85), inset 0 0 0 1px #1f1f1f;
       cursor: not-allowed;
-      -webkit-user-select: none; user-select: none;
-      transform: translateY(0);
-      box-shadow: 0 6px 0 #070707, 0 9px 16px rgba(0,0,0,0.55);
-      transition: color .3s, background .3s, border-color .3s, box-shadow .15s, transform .12s;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      transition: background .4s, box-shadow .4s, border-color .4s;
     }
-    .on-btn.ready {
-      color: #fff;
-      background: #15b657;
-      border-color: #25d970;
-      cursor: pointer;
-      box-shadow: 0 6px 0 #0b6c34, 0 12px 28px rgba(21,182,87,0.5);
-      animation: onPulse 1.6s ease-in-out infinite;
+    .switch-txt {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      font-family: var(--font-disp);
+      font-size: 18px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: #3f3f3f; pointer-events: none;
+      transition: color .35s, opacity .35s;
     }
-    .on-btn.ready:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 0 #0b6c34, 0 16px 34px rgba(21,182,87,0.62);
+    .switch-off { right: 22px; }
+    .switch-on  { left: 24px; opacity: 0; color: #fff; }
+    .switch-knob {
+      position: absolute; top: 5px; left: 5px;
+      width: 46px; height: 46px; border-radius: 50%;
+      background: linear-gradient(#ededed, #bdbdbd 46%, #8f8f8f 54%, #d2d2d2);
+      box-shadow: 0 3px 8px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.7), inset 0 -2px 3px rgba(0,0,0,.35);
+      transition: transform .42s cubic-bezier(.34,1.56,.64,1);
+    }
+    .switch.ready {
+      cursor: pointer; border-color: #2c2c2c;
+      animation: switchReady 1.7s ease-in-out infinite;
+    }
+    .switch.ready .switch-off { color: #9a9a9a; }
+    @keyframes switchReady {
+      0%,100% { box-shadow: inset 0 2px 7px rgba(0,0,0,.85), 0 0 0 0 rgba(21,182,87,0); }
+      50%     { box-shadow: inset 0 2px 7px rgba(0,0,0,.85), 0 0 24px 1px rgba(21,182,87,.42); }
+    }
+    .switch.on {
+      background: #15b657; border-color: #2ee07a;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,.25), 0 0 30px 2px rgba(21,182,87,.55);
       animation: none;
     }
-    .on-btn.ready:active {
-      transform: translateY(5px);
-      box-shadow: 0 1px 0 #0b6c34, 0 3px 9px rgba(21,182,87,0.5);
-      animation: none;
+    .switch.on .switch-knob { transform: translateX(calc(var(--sw) - 56px)); }
+    .switch.on .switch-off { opacity: 0; }
+    .switch.on .switch-on  { opacity: 1; }
+    .switch:focus-visible { outline: 1px solid #2c7a48; outline-offset: 6px; }
+    @media (prefers-reduced-motion: reduce) {
+      .switch.ready { animation: none; }
+      .switch-knob { transition: none; }
     }
-    @keyframes onPulse {
-      0%,100% { box-shadow: 0 6px 0 #0b6c34, 0 12px 24px rgba(21,182,87,0.4); }
-      50%     { box-shadow: 0 6px 0 #0b6c34, 0 15px 36px rgba(21,182,87,0.72); }
-    }
-    @media (prefers-reduced-motion: reduce) { .on-btn.ready { animation: none; } }
 
     /* ═════════════════════════════════════════
        CUSTOM CURSOR
@@ -385,7 +397,12 @@
         </div>
       </div>
       <div class="intro-hint label" id="intro-hint" data-en="Drag the fader up" data-es="Sube el fader">Drag the fader up</div>
-      <button class="on-btn" id="on-btn" type="button" disabled data-en="On" data-es="On">ON</button>
+      <button class="switch" id="on-switch" type="button" role="switch" aria-checked="false"
+              aria-label="Power on" disabled>
+        <span class="switch-txt switch-off" data-en="Off" data-es="Off">Off</span>
+        <span class="switch-txt switch-on" data-en="On" data-es="On">On</span>
+        <span class="switch-knob"></span>
+      </button>
     </div>
   </div>
 
@@ -601,19 +618,28 @@
 
     function enableOn() {
       onReady = true;
-      const onBtn = document.getElementById('on-btn');
+      const sw = document.getElementById('on-switch');
       const hint = document.getElementById('intro-hint');
       if (hint) {
         const es = document.documentElement.lang === 'es';
-        hint.setAttribute('data-en', 'Press ON'); hint.setAttribute('data-es', 'Pulsa ON');
-        hint.textContent = es ? 'Pulsa ON' : 'Press ON';
+        hint.setAttribute('data-en', 'Flip the switch'); hint.setAttribute('data-es', 'Activa el interruptor');
+        hint.textContent = es ? 'Activa el interruptor' : 'Flip the switch';
         hint.style.opacity = '0.75';
       }
-      if (!onBtn) return;
-      onBtn.disabled = false;
-      onBtn.classList.add('ready');
-      onBtn.addEventListener('click', exitIntro, { once: true });
-      try { onBtn.focus({ preventScroll: true }); } catch (e) {}
+      if (!sw) return;
+      sw.disabled = false;
+      sw.classList.add('ready');
+      sw.addEventListener('click', flipOn, { once: true });
+      try { sw.focus({ preventScroll: true }); } catch (e) {}
+    }
+    // flip the switch to ON, then let it land before entering
+    function flipOn() {
+      const sw = document.getElementById('on-switch');
+      if (!sw) { exitIntro(); return; }
+      sw.classList.remove('ready');
+      sw.classList.add('on');
+      sw.setAttribute('aria-checked', 'true');
+      setTimeout(exitIntro, ANIM ? 480 : 0);
     }
 
     function exitIntro() {
