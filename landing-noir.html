@@ -67,11 +67,11 @@
     }
     .intro-inner {
       display: flex; flex-direction: column; align-items: center;
-      gap: clamp(20px, 3vw, 38px);
+      gap: clamp(14px, 2.2vh, 30px);
     }
     .intro-num {
       font-family: var(--font-disp);
-      font-size: clamp(96px, 24vw, 320px);
+      font-size: clamp(72px, 16vh, 240px);
       font-weight: 400;
       letter-spacing: 0.02em;
       color: var(--ink);
@@ -101,7 +101,7 @@
     .fader-track {
       position: relative;
       width: 10px;
-      height: clamp(220px, 42vh, 340px);
+      height: clamp(160px, 30vh, 300px);
       background: #131313;
       border-radius: 6px;
       box-shadow: inset 0 2px 7px rgba(0,0,0,0.85), inset 0 0 0 1px #232323;
@@ -134,57 +134,85 @@
     }
     .intro-hint { transition: opacity 0.4s ease; }
 
-    /* ── FLIP SWITCH (locked grey → flips to green ON) ── */
+    /* ── ROCKER POWER SWITCH (I / O, amp-style) ── */
+    .switch-unit {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 12px;
+    }
+    .switch-label { transition: color .35s; }
     .switch {
-      --sw: clamp(134px, 18vw, 170px);
       position: relative;
-      width: var(--sw); height: 58px;
-      border: 1px solid #242424;
-      border-radius: 32px;
-      background: #131313;
-      box-shadow: inset 0 2px 7px rgba(0,0,0,.85), inset 0 0 0 1px #1f1f1f;
+      width: 86px; height: 134px;
+      padding: 0; border: 1px solid #2e2e2e;
+      border-radius: 16px;
+      background: linear-gradient(160deg, #242424, #151515 55%, #1d1d1d);
+      box-shadow: 0 10px 22px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.07);
       cursor: not-allowed;
-      padding: 0;
       -webkit-tap-highlight-color: transparent;
-      transition: background .4s, box-shadow .4s, border-color .4s;
+      transition: box-shadow .4s, border-color .4s;
     }
-    .switch-txt {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      font-family: var(--font-disp);
-      font-size: 18px; letter-spacing: 0.1em; text-transform: uppercase;
-      color: #3f3f3f; pointer-events: none;
-      transition: color .35s, opacity .35s;
+    /* recessed well the rocker sits in */
+    .switch-well {
+      position: absolute; inset: 9px;
+      border-radius: 10px;
+      background: #050505;
+      box-shadow: inset 0 2px 9px rgba(0,0,0,.95), inset 0 0 0 1px #000;
+      perspective: 360px;
+      transition: box-shadow .4s;
     }
-    .switch-off { right: 22px; }
-    .switch-on  { left: 24px; opacity: 0; color: #fff; }
-    .switch-knob {
-      position: absolute; top: 5px; left: 5px;
-      width: 46px; height: 46px; border-radius: 50%;
-      background: linear-gradient(#ededed, #bdbdbd 46%, #8f8f8f 54%, #d2d2d2);
-      box-shadow: 0 3px 8px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.7), inset 0 -2px 3px rgba(0,0,0,.35);
-      transition: transform .42s cubic-bezier(.34,1.56,.64,1);
+    /* the rocker itself — tilts on its X axis like a real power switch */
+    .rocker {
+      position: absolute; inset: 4px;
+      border-radius: 7px;
+      background: linear-gradient(#2c2c2c, #161616);
+      display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+      padding: 15px 0;
+      color: #5c5c5c;
+      transform: rotateX(-15deg);
+      transition: transform .45s cubic-bezier(.34,1.56,.64,1), color .35s;
+      box-shadow: 0 2px 6px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.08);
     }
-    .switch.ready {
-      cursor: pointer; border-color: #2c2c2c;
-      animation: switchReady 1.7s ease-in-out infinite;
+    /* crossfading sheen — top-lit when OFF, bottom-lit when ON (sells the tilt) */
+    .rocker::before, .rocker::after {
+      content: ''; position: absolute; inset: 0; border-radius: 7px;
+      pointer-events: none; transition: opacity .45s;
     }
-    .switch.ready .switch-off { color: #9a9a9a; }
+    .rocker::before { background: linear-gradient(rgba(255,255,255,.12), rgba(0,0,0,.5)); opacity: 1; }
+    .rocker::after  { background: linear-gradient(rgba(0,0,0,.5), rgba(255,255,255,.12)); opacity: 0; }
+    .switch.on .rocker::before { opacity: 0; }
+    .switch.on .rocker::after  { opacity: 1; }
+    /* I / O glyphs, drawn (not font) */
+    .glyph { position: relative; z-index: 1; }
+    .glyph-i { width: 4px; height: 17px; background: currentColor; border-radius: 2px; transition: background .35s, box-shadow .35s; }
+    .glyph-o { width: 17px; height: 17px; border: 3.5px solid currentColor; border-radius: 50%; transition: border-color .35s; }
+    /* unlocked: green pulse around the housing */
+    .switch.ready { cursor: pointer; border-color: #363636; animation: switchReady 1.7s ease-in-out infinite; }
+    .switch.ready .rocker { color: #9a9a9a; }
     @keyframes switchReady {
-      0%,100% { box-shadow: inset 0 2px 7px rgba(0,0,0,.85), 0 0 0 0 rgba(21,182,87,0); }
-      50%     { box-shadow: inset 0 2px 7px rgba(0,0,0,.85), 0 0 24px 1px rgba(21,182,87,.42); }
+      0%,100% { box-shadow: 0 10px 22px rgba(0,0,0,.65), 0 0 0 0 rgba(21,182,87,0); }
+      50%     { box-shadow: 0 10px 22px rgba(0,0,0,.65), 0 0 26px 2px rgba(21,182,87,.45); }
     }
+    /* flipped ON: rocker tilts the other way, I lights green */
     .switch.on {
-      background: #15b657; border-color: #2ee07a;
-      box-shadow: inset 0 1px 3px rgba(0,0,0,.25), 0 0 30px 2px rgba(21,182,87,.55);
-      animation: none;
+      border-color: #1f5c38;
+      box-shadow: 0 10px 22px rgba(0,0,0,.65), 0 0 30px 2px rgba(21,182,87,.55);
+      animation: none; cursor: default;
     }
-    .switch.on .switch-knob { transform: translateX(calc(var(--sw) - 56px)); }
-    .switch.on .switch-off { opacity: 0; }
-    .switch.on .switch-on  { opacity: 1; }
+    .switch.on .switch-well { box-shadow: inset 0 2px 9px rgba(0,0,0,.95), inset 0 0 14px rgba(21,182,87,.35); }
+    .switch.on .rocker { transform: rotateX(15deg); color: #8f8f8f; }
+    .switch.on .glyph-i { background: #2ee07a; box-shadow: 0 0 10px rgba(46,224,122,.85); }
     .switch:focus-visible { outline: 1px solid #2c7a48; outline-offset: 6px; }
+    /* label states (graceful no-op where :has unsupported) */
+    .switch-unit:has(.switch.ready) .switch-label-on { color: #9a9a9a; }
+    .switch-unit:has(.switch.on) .switch-label-on { color: #2ee07a; }
+    @media (max-height: 760px) {
+      .switch { width: 72px; height: 112px; }
+      .rocker { padding: 11px 0; }
+      .fader-track { height: clamp(170px, 30vh, 260px); }
+    }
     @media (prefers-reduced-motion: reduce) {
       .switch.ready { animation: none; }
-      .switch-knob { transition: none; }
+      .rocker, .rocker::before, .rocker::after { transition: none; }
     }
 
     /* ═════════════════════════════════════════
@@ -397,12 +425,19 @@
         </div>
       </div>
       <div class="intro-hint label" id="intro-hint" data-en="Drag the fader up" data-es="Sube el fader">Drag the fader up</div>
-      <button class="switch" id="on-switch" type="button" role="switch" aria-checked="false"
-              aria-label="Power on" disabled>
-        <span class="switch-txt switch-off" data-en="Off" data-es="Off">Off</span>
-        <span class="switch-txt switch-on" data-en="On" data-es="On">On</span>
-        <span class="switch-knob"></span>
-      </button>
+      <div class="switch-unit">
+        <span class="switch-label switch-label-on label">ON</span>
+        <button class="switch" id="on-switch" type="button" role="switch" aria-checked="false"
+                aria-label="Power on" disabled>
+          <span class="switch-well">
+            <span class="rocker">
+              <span class="glyph glyph-i" aria-hidden="true"></span>
+              <span class="glyph glyph-o" aria-hidden="true"></span>
+            </span>
+          </span>
+        </button>
+        <span class="switch-label switch-label-off label">OFF</span>
+      </div>
     </div>
   </div>
 
