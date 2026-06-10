@@ -133,6 +133,7 @@
       color: #fff;
     }
     .wordmark { font-weight: 500; font-size: 13px; letter-spacing: 0.34em; }
+    .wordmark span { color: var(--red); }
     .header-right { display: flex; align-items: center; gap: 26px; }
     .clock { font-size: 10px; letter-spacing: 0.18em; font-variant-numeric: tabular-nums; }
     .lang { display: flex; gap: 7px; font-size: 10px; letter-spacing: 0.18em; }
@@ -143,14 +144,24 @@
        HERO
     ═════════════════════════════════════════ */
     .hero {
+      position: relative;
+      overflow: hidden;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      padding: 100px var(--pad) 60px;
+      justify-content: space-between;   /* spread eyebrow / statement / cue — kills dead center */
+      padding: 124px var(--pad) 64px;
       max-width: 1200px;
     }
-    .hero .label { margin-bottom: 32px; }
+    .hero > * { position: relative; z-index: 1; }
+    /* cursor-tracking spotlight — the empty black becomes interactive */
+    .hero-glow {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 38%), rgba(191,45,31,0.14), transparent 60%);
+      opacity: 0; transition: opacity 0.6s ease;
+    }
+    .hero:hover .hero-glow { opacity: 1; }
+    .hero-mid { max-width: 100%; }
     .hero-statement {
       font-size: clamp(30px, 5vw, 76px);
       font-weight: 300;
@@ -166,38 +177,12 @@
       color: var(--quiet);
       line-height: 1.7;
     }
-    .scroll-hint { margin-top: clamp(48px, 7vw, 88px); display: flex; align-items: center; gap: 12px; }
+    .scroll-hint { margin-top: 0; display: flex; align-items: center; gap: 12px; }
     .scroll-hint .bar { width: 36px; height: 1px; background: var(--red); transform-origin: left; animation: pulse 2.4s ease-in-out infinite; }
     @keyframes pulse { 0%,100%{opacity:.3;transform:scaleX(.6)} 50%{opacity:1;transform:scaleX(1)} }
 
     /* elements hidden only when JS-driven animation is active */
     .js-anim .hero [data-anim] { opacity: 0; }
-
-    /* ═════════════════════════════════════════
-       MARQUEE  —  kinetic text, zero new copy
-    ═════════════════════════════════════════ */
-    .marquee {
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-      overflow: hidden;
-      white-space: nowrap;
-      padding: 18px 0;
-    }
-    .marquee-track {
-      display: inline-block;
-      will-change: transform;
-      animation: marquee 28s linear infinite;
-    }
-    .marquee-track span {
-      font-size: clamp(22px, 4vw, 48px);
-      font-weight: 300;
-      letter-spacing: 0.02em;
-      color: var(--ink);
-      padding: 0 28px;
-    }
-    .marquee-track span .dot { color: var(--red); }
-    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-    .marquee:hover .marquee-track { animation-play-state: paused; }
 
     /* ═════════════════════════════════════════
        VIEW CONTROLS
@@ -244,7 +229,7 @@
     .fig::after { content:''; position:absolute; inset:0; background: linear-gradient(to top, rgba(0,0,0,.55), transparent 40%); opacity:0; transition: opacity .4s; pointer-events:none; }
     .fig:hover::after { opacity: 1; }
 
-    .gallery.flow { display: flex; flex-direction: column; align-items: center; gap: clamp(40px, 7vw, 110px); padding-top: clamp(40px, 7vw, 90px); padding-bottom: clamp(60px, 10vw, 140px); }
+    .gallery.flow { display: flex; flex-direction: column; align-items: center; gap: clamp(22px, 4vw, 64px); padding-top: clamp(28px, 4vw, 56px); padding-bottom: clamp(48px, 8vw, 110px); }
     .gallery.flow .fig { width: 100%; max-width: 1040px; }
     .gallery.flow .fig.wide { max-width: 1280px; aspect-ratio: 16 / 8; }
     .gallery.flow .fig.tall { max-width: 760px; aspect-ratio: 4 / 5; }
@@ -252,6 +237,9 @@
 
     .gallery.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 4px; padding-top: 4px; padding-bottom: clamp(60px, 10vw, 140px); }
     .gallery.grid .fig { aspect-ratio: 1 / 1; max-width: none; }
+    /* focus: hovering one frame dims the rest of the contact sheet */
+    .gallery.grid:hover .fig { opacity: 0.4; transition: opacity 0.45s ease; }
+    .gallery.grid .fig:hover { opacity: 1; }
 
     /* ═════════════════════════════════════════
        FOOTER
@@ -296,7 +284,7 @@
 
   <!-- ── HEADER ───────────────────────────── -->
   <header>
-    <a href="/" class="wordmark">VOLUMEN</a>
+    <a href="/" class="wordmark"><span>V</span>OLUMEN</a>
     <div class="header-right">
       <span class="clock" id="clock">AUSTIN —:—</span>
       <div class="lang">
@@ -308,29 +296,25 @@
 
   <!-- ── HERO ─────────────────────────────── -->
   <section class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
     <span class="label" data-anim data-en="Rock Photography · Austin, TX" data-es="Fotografía de Rock · Austin, TX">Rock Photography · Austin, TX</span>
-    <h1 class="hero-statement" data-anim
-        data-en='What the noise looks like<br>when you hold it <span class="accent">still.</span>'
-        data-es='Cómo se ve el ruido<br>cuando lo detienes <span class="accent">en seco.</span>'>
-      What the noise looks like<br>when you hold it <span class="accent">still.</span>
-    </h1>
-    <p class="hero-sub" data-anim
-       data-en="Sweat, light, and the half-second before the encore. Two languages, one volume."
-       data-es="Sudor, luz, y el medio segundo antes del encore. Dos idiomas, un solo volumen.">
-      Sweat, light, and the half-second before the encore. Two languages, one volume.
-    </p>
+    <div class="hero-mid" data-anim>
+      <h1 class="hero-statement"
+          data-en='What the noise looks like<br>when you hold it <span class="accent">still.</span>'
+          data-es='Cómo se ve el ruido<br>cuando lo detienes <span class="accent">en seco.</span>'>
+        What the noise looks like<br>when you hold it <span class="accent">still.</span>
+      </h1>
+      <p class="hero-sub"
+         data-en="Sweat, light, and the half-second before the encore. Two languages, one volume."
+         data-es="Sudor, luz, y el medio segundo antes del encore. Dos idiomas, un solo volumen.">
+        Sweat, light, and the half-second before the encore. Two languages, one volume.
+      </p>
+    </div>
     <div class="scroll-hint" data-anim>
       <span class="bar"></span>
       <span class="label" data-en="The frames below" data-es="Los cuadros abajo">The frames below</span>
     </div>
   </section>
-
-  <!-- ── MARQUEE ──────────────────────────── -->
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee-track">
-      <span>VOLUMEN <i class="dot">●</i> EN VIVO <i class="dot">●</i> LIVE <i class="dot">●</i> AUSTIN, TX <i class="dot">●</i> ROCK <i class="dot">●</i> VOLUMEN <i class="dot">●</i> EN VIVO <i class="dot">●</i> LIVE <i class="dot">●</i> AUSTIN, TX <i class="dot">●</i> ROCK <i class="dot">●</i> </span>
-    </div>
-  </div>
 
   <!-- ── VIEW CONTROLS ────────────────────── -->
   <div class="controls">
@@ -530,8 +514,31 @@
     btnEs.addEventListener('click', () => setLang('es'));
     if (localStorage.getItem('volumen-lang') === 'es') setLang('es');
 
+    /* ── HERO SPOTLIGHT + SCROLL PARALLAX ── */
+    function setupHeroMotion() {
+      const hero = document.querySelector('.hero');
+      if (!hero) return;
+      // cursor-tracking glow (desktop only)
+      if (HAS_HOVER && !REDUCE) {
+        hero.addEventListener('mousemove', (e) => {
+          const r = hero.getBoundingClientRect();
+          hero.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+          hero.style.setProperty('--my', (e.clientY - r.top) + 'px');
+        }, { passive: true });
+      }
+      // statement drifts up as you scroll past the hero (drift only — opacity
+      // stays owned by the entrance tween; immediateRender:false avoids clobber)
+      if (ANIM && window.ScrollTrigger) {
+        G.to('.hero-mid', {
+          yPercent: -22, ease: 'none', immediateRender: false,
+          scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
+        });
+      }
+    }
+
     /* ── BOOT ── */
     setupReveals();
+    setupHeroMotion();
     if (document.readyState === 'complete') startIntro();
     else window.addEventListener('load', startIntro);
   </script>
