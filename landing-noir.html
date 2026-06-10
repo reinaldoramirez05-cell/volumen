@@ -57,7 +57,7 @@
     }
 
     /* ═════════════════════════════════════════
-       INTRO  —  00 → 12 count-up reveal
+       INTRO  —  00 → 99 count-up + VOLUME UP gate
     ═════════════════════════════════════════ */
     #intro {
       position: fixed; inset: 0; z-index: 1000;
@@ -65,9 +65,13 @@
       display: flex; align-items: center; justify-content: center;
       overflow: hidden;
     }
+    .intro-inner {
+      display: flex; flex-direction: column; align-items: center;
+      gap: clamp(30px, 5vw, 58px);
+    }
     .intro-num {
       font-family: var(--font-disp);
-      font-size: clamp(90px, 22vw, 300px);
+      font-size: clamp(96px, 24vw, 320px);
       font-weight: 400;
       letter-spacing: 0.02em;
       color: var(--ink);
@@ -75,12 +79,48 @@
       line-height: 1;
     }
     .intro-num span { color: var(--red); }
-    .intro-cap {
-      position: absolute;
-      bottom: clamp(24px, 5vw, 52px);
-      left: 0; right: 0;
-      text-align: center;
+
+    /* ── 3D "VOLUME UP" GATE BUTTON ── */
+    .volume-btn {
+      font-family: var(--font-disp);
+      font-size: clamp(20px, 2.6vw, 30px);
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: #4a4a4a;                       /* greyed while disabled */
+      background: #161616;
+      border: 1px solid #242424;
+      border-radius: 7px;
+      padding: 16px 48px 18px;
+      cursor: not-allowed;
+      -webkit-user-select: none; user-select: none;
+      transform: translateY(0);
+      /* the solid offset shadow is the button's extruded "side" */
+      box-shadow: 0 6px 0 #070707, 0 9px 16px rgba(0,0,0,0.55);
+      transition: color .3s, background .3s, border-color .3s, box-shadow .15s, transform .12s;
     }
+    .volume-btn.ready {
+      color: #fff;
+      background: var(--red);
+      border-color: #d8412f;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #7c1b12, 0 12px 26px rgba(191,45,31,0.45);
+      animation: btnPulse 1.7s ease-in-out infinite;
+    }
+    .volume-btn.ready:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 0 #7c1b12, 0 16px 32px rgba(191,45,31,0.6);
+      animation: none;
+    }
+    .volume-btn.ready:active {
+      transform: translateY(5px);
+      box-shadow: 0 1px 0 #7c1b12, 0 3px 9px rgba(191,45,31,0.5);
+      animation: none;
+    }
+    @keyframes btnPulse {
+      0%,100% { box-shadow: 0 6px 0 #7c1b12, 0 12px 24px rgba(191,45,31,0.35); }
+      50%     { box-shadow: 0 6px 0 #7c1b12, 0 14px 34px rgba(191,45,31,0.66); }
+    }
+    @media (prefers-reduced-motion: reduce) { .volume-btn.ready { animation: none; } }
 
     /* ═════════════════════════════════════════
        CUSTOM CURSOR
@@ -282,8 +322,11 @@
 
   <!-- ── INTRO ────────────────────────────── -->
   <div id="intro">
-    <div class="intro-num" id="intro-num">00</div>
-    <div class="intro-cap label" data-en="Volumen — Twelve Frames" data-es="Volumen — Doce Cuadros">Volumen — Twelve Frames</div>
+    <div class="intro-inner">
+      <div class="intro-num" id="intro-num">00</div>
+      <button class="volume-btn" id="volume-btn" type="button" disabled
+              data-en="Volume Up" data-es="Sube el Volumen">Volume Up</button>
+    </div>
   </div>
 
   <!-- ── CURSOR + GRAIN ───────────────────── -->
@@ -438,31 +481,43 @@
       });
     }
 
-    /* ── INTRO COUNT-UP ── */
+    /* ── INTRO: 00 → 99 COUNT-UP, THEN "VOLUME UP" GATE ── */
+    const volumeBtn = document.getElementById('volume-btn');
+
     function startIntro() {
       const seen = sessionStorage.getItem('volumen-intro');
       if (!ANIM || !intro || seen) { finishIntroInstant(); return; }
       sessionStorage.setItem('volumen-intro', '1');
 
       const counter = { v: 0 };
-      const tl = G.timeline({
-        onComplete: () => { intro.remove(); if (lenis) lenis.start(); revealHero(); }
-      });
-      tl.to(counter, {
-        v: 12, duration: 1.9, ease: 'power2.inOut',
-        onUpdate: () => { introNum.textContent = String(Math.round(counter.v)).padStart(2, '0'); }
-      });
-      tl.to(introNum, { color: '#bf2d1f', duration: 0.25 }, '-=0.25');
-      tl.to('.intro-num, .intro-cap', { y: -28, opacity: 0, duration: 0.5, ease: 'power3.in', stagger: 0.05 }, '+=0.25');
-      tl.to(intro, { yPercent: -100, duration: 0.9, ease: 'power4.inOut' }, '-=0.15');
+      G.timeline({ onComplete: enableVolume })
+        .to(counter, {
+          v: 99, duration: 2.6, ease: 'power2.inOut',
+          onUpdate: () => { introNum.textContent = String(Math.round(counter.v)).padStart(2, '0'); }
+        });
+    }
+    // light up the 3D button and let the user click to enter
+    function enableVolume() {
+      if (!volumeBtn || !document.getElementById('intro') || !volumeBtn.disabled) return;
+      volumeBtn.disabled = false;
+      volumeBtn.classList.add('ready');
+      volumeBtn.addEventListener('click', exitIntro, { once: true });
+      try { volumeBtn.focus({ preventScroll: true }); } catch (e) {}
+    }
+    function exitIntro() {
+      if (!document.getElementById('intro')) return;
+      if (!ANIM) { finishIntroInstant(); return; }
+      G.timeline({ onComplete: () => { intro.remove(); if (lenis) lenis.start(); revealHero(); } })
+        .to('#intro-num, #volume-btn', { y: -24, opacity: 0, duration: 0.4, ease: 'power3.in', stagger: 0.06 })
+        .to(intro, { yPercent: -100, duration: 0.9, ease: 'power4.inOut' }, '-=0.05');
     }
     function finishIntroInstant() {
       if (intro) intro.remove();
       if (lenis) lenis.start();
       revealHero();
     }
-    // hard safety: never trap behind the intro
-    setTimeout(() => { if (document.getElementById('intro')) finishIntroInstant(); }, 6000);
+    // safety: if the count-up ever stalls, still let the user in
+    setTimeout(enableVolume, 5000);
 
     /* ── VIEW TOGGLE w/ FLIP MORPH ── */
     function applyView(view) {
