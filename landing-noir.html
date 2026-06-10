@@ -8,7 +8,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- If JS never runs, never trap the visitor behind the intro overlay -->
   <noscript><style>#intro{display:none !important}</style></noscript>
@@ -23,6 +23,8 @@
       --line:   #1c1c1c;
       --red:    #bf2d1f;
       --pad:    clamp(18px, 4vw, 48px);
+      --font-disp: 'Bebas Neue', 'Arial Narrow', sans-serif;   /* poster headline */
+      --font-mono: 'Space Mono', ui-monospace, monospace;       /* technical labels */
     }
 
     html { scroll-behavior: smooth; }
@@ -46,9 +48,10 @@
     img { display: block; }
 
     .label {
+      font-family: var(--font-mono);
       font-size: 10px;
       font-weight: 400;
-      letter-spacing: 0.24em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--quiet);
     }
@@ -63,9 +66,10 @@
       overflow: hidden;
     }
     .intro-num {
-      font-size: clamp(64px, 16vw, 220px);
-      font-weight: 300;
-      letter-spacing: -0.02em;
+      font-family: var(--font-disp);
+      font-size: clamp(90px, 22vw, 300px);
+      font-weight: 400;
+      letter-spacing: 0.02em;
       color: var(--ink);
       font-variant-numeric: tabular-nums;
       line-height: 1;
@@ -135,8 +139,8 @@
     .wordmark { font-weight: 500; font-size: 13px; letter-spacing: 0.34em; }
     .wordmark span { color: var(--red); }
     .header-right { display: flex; align-items: center; gap: 26px; }
-    .clock { font-size: 10px; letter-spacing: 0.18em; font-variant-numeric: tabular-nums; }
-    .lang { display: flex; gap: 7px; font-size: 10px; letter-spacing: 0.18em; }
+    .clock { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; font-variant-numeric: tabular-nums; }
+    .lang { font-family: var(--font-mono); display: flex; gap: 7px; font-size: 10px; letter-spacing: 0.06em; }
     .lang button { background: none; border: none; padding: 0; color: rgba(255,255,255,0.45); cursor: pointer; font: inherit; letter-spacing: inherit; transition: color 0.2s; }
     .lang button.active { color: #fff; }
 
@@ -163,11 +167,12 @@
     .hero:hover .hero-glow { opacity: 1; }
     .hero-mid { max-width: 100%; }
     .hero-statement {
-      font-size: clamp(30px, 5vw, 76px);
-      font-weight: 300;
-      line-height: 1.08;
-      letter-spacing: -0.015em;
-      max-width: 18ch;
+      font-family: var(--font-disp);
+      font-size: clamp(46px, 8vw, 124px);
+      font-weight: 400;
+      line-height: 0.92;
+      letter-spacing: 0.015em;
+      max-width: 16ch;
     }
     .hero-statement .accent { color: var(--red); }
     .hero-sub {
@@ -197,8 +202,9 @@
     }
     .view-toggle { display: flex; gap: 22px; }
     .view-toggle button {
-      background: none; border: none; padding: 0; cursor: pointer; font: inherit;
-      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+      background: none; border: none; padding: 0; cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
       color: var(--quiet); transition: color 0.2s; position: relative;
     }
     .view-toggle button.active { color: var(--ink); }
@@ -226,8 +232,8 @@
       transition: opacity 0.4s, transform 0.4s; pointer-events: none;
     }
     .fig:hover figcaption { opacity: 1; transform: translateY(0); }
-    .fig figcaption .where { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #fff; }
-    .fig figcaption .num { font-size: 11px; letter-spacing: 0.12em; color: rgba(255,255,255,0.6); font-variant-numeric: tabular-nums; }
+    .fig figcaption .where { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
+    .fig figcaption .num { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); font-variant-numeric: tabular-nums; }
     .fig::after { content:''; position:absolute; inset:0; background: linear-gradient(to top, rgba(0,0,0,.55), transparent 40%); opacity:0; transition: opacity .4s; pointer-events:none; }
     .fig:hover::after { opacity: 1; }
 
