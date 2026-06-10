@@ -720,13 +720,17 @@
         if (img) img.style.transform = '';
       });
     }
+    let flipAnim = null;
     function setView(view, animate) {
       if (animate && ANIM && window.Flip) {
+        // fast-forward any in-flight morph so its cleanup (position restore)
+        // runs before we capture the next state — otherwise figs get stuck absolute
+        if (flipAnim && flipAnim.isActive()) flipAnim.progress(1);
         revealAllFigs();
         const figs = gallery.querySelectorAll('.fig');
         const state = Flip.getState(figs);
         applyView(view);
-        Flip.from(state, {
+        flipAnim = Flip.from(state, {
           duration: 0.7, ease: 'power2.inOut', stagger: 0.018, absolute: true,
           onComplete: () => { if (window.ScrollTrigger) ScrollTrigger.refresh(); }
         });
