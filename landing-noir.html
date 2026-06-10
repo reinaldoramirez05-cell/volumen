@@ -93,8 +93,8 @@
     /* tick scale on both sides */
     .fader::before, .fader::after {
       content: ''; position: absolute; top: 10px; bottom: 10px; width: 12px;
-      background: repeating-linear-gradient(to bottom, #2e2e2e 0 1px, transparent 1px 13px);
-      opacity: 0.6;
+      background: repeating-linear-gradient(to bottom, #6a6a6a 0 1px, transparent 1px 13px);
+      opacity: 0.9;
     }
     .fader::before { left: 8px; }
     .fader::after  { right: 8px; }
@@ -126,6 +126,13 @@
       transform: translateY(-50%);
       background: var(--red); border-radius: 2px;
       box-shadow: 0 0 7px rgba(191,45,31,0.7);
+      animation: capPulse 2s ease-in-out infinite;
+    }
+    /* steady under the finger while dragging */
+    .fader.dragging .fader-cap::before { animation: none; opacity: 1; }
+    @keyframes capPulse {
+      0%,100% { opacity: .65; box-shadow: 0 0 4px rgba(191,45,31,.4); }
+      50%     { opacity: 1;   box-shadow: 0 0 12px rgba(191,45,31,.95), 0 0 22px rgba(191,45,31,.45); }
     }
     .fader-cap::after {                     /* grip ridges */
       content: ''; position: absolute; left: 11px; right: 11px; top: 6px; bottom: 6px;
@@ -189,8 +196,8 @@
     .switch.ready { cursor: pointer; border-color: #363636; animation: switchReady 1.7s ease-in-out infinite; }
     .switch.ready .rocker { color: #9a9a9a; }
     @keyframes switchReady {
-      0%,100% { box-shadow: 0 10px 22px rgba(0,0,0,.65), 0 0 0 0 rgba(21,182,87,0); }
-      50%     { box-shadow: 0 10px 22px rgba(0,0,0,.65), 0 0 26px 2px rgba(21,182,87,.45); }
+      0%,100% { box-shadow: 0 10px 22px rgba(0,0,0,.65), 0 0 6px 0 rgba(21,182,87,.15); }
+      50%     { box-shadow: 0 10px 22px rgba(0,0,0,.65), 0 0 34px 5px rgba(21,182,87,.65); }
     }
     /* flipped ON: rocker tilts the other way, I lights green */
     .switch.on {
@@ -203,8 +210,12 @@
     .switch.on .glyph-i { background: #2ee07a; box-shadow: 0 0 10px rgba(46,224,122,.85); }
     .switch:focus-visible { outline: 1px solid #2c7a48; outline-offset: 6px; }
     /* label states (graceful no-op where :has unsupported) */
-    .switch-unit:has(.switch.ready) .switch-label-on { color: #9a9a9a; }
-    .switch-unit:has(.switch.on) .switch-label-on { color: #2ee07a; }
+    .switch-unit:has(.switch.ready) .switch-label-on { animation: labelPulse 1.7s ease-in-out infinite; }
+    .switch-unit:has(.switch.on) .switch-label-on { color: #2ee07a; animation: none; }
+    @keyframes labelPulse {
+      0%,100% { color: #7a7a7a; }
+      50%     { color: #2ee07a; }
+    }
     @media (max-height: 760px) {
       .switch { width: 72px; height: 112px; }
       .rocker { padding: 11px 0; }
@@ -213,6 +224,8 @@
     @media (prefers-reduced-motion: reduce) {
       .switch.ready { animation: none; }
       .rocker, .rocker::before, .rocker::after { transition: none; }
+      .fader-cap::before { animation: none; }
+      .switch-unit:has(.switch.ready) .switch-label-on { animation: none; color: #9a9a9a; }
     }
 
     /* ═════════════════════════════════════════
