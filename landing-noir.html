@@ -67,7 +67,7 @@
     }
     .intro-inner {
       display: flex; flex-direction: column; align-items: center;
-      gap: clamp(30px, 5vw, 58px);
+      gap: clamp(20px, 3vw, 38px);
     }
     .intro-num {
       font-family: var(--font-disp);
@@ -80,47 +80,100 @@
     }
     .intro-num span { color: var(--red); }
 
-    /* ── 3D "VOLUME UP" GATE BUTTON ── */
-    .volume-btn {
+    /* ── CONSOLE FADER (drag 0 → 100) ── */
+    .fader {
+      position: relative;
+      display: flex; justify-content: center;
+      padding: 10px 46px;
+      touch-action: none;                 /* don't scroll the page while dragging */
+      cursor: grab; outline: none;
+    }
+    .fader.dragging { cursor: grabbing; }
+    .fader:focus-visible { outline: 1px solid #333; outline-offset: 10px; border-radius: 4px; }
+    /* tick scale on both sides */
+    .fader::before, .fader::after {
+      content: ''; position: absolute; top: 10px; bottom: 10px; width: 12px;
+      background: repeating-linear-gradient(to bottom, #2e2e2e 0 1px, transparent 1px 13px);
+      opacity: 0.6;
+    }
+    .fader::before { left: 8px; }
+    .fader::after  { right: 8px; }
+    .fader-track {
+      position: relative;
+      width: 10px;
+      height: clamp(220px, 42vh, 340px);
+      background: #131313;
+      border-radius: 6px;
+      box-shadow: inset 0 2px 7px rgba(0,0,0,0.85), inset 0 0 0 1px #232323;
+    }
+    .fader-fill {
+      position: absolute; left: 0; right: 0; bottom: 0; height: 0%;
+      background: linear-gradient(to top, #6e160f, var(--red));
+      border-radius: 6px;
+    }
+    .fader-cap {
+      position: absolute; left: 50%; bottom: 0;
+      width: 68px; height: 36px;
+      transform: translate(-50%, 50%);     /* center the cap on the value line */
+      border-radius: 5px;
+      background: linear-gradient(#ededed, #c2c2c2 16%, #909090 49%, #6c6c6c 51%, #a3a3a3 84%, #d4d4d4);
+      box-shadow: 0 7px 13px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 0 rgba(0,0,0,0.45);
+      cursor: grab;
+    }
+    .fader.dragging .fader-cap { cursor: grabbing; }
+    .fader-cap::before {                   /* red center indicator line */
+      content: ''; position: absolute; top: 50%; left: 7px; right: 7px; height: 3px;
+      transform: translateY(-50%);
+      background: var(--red); border-radius: 2px;
+      box-shadow: 0 0 7px rgba(191,45,31,0.7);
+    }
+    .fader-cap::after {                     /* grip ridges */
+      content: ''; position: absolute; left: 11px; right: 11px; top: 6px; bottom: 6px;
+      background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.18) 0 1px, transparent 1px 5px);
+      opacity: 0.45;
+    }
+    .intro-hint { transition: opacity 0.4s ease; }
+
+    /* ── 3D "ON" GATE BUTTON (grey → green) ── */
+    .on-btn {
       font-family: var(--font-disp);
-      font-size: clamp(20px, 2.6vw, 30px);
-      letter-spacing: 0.09em;
+      font-size: clamp(22px, 3vw, 34px);
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: #4a4a4a;                       /* greyed while disabled */
       background: #161616;
       border: 1px solid #242424;
       border-radius: 7px;
-      padding: 16px 48px 18px;
+      padding: 13px 56px 15px;
       cursor: not-allowed;
       -webkit-user-select: none; user-select: none;
       transform: translateY(0);
-      /* the solid offset shadow is the button's extruded "side" */
       box-shadow: 0 6px 0 #070707, 0 9px 16px rgba(0,0,0,0.55);
       transition: color .3s, background .3s, border-color .3s, box-shadow .15s, transform .12s;
     }
-    .volume-btn.ready {
+    .on-btn.ready {
       color: #fff;
-      background: var(--red);
-      border-color: #d8412f;
+      background: #15b657;
+      border-color: #25d970;
       cursor: pointer;
-      box-shadow: 0 6px 0 #7c1b12, 0 12px 26px rgba(191,45,31,0.45);
-      animation: btnPulse 1.7s ease-in-out infinite;
+      box-shadow: 0 6px 0 #0b6c34, 0 12px 28px rgba(21,182,87,0.5);
+      animation: onPulse 1.6s ease-in-out infinite;
     }
-    .volume-btn.ready:hover {
+    .on-btn.ready:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 0 #7c1b12, 0 16px 32px rgba(191,45,31,0.6);
+      box-shadow: 0 8px 0 #0b6c34, 0 16px 34px rgba(21,182,87,0.62);
       animation: none;
     }
-    .volume-btn.ready:active {
+    .on-btn.ready:active {
       transform: translateY(5px);
-      box-shadow: 0 1px 0 #7c1b12, 0 3px 9px rgba(191,45,31,0.5);
+      box-shadow: 0 1px 0 #0b6c34, 0 3px 9px rgba(21,182,87,0.5);
       animation: none;
     }
-    @keyframes btnPulse {
-      0%,100% { box-shadow: 0 6px 0 #7c1b12, 0 12px 24px rgba(191,45,31,0.35); }
-      50%     { box-shadow: 0 6px 0 #7c1b12, 0 14px 34px rgba(191,45,31,0.66); }
+    @keyframes onPulse {
+      0%,100% { box-shadow: 0 6px 0 #0b6c34, 0 12px 24px rgba(21,182,87,0.4); }
+      50%     { box-shadow: 0 6px 0 #0b6c34, 0 15px 36px rgba(21,182,87,0.72); }
     }
-    @media (prefers-reduced-motion: reduce) { .volume-btn.ready { animation: none; } }
+    @media (prefers-reduced-motion: reduce) { .on-btn.ready { animation: none; } }
 
     /* ═════════════════════════════════════════
        CUSTOM CURSOR
@@ -323,9 +376,16 @@
   <!-- ── INTRO ────────────────────────────── -->
   <div id="intro">
     <div class="intro-inner">
-      <div class="intro-num" id="intro-num">00</div>
-      <button class="volume-btn" id="volume-btn" type="button" disabled
-              data-en="Volume Up" data-es="Sube el Volumen">Volume Up</button>
+      <div class="intro-num" id="intro-num">0</div>
+      <div class="fader" id="fader" role="slider" tabindex="0"
+           aria-label="Volume level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="fader-track">
+          <div class="fader-fill" id="fader-fill"></div>
+          <div class="fader-cap" id="fader-cap"></div>
+        </div>
+      </div>
+      <div class="intro-hint label" id="intro-hint" data-en="Drag the fader up" data-es="Sube el fader">Drag the fader up</div>
+      <button class="on-btn" id="on-btn" type="button" disabled data-en="On" data-es="On">ON</button>
     </div>
   </div>
 
@@ -481,34 +541,86 @@
       });
     }
 
-    /* ── INTRO: 00 → 99 COUNT-UP, THEN "VOLUME UP" GATE ── */
-    const volumeBtn = document.getElementById('volume-btn');
+    /* ── INTRO: CONSOLE FADER (0 → 100) → "ON" GATE ── */
+    let faderVal = 0, onReady = false;
 
     function startIntro() {
       const seen = sessionStorage.getItem('volumen-intro');
       if (!ANIM || !intro || seen) { finishIntroInstant(); return; }
       sessionStorage.setItem('volumen-intro', '1');
+      setupFader();
+    }
 
-      const counter = { v: 0 };
-      G.timeline({ onComplete: enableVolume })
-        .to(counter, {
-          v: 99, duration: 2.6, ease: 'power2.inOut',
-          onUpdate: () => { introNum.textContent = String(Math.round(counter.v)).padStart(2, '0'); }
-        });
+    function setFader(pct) {
+      faderVal = Math.max(0, Math.min(100, Math.round(pct)));
+      const fill = document.getElementById('fader-fill');
+      const cap  = document.getElementById('fader-cap');
+      const fdr  = document.getElementById('fader');
+      if (fill) fill.style.height = faderVal + '%';
+      if (cap)  cap.style.bottom  = faderVal + '%';
+      if (fdr)  fdr.setAttribute('aria-valuenow', faderVal);
+      if (introNum) introNum.textContent = faderVal;
+      if (faderVal >= 100 && !onReady) enableOn();
     }
-    // light up the 3D button and let the user click to enter
-    function enableVolume() {
-      if (!volumeBtn || !document.getElementById('intro') || !volumeBtn.disabled) return;
-      volumeBtn.disabled = false;
-      volumeBtn.classList.add('ready');
-      volumeBtn.addEventListener('click', exitIntro, { once: true });
-      try { volumeBtn.focus({ preventScroll: true }); } catch (e) {}
+
+    function setupFader() {
+      const fdr = document.getElementById('fader');
+      const track = fdr && fdr.querySelector('.fader-track');
+      const hint = document.getElementById('intro-hint');
+      if (!fdr || !track) return;
+      setFader(0);
+      const toPct = (clientY) => {
+        const r = track.getBoundingClientRect();
+        return (r.bottom - clientY) / r.height * 100;
+      };
+      let dragging = false;
+      const down = (e) => {
+        dragging = true; fdr.classList.add('dragging');
+        if (hint) hint.style.opacity = '0';
+        if (fdr.setPointerCapture && e.pointerId != null) { try { fdr.setPointerCapture(e.pointerId); } catch (x) {} }
+        setFader(toPct(e.clientY)); e.preventDefault();
+      };
+      const move = (e) => { if (dragging) setFader(toPct(e.clientY)); };
+      const up   = () => { dragging = false; fdr.classList.remove('dragging'); };
+      fdr.addEventListener('pointerdown', down);
+      window.addEventListener('pointermove', move, { passive: true });
+      window.addEventListener('pointerup', up);
+      // keyboard accessibility
+      fdr.addEventListener('keydown', (e) => {
+        let v = faderVal;
+        if (e.key === 'ArrowUp' || e.key === 'ArrowRight') v += 4;
+        else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') v -= 4;
+        else if (e.key === 'End' || e.key === 'PageUp') v = 100;
+        else if (e.key === 'Home' || e.key === 'PageDown') v = 0;
+        else return;
+        e.preventDefault();
+        if (hint) hint.style.opacity = '0';
+        setFader(v);
+      });
     }
+
+    function enableOn() {
+      onReady = true;
+      const onBtn = document.getElementById('on-btn');
+      const hint = document.getElementById('intro-hint');
+      if (hint) {
+        const es = document.documentElement.lang === 'es';
+        hint.setAttribute('data-en', 'Press ON'); hint.setAttribute('data-es', 'Pulsa ON');
+        hint.textContent = es ? 'Pulsa ON' : 'Press ON';
+        hint.style.opacity = '0.75';
+      }
+      if (!onBtn) return;
+      onBtn.disabled = false;
+      onBtn.classList.add('ready');
+      onBtn.addEventListener('click', exitIntro, { once: true });
+      try { onBtn.focus({ preventScroll: true }); } catch (e) {}
+    }
+
     function exitIntro() {
       if (!document.getElementById('intro')) return;
       if (!ANIM) { finishIntroInstant(); return; }
       G.timeline({ onComplete: () => { intro.remove(); if (lenis) lenis.start(); revealHero(); } })
-        .to('#intro-num, #volume-btn', { y: -24, opacity: 0, duration: 0.4, ease: 'power3.in', stagger: 0.06 })
+        .to('.intro-inner', { y: -24, opacity: 0, duration: 0.4, ease: 'power3.in' })
         .to(intro, { yPercent: -100, duration: 0.9, ease: 'power4.inOut' }, '-=0.05');
     }
     function finishIntroInstant() {
@@ -516,8 +628,6 @@
       if (lenis) lenis.start();
       revealHero();
     }
-    // safety: if the count-up ever stalls, still let the user in
-    setTimeout(enableVolume, 5000);
 
     /* ── VIEW TOGGLE w/ FLIP MORPH ── */
     function applyView(view) {
