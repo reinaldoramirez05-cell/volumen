@@ -57,7 +57,7 @@
     }
 
     /* ═════════════════════════════════════════
-       INTRO  —  00 → 99 count-up + VOLUME UP gate
+       INTRO  —  AMP HEAD: volume knob 0→100 + power switch gate
     ═════════════════════════════════════════ */
     #intro {
       position: fixed; inset: 0; z-index: 1000;
@@ -80,88 +80,140 @@
     }
     .intro-num span { color: var(--red); }
 
-    /* ── CONSOLE FADER (drag 0 → 100) ── */
-    .fader {
+    /* ── AMP HEAD (red tolex + cream control panel) ── */
+    .amp {
+      width: clamp(320px, 58vw, 660px);
+      max-width: 92vw;
+      padding: clamp(14px, 2vw, 22px) clamp(16px, 2.4vw, 26px) clamp(16px, 2.2vw, 24px);
+      border: 1px solid #5e120c;
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 1px 1px, rgba(0,0,0,.30) 1px, transparent 1.7px) 0 0 / 5px 5px,
+        radial-gradient(circle at 3.5px 3.5px, rgba(255,255,255,.06) 1px, transparent 1.7px) 0 0 / 5px 5px,
+        linear-gradient(165deg, #c43523, #9e2318 55%, #b62a1d);
+      box-shadow:
+        0 24px 60px rgba(0,0,0,.7),
+        inset 0 1px 0 rgba(255,255,255,.18),
+        inset 0 -2px 8px rgba(0,0,0,.4);
+    }
+    .amp-logo {
+      font-family: var(--font-disp);
+      font-size: clamp(22px, 3vw, 34px);
+      letter-spacing: .34em;
+      text-indent: .34em;                  /* re-centers letterspaced text */
+      text-align: center;
+      color: #efe6d2;
+      text-shadow: 0 1px 0 rgba(0,0,0,.45);
+      margin-bottom: clamp(12px, 1.8vw, 20px);
+      user-select: none;
+    }
+    .amp-panel {
       position: relative;
-      display: flex; justify-content: center;
-      padding: 10px 46px;
-      touch-action: none;                 /* don't scroll the page while dragging */
-      cursor: grab; outline: none;
+      display: flex; align-items: center; justify-content: center;
+      flex-wrap: wrap;                    /* power group drops to its own row when tight */
+      gap: clamp(10px, 2vw, 22px);
+      row-gap: 14px;
+      padding: clamp(12px, 1.8vw, 18px) clamp(16px, 2.2vw, 26px);
+      background: linear-gradient(#f0e7d2, #e2d7bc);
+      border: 1px solid #c8bb9c;
+      border-radius: 7px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), inset 0 -3px 7px rgba(0,0,0,.16), 0 1px 0 rgba(0,0,0,.35);
     }
-    .fader.dragging { cursor: grabbing; }
-    .fader:focus-visible { outline: 1px solid #333; outline-offset: 10px; border-radius: 4px; }
-    /* tick scale on both sides */
-    .fader::before, .fader::after {
-      content: ''; position: absolute; top: 10px; bottom: 10px; width: 12px;
-      background: repeating-linear-gradient(to bottom, #6a6a6a 0 1px, transparent 1px 13px);
-      opacity: 0.9;
+    /* brass corner screws */
+    .amp-panel::before, .amp-panel::after {
+      content: ''; position: absolute; top: 5px; bottom: 5px; width: 8px;
+      background-image:
+        radial-gradient(circle, #d2b677 1px, #8a703a 2.4px, rgba(0,0,0,.4) 3px, transparent 3.6px),
+        radial-gradient(circle, #d2b677 1px, #8a703a 2.4px, rgba(0,0,0,.4) 3px, transparent 3.6px);
+      background-repeat: no-repeat;
+      background-position: center top, center bottom;
+      background-size: 8px 8px;
+      pointer-events: none;
     }
-    .fader::before { left: 8px; }
-    .fader::after  { right: 8px; }
-    .fader-track {
+    .amp-panel::before { left: 5px; }
+    .amp-panel::after  { right: 5px; }
+
+    /* ── KNOBS (270° pot sweep: -135deg = 0, +135deg = full) ── */
+    .knob {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 8px;
+      user-select: none;
+    }
+    .knob-dial {
+      --rot: -135deg;
       position: relative;
-      width: 10px;
-      height: clamp(160px, 30vh, 300px);
-      background: #131313;
-      border-radius: 6px;
-      box-shadow: inset 0 2px 7px rgba(0,0,0,0.85), inset 0 0 0 1px #232323;
+      width: clamp(38px, 5.5vw, 58px); height: clamp(38px, 5.5vw, 58px);
+      border-radius: 50%;
+      background: radial-gradient(circle at 32% 28%, #3e3e3e, #181818 55%, #0b0b0b);
+      box-shadow:
+        0 0 0 2px #23211d,
+        0 0 0 3px rgba(255,255,255,.16),
+        0 3px 7px rgba(0,0,0,.4),
+        inset 0 1px 0 rgba(255,255,255,.22);
+      transform: rotate(var(--rot));
     }
-    .fader-fill {
-      position: absolute; left: 0; right: 0; bottom: 0; height: 0%;
-      background: linear-gradient(to top, #6e160f, var(--red));
-      border-radius: 6px;
+    .knob-dial::before {                   /* pointer notch */
+      content: ''; position: absolute; left: 50%; top: 8%;
+      width: 3px; height: 30%;
+      transform: translateX(-50%);
+      background: #efe6d2; border-radius: 2px;
     }
-    .fader-cap {
-      position: absolute; left: 50%; bottom: 0;
-      width: 68px; height: 36px;
-      transform: translate(-50%, 50%);     /* center the cap on the value line */
-      border-radius: 5px;
-      background: linear-gradient(#ededed, #c2c2c2 16%, #909090 49%, #6c6c6c 51%, #a3a3a3 84%, #d4d4d4);
-      box-shadow: 0 7px 13px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 0 rgba(0,0,0,0.45);
-      cursor: grab;
+    .knob-label {
+      font-size: 9px;
+      color: #4a4036;
     }
-    .fader.dragging .fader-cap { cursor: grabbing; }
-    .fader-cap::before {                   /* red center indicator line */
-      content: ''; position: absolute; top: 50%; left: 7px; right: 7px; height: 3px;
-      transform: translateY(-50%);
-      background: var(--red); border-radius: 2px;
-      box-shadow: 0 0 7px rgba(191,45,31,0.7);
-      animation: capPulse 2s ease-in-out infinite;
+    /* the one you can grab */
+    .knob-volume { cursor: grab; touch-action: none; outline: none; }
+    .knob-volume.dragging { cursor: grabbing; }
+    .knob-volume:focus-visible .knob-dial { outline: 1px solid #8a703a; outline-offset: 4px; }
+    .knob-volume .knob-dial::before { animation: knobPulse 2s ease-in-out infinite; }
+    .knob-volume.dragging .knob-dial::before,
+    .knob-volume.done .knob-dial::before { animation: none; opacity: 1; }
+    @keyframes knobPulse {
+      0%,100% { opacity: .5; box-shadow: 0 0 2px rgba(239,230,210,.25); }
+      50%     { opacity: 1;  box-shadow: 0 0 9px rgba(239,230,210,.9); }
     }
-    /* steady under the finger while dragging */
-    .fader.dragging .fader-cap::before { animation: none; opacity: 1; }
-    @keyframes capPulse {
-      0%,100% { opacity: .65; box-shadow: 0 0 4px rgba(191,45,31,.4); }
-      50%     { opacity: 1;   box-shadow: 0 0 12px rgba(191,45,31,.95), 0 0 22px rgba(191,45,31,.45); }
+
+    /* ── PILOT LAMP + POWER GROUP ── */
+    .amp-power { display: flex; align-items: center; gap: clamp(10px, 1.6vw, 16px); }
+    .pilot {
+      flex: 0 0 auto;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #6b1d15, #3a0d09 70%);
+      border: 2px solid #b3a787;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,.8), 0 1px 0 rgba(255,255,255,.55);
+      transition: background .2s, box-shadow .2s;
     }
-    .fader-cap::after {                     /* grip ridges */
-      content: ''; position: absolute; left: 11px; right: 11px; top: 6px; bottom: 6px;
-      background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.18) 0 1px, transparent 1px 5px);
-      opacity: 0.45;
+    .pilot.lit {
+      background: radial-gradient(circle at 35% 30%, #ffd9d2, #ff4733 45%, #c0271a 85%);
+      box-shadow:
+        inset 0 1px 2px rgba(255,255,255,.5),
+        0 0 10px rgba(255,71,51,.9),
+        0 0 26px rgba(255,71,51,.5);
     }
     .intro-hint { transition: opacity 0.4s ease; }
 
     /* ── ROCKER POWER SWITCH (I / O, amp-style) ── */
     .switch-unit {
       display: flex; flex-direction: column; align-items: center;
-      gap: 12px;
+      gap: 7px;
     }
     .switch-label { transition: color .35s; }
     .switch {
       position: relative;
-      width: 86px; height: 134px;
+      width: 56px; height: 88px;
       padding: 0; border: 1px solid #2e2e2e;
-      border-radius: 16px;
+      border-radius: 11px;
       background: linear-gradient(160deg, #242424, #151515 55%, #1d1d1d);
-      box-shadow: 0 10px 22px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.07);
+      box-shadow: 0 5px 12px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.07);
       cursor: not-allowed;
       -webkit-tap-highlight-color: transparent;
       transition: box-shadow .4s, border-color .4s;
     }
     /* recessed well the rocker sits in */
     .switch-well {
-      position: absolute; inset: 9px;
-      border-radius: 10px;
+      position: absolute; inset: 6px;
+      border-radius: 8px;
       background: #050505;
       box-shadow: inset 0 2px 9px rgba(0,0,0,.95), inset 0 0 0 1px #000;
       perspective: 360px;
@@ -169,11 +221,11 @@
     }
     /* the rocker itself — tilts on its X axis like a real power switch */
     .rocker {
-      position: absolute; inset: 4px;
-      border-radius: 7px;
+      position: absolute; inset: 3px;
+      border-radius: 5px;
       background: linear-gradient(#2c2c2c, #161616);
       display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-      padding: 15px 0;
+      padding: 10px 0;
       color: #5c5c5c;
       transform: rotateX(-15deg);
       transition: transform .45s cubic-bezier(.34,1.56,.64,1), color .35s;
@@ -190,19 +242,19 @@
     .switch.on .rocker::after  { opacity: 1; }
     /* I / O glyphs, drawn (not font) */
     .glyph { position: relative; z-index: 1; }
-    .glyph-i { width: 4px; height: 17px; background: currentColor; border-radius: 2px; transition: background .35s, box-shadow .35s; }
-    .glyph-o { width: 17px; height: 17px; border: 3.5px solid currentColor; border-radius: 50%; transition: border-color .35s; }
+    .glyph-i { width: 3px; height: 13px; background: currentColor; border-radius: 2px; transition: background .35s, box-shadow .35s; }
+    .glyph-o { width: 13px; height: 13px; border: 3px solid currentColor; border-radius: 50%; transition: border-color .35s; }
     /* unlocked: green pulse around the housing */
     .switch.ready { cursor: pointer; border-color: #363636; animation: switchReady 1.7s ease-in-out infinite; }
     .switch.ready .rocker { color: #9a9a9a; }
     @keyframes switchReady {
-      0%,100% { box-shadow: 0 10px 22px rgba(0,0,0,.65), 0 0 6px 0 rgba(21,182,87,.15); }
-      50%     { box-shadow: 0 10px 22px rgba(0,0,0,.65), 0 0 34px 5px rgba(21,182,87,.65); }
+      0%,100% { box-shadow: 0 5px 12px rgba(0,0,0,.4), 0 0 6px 0 rgba(21,182,87,.15); }
+      50%     { box-shadow: 0 5px 12px rgba(0,0,0,.4), 0 0 34px 5px rgba(21,182,87,.65); }
     }
     /* flipped ON: rocker tilts the other way, I lights green */
     .switch.on {
       border-color: #1f5c38;
-      box-shadow: 0 10px 22px rgba(0,0,0,.65), 0 0 30px 2px rgba(21,182,87,.55);
+      box-shadow: 0 5px 12px rgba(0,0,0,.4), 0 0 30px 2px rgba(21,182,87,.55);
       animation: none; cursor: default;
     }
     .switch.on .switch-well { box-shadow: inset 0 2px 9px rgba(0,0,0,.95), inset 0 0 14px rgba(21,182,87,.35); }
@@ -217,14 +269,23 @@
       50%     { color: #2ee07a; }
     }
     @media (max-height: 760px) {
-      .switch { width: 72px; height: 112px; }
-      .rocker { padding: 11px 0; }
-      .fader-track { height: clamp(170px, 30vh, 260px); }
+      .intro-num { font-size: clamp(60px, 12vh, 150px); }
+      .amp-logo { margin-bottom: 10px; }
+      .knob-dial { width: clamp(34px, 5vw, 46px); height: clamp(34px, 5vw, 46px); }
+      .switch { width: 48px; height: 76px; }
+      .rocker { padding: 8px 0; }
+    }
+    @media (max-width: 480px) {
+      .amp { width: min(92vw, 350px); }
+      .amp-panel { flex-wrap: wrap; gap: 8px; row-gap: 14px; }
+      .knob-dial { width: 36px; height: 36px; }
+      .knob-label { font-size: 8px; }
     }
     @media (prefers-reduced-motion: reduce) {
       .switch.ready { animation: none; }
       .rocker, .rocker::before, .rocker::after { transition: none; }
-      .fader-cap::before { animation: none; }
+      .knob-volume .knob-dial::before { animation: none; }
+      .pilot { transition: none; }
       .switch-unit:has(.switch.ready) .switch-label-on { animation: none; color: #9a9a9a; }
     }
 
@@ -430,27 +491,37 @@
   <div id="intro">
     <div class="intro-inner">
       <div class="intro-num" id="intro-num">0</div>
-      <div class="fader" id="fader" role="slider" tabindex="0"
-           aria-label="Volume level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-        <div class="fader-track">
-          <div class="fader-fill" id="fader-fill"></div>
-          <div class="fader-cap" id="fader-cap"></div>
+      <div class="amp">
+        <div class="amp-logo">VOLUMEN</div>
+        <div class="amp-panel">
+          <div class="knob" data-passive><div class="knob-dial" style="--rot:-135deg"></div><span class="knob-label label">Gain</span></div>
+          <div class="knob" data-passive><div class="knob-dial" style="--rot:-121deg"></div><span class="knob-label label">Bass</span></div>
+          <div class="knob" data-passive><div class="knob-dial" style="--rot:-128deg"></div><span class="knob-label label">Mid</span></div>
+          <div class="knob" data-passive><div class="knob-dial" style="--rot:-114deg"></div><span class="knob-label label">Treble</span></div>
+          <div class="knob knob-volume" id="vol-knob" role="slider" tabindex="0"
+               aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="knob-dial"></div>
+            <span class="knob-label label">Volume</span>
+          </div>
+          <div class="amp-power">
+            <div class="pilot" id="pilot" aria-hidden="true"></div>
+            <div class="switch-unit">
+              <span class="switch-label switch-label-on label">ON</span>
+              <button class="switch" id="on-switch" type="button" role="switch" aria-checked="false"
+                      aria-label="Power on" disabled>
+                <span class="switch-well">
+                  <span class="rocker">
+                    <span class="glyph glyph-i" aria-hidden="true"></span>
+                    <span class="glyph glyph-o" aria-hidden="true"></span>
+                  </span>
+                </span>
+              </button>
+              <span class="switch-label switch-label-off label">OFF</span>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="intro-hint label" id="intro-hint" data-en="Drag the fader up" data-es="Sube el fader">Drag the fader up</div>
-      <div class="switch-unit">
-        <span class="switch-label switch-label-on label">ON</span>
-        <button class="switch" id="on-switch" type="button" role="switch" aria-checked="false"
-                aria-label="Power on" disabled>
-          <span class="switch-well">
-            <span class="rocker">
-              <span class="glyph glyph-i" aria-hidden="true"></span>
-              <span class="glyph glyph-o" aria-hidden="true"></span>
-            </span>
-          </span>
-        </button>
-        <span class="switch-label switch-label-off label">OFF</span>
-      </div>
+      <div class="intro-hint label" id="intro-hint" data-en="Turn the volume up" data-es="Sube el volumen">Turn the volume up</div>
     </div>
   </div>
 
@@ -606,53 +677,52 @@
       });
     }
 
-    /* ── INTRO: CONSOLE FADER (0 → 100) → "ON" GATE ── */
-    let faderVal = 0, onReady = false;
+    /* ── INTRO: AMP VOLUME KNOB (0 → 100) → POWER SWITCH GATE ── */
+    let volVal = 0, onReady = false;
 
     function startIntro() {
       const seen = sessionStorage.getItem('volumen-intro');
       if (!ANIM || !intro || seen) { finishIntroInstant(); return; }
       sessionStorage.setItem('volumen-intro', '1');
-      setupFader();
+      setupKnob();
     }
 
-    function setFader(pct) {
-      faderVal = Math.max(0, Math.min(100, Math.round(pct)));
-      const fill = document.getElementById('fader-fill');
-      const cap  = document.getElementById('fader-cap');
-      const fdr  = document.getElementById('fader');
-      if (fill) fill.style.height = faderVal + '%';
-      if (cap)  cap.style.bottom  = faderVal + '%';
-      if (fdr)  fdr.setAttribute('aria-valuenow', faderVal);
-      if (introNum) introNum.textContent = faderVal;
-      if (faderVal >= 100 && !onReady) enableOn();
+    function setVol(pct) {
+      volVal = Math.max(0, Math.min(100, Math.round(pct)));
+      const knob = document.getElementById('vol-knob');
+      const dial = knob && knob.querySelector('.knob-dial');
+      if (dial) dial.style.setProperty('--rot', (-135 + volVal * 2.7) + 'deg');
+      if (knob) knob.setAttribute('aria-valuenow', volVal);
+      if (introNum) introNum.textContent = volVal;
+      if (volVal >= 100 && !onReady) enableOn();
     }
 
-    function setupFader() {
-      const fdr = document.getElementById('fader');
-      const track = fdr && fdr.querySelector('.fader-track');
+    function setupKnob() {
+      const knob = document.getElementById('vol-knob');
       const hint = document.getElementById('intro-hint');
-      if (!fdr || !track) return;
-      setFader(0);
-      const toPct = (clientY) => {
-        const r = track.getBoundingClientRect();
-        return (r.bottom - clientY) / r.height * 100;
-      };
-      let dragging = false;
+      if (!knob) return;
+      setVol(0);
+      let dragging = false, lastY = 0, vf = 0;   // vf: unrounded accumulator
       const down = (e) => {
-        dragging = true; fdr.classList.add('dragging');
+        dragging = true; lastY = e.clientY;
+        knob.classList.add('dragging');
         if (hint) hint.style.opacity = '0';
-        if (fdr.setPointerCapture && e.pointerId != null) { try { fdr.setPointerCapture(e.pointerId); } catch (x) {} }
-        setFader(toPct(e.clientY)); e.preventDefault();
+        if (knob.setPointerCapture && e.pointerId != null) { try { knob.setPointerCapture(e.pointerId); } catch (x) {} }
+        e.preventDefault();
       };
-      const move = (e) => { if (dragging) setFader(toPct(e.clientY)); };
-      const up   = () => { dragging = false; fdr.classList.remove('dragging'); };
-      fdr.addEventListener('pointerdown', down);
+      const move = (e) => {
+        if (!dragging) return;
+        vf = Math.max(0, Math.min(100, vf + (lastY - e.clientY) * 0.6));   // drag up = louder
+        lastY = e.clientY;
+        setVol(vf);
+      };
+      const up = () => { dragging = false; knob.classList.remove('dragging'); };
+      knob.addEventListener('pointerdown', down);
       window.addEventListener('pointermove', move, { passive: true });
       window.addEventListener('pointerup', up);
       // keyboard accessibility
-      fdr.addEventListener('keydown', (e) => {
-        let v = faderVal;
+      knob.addEventListener('keydown', (e) => {
+        let v = volVal;
         if (e.key === 'ArrowUp' || e.key === 'ArrowRight') v += 4;
         else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') v -= 4;
         else if (e.key === 'End' || e.key === 'PageUp') v = 100;
@@ -660,14 +730,17 @@
         else return;
         e.preventDefault();
         if (hint) hint.style.opacity = '0';
-        setFader(v);
+        vf = v;
+        setVol(v);
       });
     }
 
     function enableOn() {
       onReady = true;
       const sw = document.getElementById('on-switch');
+      const knob = document.getElementById('vol-knob');
       const hint = document.getElementById('intro-hint');
+      if (knob) knob.classList.add('done');
       if (hint) {
         const es = document.documentElement.lang === 'es';
         hint.setAttribute('data-en', 'Flip the switch'); hint.setAttribute('data-es', 'Activa el interruptor');
@@ -680,14 +753,31 @@
       sw.addEventListener('click', flipOn, { once: true });
       try { sw.focus({ preventScroll: true }); } catch (e) {}
     }
-    // flip the switch to ON, then let it land before entering
+    // flip the switch ON → pilot lamp warms up → every knob sweeps to full → enter
     function flipOn() {
       const sw = document.getElementById('on-switch');
       if (!sw) { exitIntro(); return; }
       sw.classList.remove('ready');
       sw.classList.add('on');
       sw.setAttribute('aria-checked', 'true');
-      setTimeout(exitIntro, ANIM ? 480 : 0);
+      if (!ANIM) { exitIntro(); return; }
+      const pilot = document.getElementById('pilot');
+      const tl = G.timeline({ onComplete: exitIntro });
+      if (pilot) {                                     // tube warm-up flicker
+        tl.add(() => pilot.classList.add('lit'), 0.25)
+          .add(() => pilot.classList.remove('lit'), 0.34)
+          .add(() => pilot.classList.add('lit'), 0.46)
+          .add(() => pilot.classList.remove('lit'), 0.52)
+          .add(() => pilot.classList.add('lit'), 0.62);
+      }
+      tl.to('.knob[data-passive] .knob-dial', {
+          '--rot': '135deg', duration: 0.7, ease: 'back.out(1.4)', stagger: 0.09
+        }, 0.45)
+        .to('.amp', {
+          boxShadow: '0 24px 60px rgba(0,0,0,.7), 0 0 60px 6px rgba(191,45,31,.4), inset 0 1px 0 rgba(255,255,255,.18)',
+          duration: 0.5, ease: 'power2.out'
+        }, 0.55)
+        .to({}, { duration: 0.25 });                   // beat before the exit
     }
 
     function exitIntro() {
