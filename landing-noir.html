@@ -69,13 +69,14 @@
       display: flex; flex-direction: column; align-items: center;
       gap: clamp(14px, 2.2vh, 30px);
     }
-    /* ── AMP HEAD (red tolex + cream control panel) ── */
+    /* ── AMP HEAD (red tolex + cream face, Orange-head anatomy) ── */
     .amp {
-      width: clamp(320px, 58vw, 660px);
+      position: relative;
+      width: clamp(340px, 60vw, 700px);
       max-width: 92vw;
-      padding: clamp(14px, 2vw, 22px) clamp(16px, 2.4vw, 26px) clamp(16px, 2.2vw, 24px);
+      padding: clamp(14px, 2vw, 24px) clamp(16px, 2.4vw, 28px) clamp(16px, 2.2vw, 26px);
       border: 1px solid #5e120c;
-      border-radius: 12px;
+      border-radius: 14px;
       background:
         radial-gradient(circle at 1px 1px, rgba(0,0,0,.30) 1px, transparent 1.7px) 0 0 / 5px 5px,
         radial-gradient(circle at 3.5px 3.5px, rgba(255,255,255,.06) 1px, transparent 1.7px) 0 0 / 5px 5px,
@@ -85,28 +86,96 @@
         inset 0 1px 0 rgba(255,255,255,.18),
         inset 0 -2px 8px rgba(0,0,0,.4);
     }
+    /* strap handle on top */
+    .amp-handle {
+      position: absolute; left: 50%; top: -15px;
+      transform: translateX(-50%);
+      width: clamp(130px, 26%, 190px); height: 30px;
+      border: 5px solid #181818;
+      border-bottom: none;
+      border-radius: 14px 14px 0 0;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 -2px 5px rgba(0,0,0,.4);
+      pointer-events: none;
+    }
+    /* black corner protectors (quarter-round caps, clipped by the box radius) */
+    .amp-corners {
+      position: absolute; inset: 0; border-radius: 14px;
+      pointer-events: none;
+      background:
+        radial-gradient(circle 26px at 0 0,       #1d1d1d 55%, #0b0b0b 96%, transparent) top left     / 40px 40px no-repeat,
+        radial-gradient(circle 26px at 100% 0,    #1d1d1d 55%, #0b0b0b 96%, transparent) top right    / 40px 40px no-repeat,
+        radial-gradient(circle 26px at 0 100%,    #1d1d1d 55%, #0b0b0b 96%, transparent) bottom left  / 40px 40px no-repeat,
+        radial-gradient(circle 26px at 100% 100%, #1d1d1d 55%, #0b0b0b 96%, transparent) bottom right / 40px 40px no-repeat;
+    }
+    /* cream face filling the front, framed by tolex */
+    .amp-face {
+      position: relative;
+      display: flex; flex-direction: column;
+      gap: clamp(10px, 1.6vw, 18px);
+      padding: clamp(12px, 1.8vw, 20px) clamp(18px, 2.6vw, 30px) clamp(14px, 2vw, 22px);
+      border-radius: 8px;
+      background: linear-gradient(#f4ecd9, #e6dcc2);
+      border: 1px solid #c8bb9c;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.8), inset 0 -3px 8px rgba(0,0,0,.14), 0 1px 0 rgba(0,0,0,.35);
+    }
+    /* chrome kick rails on the face edges */
+    .amp-face::before, .amp-face::after {
+      content: ''; position: absolute; top: 10px; bottom: 10px; width: 5px;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #8c8c8c, #f2f2f2 45%, #b9b9b9 60%, #777);
+      box-shadow: 0 1px 2px rgba(0,0,0,.35);
+    }
+    .amp-face::before { left: 7px; }
+    .amp-face::after  { right: 7px; }
+    /* badge row: logo plate, model name, crest */
+    .amp-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; flex-wrap: wrap;
+    }
     .amp-logo {
       font-family: var(--font-disp);
-      font-size: clamp(22px, 3vw, 34px);
-      letter-spacing: .34em;
-      text-indent: .34em;                  /* re-centers letterspaced text */
-      text-align: center;
-      color: #efe6d2;
-      text-shadow: 0 1px 0 rgba(0,0,0,.45);
-      margin-bottom: clamp(12px, 1.8vw, 20px);
+      font-size: clamp(20px, 2.6vw, 30px);
+      line-height: 1.1;
+      letter-spacing: .18em;
+      text-indent: .18em;                  /* re-centers letterspaced text */
+      color: var(--red);
+      padding: 3px 14px 2px;
+      border: 2px solid #2b2017;
+      border-radius: 5px;
+      outline: 1px solid #2b2017;          /* double-line badge frame */
+      outline-offset: 2px;
+      user-select: none;
+    }
+    .amp-model {
+      font-family: var(--font-mono);
+      font-size: clamp(8px, 1.1vw, 11px);
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      color: #3a2f24;
+      white-space: nowrap;
+    }
+    .amp-model span { color: var(--red); }
+    .amp-crest {
+      width: 27px; height: 27px;
+      border: 2px solid #2b2017;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-disp);
+      font-size: 16px; line-height: 1;
+      color: var(--red);
       user-select: none;
     }
     .amp-panel {
       position: relative;
       display: flex; align-items: center; justify-content: center;
-      flex-wrap: wrap;                    /* power group drops to its own row when tight */
-      gap: clamp(10px, 2vw, 22px);
-      row-gap: 14px;
-      padding: clamp(12px, 1.8vw, 18px) clamp(16px, 2.2vw, 26px);
-      background: linear-gradient(#f0e7d2, #e2d7bc);
-      border: 1px solid #c8bb9c;
+      flex-wrap: wrap;                    /* groups drop to their own row when tight */
+      gap: clamp(10px, 1.4vw, 16px);
+      row-gap: 12px;
+      padding: clamp(10px, 1.5vw, 16px) clamp(12px, 1.6vw, 18px);
+      background: linear-gradient(#ece1c8, #ddd1b4);
+      border: 2px solid #29211a;          /* dark control-strip frame */
       border-radius: 7px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), inset 0 -3px 7px rgba(0,0,0,.16), 0 1px 0 rgba(0,0,0,.35);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.7), inset 0 -3px 7px rgba(0,0,0,.14), 0 1px 0 rgba(0,0,0,.3);
     }
     /* brass corner screws */
     .amp-panel::before, .amp-panel::after {
@@ -131,7 +200,7 @@
     .knob-dial {
       --rot: -135deg;
       position: relative;
-      width: clamp(38px, 5.5vw, 58px); height: clamp(38px, 5.5vw, 58px);
+      width: clamp(38px, 5vw, 54px); height: clamp(38px, 5vw, 54px);
       border-radius: 50%;
       background: radial-gradient(circle at 32% 28%, #3e3e3e, #181818 55%, #0b0b0b);
       box-shadow:
@@ -151,6 +220,35 @@
       font-size: 9px;
       color: #4a4036;
     }
+    /* the knob bank sits on a red section of the strip, like the reference's channel block */
+    .amp-knobs {
+      display: flex; align-items: center;
+      gap: clamp(8px, 1.4vw, 16px);
+      padding: 10px clamp(8px, 1.2vw, 12px);
+      border-radius: 5px;
+      border: 1px solid #5e120c;
+      background: linear-gradient(160deg, #c43523, #9e2318 60%, #b62a1d);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.18), inset 0 -2px 5px rgba(0,0,0,.3);
+    }
+    .amp-knobs .knob-label { color: #f0e7d2; }
+
+    /* ── INPUT JACK (decorative) ── */
+    .amp-jack-unit {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 8px;
+    }
+    .jack {
+      position: relative;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #f2f2f2, #b5b5b5 40%, #6e6e6e 75%, #585858);
+      box-shadow: inset 0 0 0 2px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.35);
+    }
+    .jack::after {
+      content: ''; position: absolute; inset: 8px; border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #2a2a2a, #000 70%);
+      box-shadow: inset 0 1px 2px rgba(0,0,0,.9);
+    }
+
     /* ── PILOT LAMP + POWER GROUP ── */
     .amp-power { display: flex; align-items: center; gap: clamp(10px, 1.6vw, 16px); }
     .pilot {
@@ -249,14 +347,18 @@
       50%     { color: #ff5b40; }
     }
     @media (max-height: 760px) {
-      .amp-logo { margin-bottom: 10px; }
+      .amp-face { gap: 10px; }
       .knob-dial { width: clamp(34px, 5vw, 46px); height: clamp(34px, 5vw, 46px); }
       .switch { width: 50px; height: 78px; }
       .rocker { padding: 9px 0; }
     }
     @media (max-width: 480px) {
-      .amp { width: min(92vw, 350px); }
-      .amp-panel { flex-wrap: wrap; gap: 8px; row-gap: 14px; }
+      .amp { width: min(92vw, 360px); }
+      .amp-panel { flex-wrap: wrap; gap: 8px; row-gap: 12px; }
+      .amp-knobs { gap: 8px; padding: 8px; }
+      .amp-power { order: 1; }            /* knob bank first row, power + jack below */
+      .amp-jack-unit { order: 2; }
+      .amp-model { display: none; }
       .knob-dial { width: 36px; height: 36px; }
       .knob-label { font-size: 8px; }
     }
@@ -469,27 +571,41 @@
   <div id="intro">
     <div class="intro-inner">
       <div class="amp">
-        <div class="amp-logo">VOLUMEN</div>
-        <div class="amp-panel">
-          <div class="knob" data-passive><div class="knob-dial" style="--rot:-135deg"></div><span class="knob-label label">Gain</span></div>
-          <div class="knob" data-passive><div class="knob-dial" style="--rot:-121deg"></div><span class="knob-label label">Bass</span></div>
-          <div class="knob" data-passive><div class="knob-dial" style="--rot:-128deg"></div><span class="knob-label label">Mid</span></div>
-          <div class="knob" data-passive><div class="knob-dial" style="--rot:-114deg"></div><span class="knob-label label">Treble</span></div>
-          <div class="knob" data-passive><div class="knob-dial" style="--rot:-125deg"></div><span class="knob-label label">Volume</span></div>
-          <div class="amp-power">
-            <div class="pilot" id="pilot" aria-hidden="true"></div>
-            <div class="switch-unit">
-              <span class="switch-label switch-label-on label">ON</span>
-              <button class="switch" id="on-switch" type="button" role="switch" aria-checked="false"
-                      aria-label="Power on" disabled>
-                <span class="switch-well" aria-hidden="true">
-                  <span class="rocker">
-                    <span class="glyph glyph-o"></span>
-                    <span class="glyph glyph-i"></span>
+        <span class="amp-handle" aria-hidden="true"></span>
+        <span class="amp-corners" aria-hidden="true"></span>
+        <div class="amp-face">
+          <div class="amp-header">
+            <div class="amp-logo">VOLUMEN</div>
+            <div class="amp-model">En Vivo <span>100</span></div>
+            <div class="amp-crest" aria-hidden="true">V</div>
+          </div>
+          <div class="amp-panel">
+            <div class="amp-power">
+              <div class="pilot" id="pilot" aria-hidden="true"></div>
+              <div class="switch-unit">
+                <span class="switch-label switch-label-on label">ON</span>
+                <button class="switch" id="on-switch" type="button" role="switch" aria-checked="false"
+                        aria-label="Power on" disabled>
+                  <span class="switch-well" aria-hidden="true">
+                    <span class="rocker">
+                      <span class="glyph glyph-o"></span>
+                      <span class="glyph glyph-i"></span>
+                    </span>
                   </span>
-                </span>
-              </button>
-              <span class="switch-label switch-label-off label">OFF</span>
+                </button>
+                <span class="switch-label switch-label-off label">OFF</span>
+              </div>
+            </div>
+            <div class="amp-knobs">
+              <div class="knob" data-passive><div class="knob-dial" style="--rot:-135deg"></div><span class="knob-label label">Gain</span></div>
+              <div class="knob" data-passive><div class="knob-dial" style="--rot:-121deg"></div><span class="knob-label label">Bass</span></div>
+              <div class="knob" data-passive><div class="knob-dial" style="--rot:-128deg"></div><span class="knob-label label">Mid</span></div>
+              <div class="knob" data-passive><div class="knob-dial" style="--rot:-114deg"></div><span class="knob-label label">Treble</span></div>
+              <div class="knob" data-passive><div class="knob-dial" style="--rot:-125deg"></div><span class="knob-label label">Volume</span></div>
+            </div>
+            <div class="amp-jack-unit">
+              <span class="jack" aria-hidden="true"></span>
+              <span class="knob-label label">Input</span>
             </div>
           </div>
         </div>
