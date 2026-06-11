@@ -57,7 +57,7 @@
     }
 
     /* ═════════════════════════════════════════
-       INTRO  —  AMP HEAD: volume knob 0→100 + power switch gate
+       INTRO  —  AMP HEAD: flip the power switch to enter
     ═════════════════════════════════════════ */
     #intro {
       position: fixed; inset: 0; z-index: 1000;
@@ -69,17 +69,6 @@
       display: flex; flex-direction: column; align-items: center;
       gap: clamp(14px, 2.2vh, 30px);
     }
-    .intro-num {
-      font-family: var(--font-disp);
-      font-size: clamp(72px, 16vh, 240px);
-      font-weight: 400;
-      letter-spacing: 0.02em;
-      color: var(--ink);
-      font-variant-numeric: tabular-nums;
-      line-height: 1;
-    }
-    .intro-num span { color: var(--red); }
-
     /* ── AMP HEAD (red tolex + cream control panel) ── */
     .amp {
       width: clamp(320px, 58vw, 660px);
@@ -162,18 +151,6 @@
       font-size: 9px;
       color: #4a4036;
     }
-    /* the one you can grab */
-    .knob-volume { cursor: grab; touch-action: none; outline: none; }
-    .knob-volume.dragging { cursor: grabbing; }
-    .knob-volume:focus-visible .knob-dial { outline: 1px solid #8a703a; outline-offset: 4px; }
-    .knob-volume .knob-dial::before { animation: knobPulse 2s ease-in-out infinite; }
-    .knob-volume.dragging .knob-dial::before,
-    .knob-volume.done .knob-dial::before { animation: none; opacity: 1; }
-    @keyframes knobPulse {
-      0%,100% { opacity: .5; box-shadow: 0 0 2px rgba(239,230,210,.25); }
-      50%     { opacity: 1;  box-shadow: 0 0 9px rgba(239,230,210,.9); }
-    }
-
     /* ── PILOT LAMP + POWER GROUP ── */
     .amp-power { display: flex; align-items: center; gap: clamp(10px, 1.6vw, 16px); }
     .pilot {
@@ -193,91 +170,89 @@
     }
     .intro-hint { transition: opacity 0.4s ease; }
 
-    /* ── BAT TOGGLE POWER SWITCH (chrome lever, up = ON) ── */
+    /* ── ILLUMINATED ROCKER POWER SWITCH (red paddle, I = on) ── */
     .switch-unit {
       display: flex; flex-direction: column; align-items: center;
-      gap: 2px;
+      gap: 7px;
     }
     .switch-label { transition: color .35s; }
     .switch {
       position: relative;
-      width: 64px; height: 96px;
-      padding: 0; border: none;
-      background: transparent;
+      width: 58px; height: 92px;
+      padding: 0;
+      border: 1px solid #000;
+      border-radius: 9px;
+      background: linear-gradient(160deg, #2b2b2b, #161616 60%, #222);
+      box-shadow: 0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.08);
       cursor: not-allowed;
       -webkit-tap-highlight-color: transparent;
     }
-    .toggle {
-      position: absolute; inset: 0;
-      perspective: 260px;
-      filter: brightness(.55) saturate(.7);   /* locked = dull metal */
-      transition: filter .4s;
+    /* recessed well the paddle rocks in */
+    .switch-well {
+      position: absolute; inset: 7px;
+      border-radius: 5px;
+      background: #050505;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,.95), inset 0 0 0 1px #000;
+      perspective: 320px;
     }
-    .switch.ready .toggle, .switch.on .toggle { filter: none; }
-    /* knurled mounting nut */
-    .toggle-base {
-      position: absolute; left: 50%; top: 50%;
-      width: 40px; height: 40px;
-      margin: -20px 0 0 -20px;
-      border-radius: 50%;
-      background: repeating-conic-gradient(#9a9a9a 0deg 5deg, #e6e6e6 5deg 10deg, #848484 10deg 15deg);
-      box-shadow: 0 2px 6px rgba(0,0,0,.45), inset 0 1px 1px rgba(255,255,255,.55);
-      transition: box-shadow .4s;
-    }
-    .toggle-base::after {                   /* domed bushing the lever exits */
-      content: ''; position: absolute; inset: 6px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 30%, #f6f6f6, #c4c4c4 45%, #7e7e7e 80%, #686868);
-      box-shadow: inset 0 -2px 4px rgba(0,0,0,.4), inset 0 1px 2px rgba(255,255,255,.7);
-    }
-    /* the chrome bat — pivots at the bushing, sweeps out toward you on flip */
-    .toggle-lever {
-      position: absolute; left: 50%; bottom: 50%;
-      width: 9px; height: 30px;
-      margin-left: -4.5px;
-      transform-origin: 50% 100%;
-      transform: rotateX(-142deg);          /* OFF: thrown down */
-      transition: transform .38s cubic-bezier(.4, 1.6, .5, 1);
+    /* translucent red paddle */
+    .rocker {
+      position: absolute; inset: 3px;
       border-radius: 4px;
-      background: linear-gradient(90deg, #6e6e6e, #fbfbfb 38%, #d6d6d6 55%, #777);
+      display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+      padding: 12px 0;
+      background: linear-gradient(#8c1f15, #5e120c 55%, #71190f);   /* unlit red plastic */
+      color: rgba(255,235,230,.8);
+      transform: rotateX(12deg);              /* OFF: I side (bottom) out */
+      transition: transform .4s cubic-bezier(.34,1.56,.64,1), background .35s, box-shadow .35s, color .35s, filter .4s;
+      box-shadow: 0 2px 5px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.14);
+      filter: brightness(.6) saturate(.75);   /* locked = dull */
     }
-    .toggle-lever::before {                 /* flared bat end — rounded slab, no ball */
-      content: ''; position: absolute; left: 50%; top: -9px;
-      width: 15px; height: 20px;
-      margin-left: -7.5px;
-      border-radius: 7px 7px 6px 6px;
-      background: linear-gradient(90deg, #696969, #f8f8f8 36%, #cfcfcf 58%, #707070);
-      box-shadow: 0 1px 3px rgba(0,0,0,.35), inset 0 1px 1px rgba(255,255,255,.55);
+    .switch.ready .rocker, .switch.on .rocker { filter: none; }
+    .rocker::after {                          /* molded-lens texture */
+      content: ''; position: absolute; inset: 0; border-radius: 4px;
+      background: repeating-linear-gradient(rgba(255,255,255,.05) 0 1px, transparent 1px 3px);
+      pointer-events: none;
     }
-    /* unlocked: green pulse around the nut */
+    /* O / I markings on the paddle */
+    .glyph { position: relative; z-index: 1; }
+    .glyph-o { width: 13px; height: 13px; border: 2.5px solid currentColor; border-radius: 50%; }
+    .glyph-i { width: 3px; height: 14px; background: currentColor; border-radius: 2px; }
+    /* unlocked: paddle breathes red, asking to be flipped */
     .switch.ready { cursor: pointer; }
-    .switch.ready .toggle-base { animation: switchReady 1.7s ease-in-out infinite; }
-    @keyframes switchReady {
-      0%,100% { box-shadow: 0 2px 6px rgba(0,0,0,.45), 0 0 6px 0 rgba(21,182,87,.15); }
-      50%     { box-shadow: 0 2px 6px rgba(0,0,0,.45), 0 0 26px 5px rgba(21,182,87,.65); }
+    .switch.ready .rocker { animation: rockerPulse 1.7s ease-in-out infinite; }
+    @keyframes rockerPulse {
+      0%,100% {
+        background: linear-gradient(#8c1f15, #5e120c 55%, #71190f);
+        box-shadow: 0 2px 5px rgba(0,0,0,.6), inset 0 0 6px rgba(255,71,51,.25);
+      }
+      50% {
+        background: linear-gradient(#d0301d, #8c1f15 55%, #b62a1d);
+        box-shadow: 0 2px 5px rgba(0,0,0,.6), inset 0 0 16px rgba(255,96,72,.85), 0 0 18px rgba(255,71,51,.45);
+      }
     }
-    /* flipped ON: lever snaps up, steady green ring */
+    /* flipped ON: paddle rocks the other way and lights from within */
     .switch.on { cursor: default; }
-    .switch.on .toggle-lever { transform: rotateX(-24deg); }
-    .switch.on .toggle-base {
+    .switch.on .rocker {
+      transform: rotateX(-12deg);
       animation: none;
-      box-shadow: 0 2px 6px rgba(0,0,0,.45), 0 0 18px 2px rgba(21,182,87,.55);
+      background: linear-gradient(#ff6a4e, #e03a23 45%, #ff5b40);
+      color: #fff7f5;
+      box-shadow: 0 2px 5px rgba(0,0,0,.55), inset 0 0 18px rgba(255,255,255,.35), 0 0 26px rgba(255,71,51,.75);
     }
-    .switch:focus-visible { outline: none; }
-    .switch:focus-visible .toggle-base { outline: 1px solid #2c7a48; outline-offset: 5px; }
+    .switch:focus-visible { outline: 1px solid #b3402f; outline-offset: 4px; }
     /* label states (graceful no-op where :has unsupported) */
     .switch-unit:has(.switch.ready) .switch-label-on { animation: labelPulse 1.7s ease-in-out infinite; }
-    .switch-unit:has(.switch.on) .switch-label-on { color: #2ee07a; animation: none; }
+    .switch-unit:has(.switch.on) .switch-label-on { color: #ff5b40; animation: none; }
     @keyframes labelPulse {
       0%,100% { color: #7a7a7a; }
-      50%     { color: #2ee07a; }
+      50%     { color: #ff5b40; }
     }
     @media (max-height: 760px) {
-      .intro-num { font-size: clamp(60px, 12vh, 150px); }
       .amp-logo { margin-bottom: 10px; }
       .knob-dial { width: clamp(34px, 5vw, 46px); height: clamp(34px, 5vw, 46px); }
-      .switch { width: 56px; height: 80px; }
-      .toggle { transform: scale(.85); }
+      .switch { width: 50px; height: 78px; }
+      .rocker { padding: 9px 0; }
     }
     @media (max-width: 480px) {
       .amp { width: min(92vw, 350px); }
@@ -286,9 +261,8 @@
       .knob-label { font-size: 8px; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .switch.ready .toggle-base { animation: none; }
-      .toggle-lever { transition: none; }
-      .knob-volume .knob-dial::before { animation: none; }
+      .switch.ready .rocker { animation: none; }
+      .rocker { transition: none; }
       .pilot { transition: none; }
       .switch-unit:has(.switch.ready) .switch-label-on { animation: none; color: #9a9a9a; }
     }
@@ -494,7 +468,6 @@
   <!-- ── INTRO ────────────────────────────── -->
   <div id="intro">
     <div class="intro-inner">
-      <div class="intro-num" id="intro-num">0</div>
       <div class="amp">
         <div class="amp-logo">VOLUMEN</div>
         <div class="amp-panel">
@@ -502,20 +475,18 @@
           <div class="knob" data-passive><div class="knob-dial" style="--rot:-121deg"></div><span class="knob-label label">Bass</span></div>
           <div class="knob" data-passive><div class="knob-dial" style="--rot:-128deg"></div><span class="knob-label label">Mid</span></div>
           <div class="knob" data-passive><div class="knob-dial" style="--rot:-114deg"></div><span class="knob-label label">Treble</span></div>
-          <div class="knob knob-volume" id="vol-knob" role="slider" tabindex="0"
-               aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-            <div class="knob-dial"></div>
-            <span class="knob-label label">Volume</span>
-          </div>
+          <div class="knob" data-passive><div class="knob-dial" style="--rot:-125deg"></div><span class="knob-label label">Volume</span></div>
           <div class="amp-power">
             <div class="pilot" id="pilot" aria-hidden="true"></div>
             <div class="switch-unit">
               <span class="switch-label switch-label-on label">ON</span>
               <button class="switch" id="on-switch" type="button" role="switch" aria-checked="false"
                       aria-label="Power on" disabled>
-                <span class="toggle" aria-hidden="true">
-                  <span class="toggle-base"></span>
-                  <span class="toggle-lever"></span>
+                <span class="switch-well" aria-hidden="true">
+                  <span class="rocker">
+                    <span class="glyph glyph-o"></span>
+                    <span class="glyph glyph-i"></span>
+                  </span>
                 </span>
               </button>
               <span class="switch-label switch-label-off label">OFF</span>
@@ -523,7 +494,7 @@
           </div>
         </div>
       </div>
-      <div class="intro-hint label" id="intro-hint" data-en="Turn the volume up" data-es="Sube el volumen">Turn the volume up</div>
+      <div class="intro-hint label" id="intro-hint" data-en="Flip the switch" data-es="Activa el interruptor">Flip the switch</div>
     </div>
   </div>
 
@@ -635,7 +606,6 @@
     if (G && window.Flip)          G.registerPlugin(Flip);
 
     const intro    = document.getElementById('intro');
-    const introNum = document.getElementById('intro-num');
     const gallery  = document.getElementById('gallery');
     const flowBtn  = document.getElementById('view-flow');
     const gridBtn  = document.getElementById('view-grid');
@@ -679,76 +649,16 @@
       });
     }
 
-    /* ── INTRO: AMP VOLUME KNOB (0 → 100) → POWER SWITCH GATE ── */
-    let volVal = 0, onReady = false;
-
+    /* ── INTRO: AMP POWER SWITCH GATE (one flip to enter) ── */
     function startIntro() {
       const seen = sessionStorage.getItem('volumen-intro');
       if (!ANIM || !intro || seen) { finishIntroInstant(); return; }
       sessionStorage.setItem('volumen-intro', '1');
-      setupKnob();
-    }
-
-    function setVol(pct) {
-      volVal = Math.max(0, Math.min(100, Math.round(pct)));
-      const knob = document.getElementById('vol-knob');
-      const dial = knob && knob.querySelector('.knob-dial');
-      if (dial) dial.style.setProperty('--rot', (-135 + volVal * 2.7) + 'deg');
-      if (knob) knob.setAttribute('aria-valuenow', volVal);
-      if (introNum) introNum.textContent = volVal;
-      if (volVal >= 100 && !onReady) enableOn();
-    }
-
-    function setupKnob() {
-      const knob = document.getElementById('vol-knob');
-      const hint = document.getElementById('intro-hint');
-      if (!knob) return;
-      setVol(0);
-      let dragging = false, lastY = 0, vf = 0;   // vf: unrounded accumulator
-      const down = (e) => {
-        dragging = true; lastY = e.clientY;
-        knob.classList.add('dragging');
-        if (hint) hint.style.opacity = '0';
-        if (knob.setPointerCapture && e.pointerId != null) { try { knob.setPointerCapture(e.pointerId); } catch (x) {} }
-        e.preventDefault();
-      };
-      const move = (e) => {
-        if (!dragging) return;
-        vf = Math.max(0, Math.min(100, vf + (lastY - e.clientY) * 0.6));   // drag up = louder
-        lastY = e.clientY;
-        setVol(vf);
-      };
-      const up = () => { dragging = false; knob.classList.remove('dragging'); };
-      knob.addEventListener('pointerdown', down);
-      window.addEventListener('pointermove', move, { passive: true });
-      window.addEventListener('pointerup', up);
-      // keyboard accessibility
-      knob.addEventListener('keydown', (e) => {
-        let v = volVal;
-        if (e.key === 'ArrowUp' || e.key === 'ArrowRight') v += 4;
-        else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') v -= 4;
-        else if (e.key === 'End' || e.key === 'PageUp') v = 100;
-        else if (e.key === 'Home' || e.key === 'PageDown') v = 0;
-        else return;
-        e.preventDefault();
-        if (hint) hint.style.opacity = '0';
-        vf = v;
-        setVol(v);
-      });
+      enableOn();
     }
 
     function enableOn() {
-      onReady = true;
       const sw = document.getElementById('on-switch');
-      const knob = document.getElementById('vol-knob');
-      const hint = document.getElementById('intro-hint');
-      if (knob) knob.classList.add('done');
-      if (hint) {
-        const es = document.documentElement.lang === 'es';
-        hint.setAttribute('data-en', 'Flip the switch'); hint.setAttribute('data-es', 'Activa el interruptor');
-        hint.textContent = es ? 'Activa el interruptor' : 'Flip the switch';
-        hint.style.opacity = '0.75';
-      }
       if (!sw) return;
       sw.disabled = false;
       sw.classList.add('ready');
