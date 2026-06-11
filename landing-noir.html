@@ -78,13 +78,22 @@
       border: 1px solid #5e120c;
       border-radius: 14px;
       background:
-        radial-gradient(circle at 1px 1px, rgba(0,0,0,.30) 1px, transparent 1.7px) 0 0 / 5px 5px,
-        radial-gradient(circle at 3.5px 3.5px, rgba(255,255,255,.06) 1px, transparent 1.7px) 0 0 / 5px 5px,
-        linear-gradient(165deg, #c43523, #9e2318 55%, #b62a1d);
+        /* cabinet form: soft top light, shaded foot */
+        linear-gradient(180deg, rgba(255,255,255,.13), rgba(255,255,255,0) 13%, rgba(0,0,0,0) 76%, rgba(0,0,0,.32)),
+        /* pebbled vinyl grain: paired shadow + highlight bump per cell */
+        radial-gradient(circle at 62% 66%, rgba(0,0,0,.28) .6px, transparent 1.7px) 0 0 / 6px 6px,
+        radial-gradient(circle at 34% 30%, rgba(255,255,255,.12) .6px, transparent 1.7px) 0 0 / 6px 6px,
+        /* woven basketweave hatch */
+        repeating-linear-gradient(45deg,  rgba(0,0,0,.05) 0 1px, transparent 1px 5px),
+        repeating-linear-gradient(-45deg, rgba(0,0,0,.05) 0 1px, transparent 1px 5px),
+        /* base tolex red */
+        linear-gradient(160deg, #c83b28, #a3261a 55%, #ba2c1e);
       box-shadow:
-        0 24px 60px rgba(0,0,0,.7),
-        inset 0 1px 0 rgba(255,255,255,.18),
-        inset 0 -2px 8px rgba(0,0,0,.4);
+        0 26px 64px rgba(0,0,0,.72),
+        0 6px 16px rgba(0,0,0,.5),
+        inset 0 2px 0 rgba(255,255,255,.20),
+        inset 0 -3px 10px rgba(0,0,0,.45),
+        inset 0 0 22px rgba(0,0,0,.28);     /* recessed-opening lip */
     }
     /* strap handle on top */
     .amp-handle {
@@ -99,15 +108,22 @@
     }
     /* black corner protectors (quarter-round caps, clipped by the box radius) */
     .amp-corners {
-      --cap: 26px;
-      --capbox: 40px;
+      --cap: 27px;
+      --capbox: 42px;
+      --screw: 15px;                        /* screw inset from each corner */
       position: absolute; inset: 0; border-radius: 14px;
       pointer-events: none;
       background:
-        radial-gradient(circle var(--cap) at 0 0,       #1d1d1d 55%, #0b0b0b 96%, transparent) top left     / var(--capbox) var(--capbox) no-repeat,
-        radial-gradient(circle var(--cap) at 100% 0,    #1d1d1d 55%, #0b0b0b 96%, transparent) top right    / var(--capbox) var(--capbox) no-repeat,
-        radial-gradient(circle var(--cap) at 0 100%,    #1d1d1d 55%, #0b0b0b 96%, transparent) bottom left  / var(--capbox) var(--capbox) no-repeat,
-        radial-gradient(circle var(--cap) at 100% 100%, #1d1d1d 55%, #0b0b0b 96%, transparent) bottom right / var(--capbox) var(--capbox) no-repeat;
+        /* chrome screws set into each cap (painted on top) */
+        radial-gradient(circle 2.4px at var(--screw) var(--screw),                           #7c7c7c 28%, #2a2a2a 64%, #050505 80%, transparent 86%) no-repeat,
+        radial-gradient(circle 2.4px at calc(100% - var(--screw)) var(--screw),              #7c7c7c 28%, #2a2a2a 64%, #050505 80%, transparent 86%) no-repeat,
+        radial-gradient(circle 2.4px at var(--screw) calc(100% - var(--screw)),              #7c7c7c 28%, #2a2a2a 64%, #050505 80%, transparent 86%) no-repeat,
+        radial-gradient(circle 2.4px at calc(100% - var(--screw)) calc(100% - var(--screw)), #7c7c7c 28%, #2a2a2a 64%, #050505 80%, transparent 86%) no-repeat,
+        /* molded caps with a bevel highlight catching the outer corner */
+        radial-gradient(circle var(--cap) at 0 0,       #3a3a3a 0%, #1c1c1c 48%, #060606 90%, transparent 97%) top left     / var(--capbox) var(--capbox) no-repeat,
+        radial-gradient(circle var(--cap) at 100% 0,    #3a3a3a 0%, #1c1c1c 48%, #060606 90%, transparent 97%) top right    / var(--capbox) var(--capbox) no-repeat,
+        radial-gradient(circle var(--cap) at 0 100%,    #2c2c2c 0%, #161616 48%, #050505 90%, transparent 97%) bottom left  / var(--capbox) var(--capbox) no-repeat,
+        radial-gradient(circle var(--cap) at 100% 100%, #2c2c2c 0%, #161616 48%, #050505 90%, transparent 97%) bottom right / var(--capbox) var(--capbox) no-repeat;
     }
     /* cream face filling the front, framed by tolex */
     .amp-face {
@@ -116,16 +132,30 @@
       gap: clamp(10px, 1.6vw, 18px);
       padding: clamp(12px, 1.8vw, 20px) clamp(18px, 2.6vw, 30px) clamp(14px, 2vw, 22px);
       border-radius: 8px;
-      background: linear-gradient(#f4ecd9, #e6dcc2);
-      border: 1px solid #c8bb9c;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.8), inset 0 -3px 8px rgba(0,0,0,.14), 0 1px 0 rgba(0,0,0,.35);
+      background:
+        /* brass screws at the four panel corners */
+        radial-gradient(circle 2px at 12px 12px,                          #d8bd7e 22%, #7a6230 62%, transparent 70%) no-repeat,
+        radial-gradient(circle 2px at calc(100% - 12px) 12px,             #d8bd7e 22%, #7a6230 62%, transparent 70%) no-repeat,
+        radial-gradient(circle 2px at 12px calc(100% - 12px),             #d8bd7e 22%, #7a6230 62%, transparent 70%) no-repeat,
+        radial-gradient(circle 2px at calc(100% - 12px) calc(100% - 12px),#d8bd7e 22%, #7a6230 62%, transparent 70%) no-repeat,
+        /* faint brushed-paper texture */
+        repeating-linear-gradient(90deg, rgba(0,0,0,.014) 0 2px, transparent 2px 4px),
+        linear-gradient(#f6efdd, #e4d9bd);
+      border: 1px solid #cabd9d;
+      box-shadow:
+        0 0 0 2px #7c1c11,                       /* red welt cord */
+        0 0 0 3px rgba(255,255,255,.10),         /* cord top-light */
+        0 0 0 4px rgba(0,0,0,.4),                /* cord shadow line */
+        inset 0 1px 0 rgba(255,255,255,.85),
+        inset 0 0 14px rgba(0,0,0,.09),          /* face recess vignette */
+        inset 0 -3px 8px rgba(0,0,0,.16);
     }
-    /* chrome kick rails on the face edges */
+    /* brass piping rails flanking the face (gold welt, like the reference) */
     .amp-face::before, .amp-face::after {
-      content: ''; position: absolute; top: 10px; bottom: 10px; width: 5px;
+      content: ''; position: absolute; top: 9px; bottom: 9px; width: 5px;
       border-radius: 3px;
-      background: linear-gradient(90deg, #8c8c8c, #f2f2f2 45%, #b9b9b9 60%, #777);
-      box-shadow: 0 1px 2px rgba(0,0,0,.35);
+      background: linear-gradient(90deg, #6f5220, #f4d97f 42%, #d9b153 58%, #6a4d1d);
+      box-shadow: 0 1px 2px rgba(0,0,0,.4), inset 0 0 1px rgba(255,255,255,.6);
     }
     .amp-face::before { left: 7px; }
     .amp-face::after  { right: 7px; }
@@ -203,19 +233,31 @@
       position: relative;
       width: clamp(38px, 5vw, 54px); height: clamp(38px, 5vw, 54px);
       border-radius: 50%;
-      background: radial-gradient(circle at 32% 28%, #3e3e3e, #181818 55%, #0b0b0b);
+      background: radial-gradient(circle at 50% 36%, #4c4c4c, #242424 48%, #0b0b0b 82%);
       box-shadow:
-        0 0 0 2px #23211d,
-        0 0 0 3px rgba(255,255,255,.16),
-        0 3px 7px rgba(0,0,0,.4),
-        inset 0 1px 0 rgba(255,255,255,.22);
+        0 0 0 2px #1b1915,
+        0 0 0 3px rgba(255,255,255,.14),
+        0 4px 8px rgba(0,0,0,.45),
+        inset 0 2px 3px rgba(255,255,255,.20),
+        inset 0 -3px 5px rgba(0,0,0,.6);
+    }
+    .knob-dial::after {                    /* knurled skirt ring */
+      content: ''; position: absolute; inset: -1px; border-radius: 50%;
+      background: repeating-conic-gradient(rgba(255,255,255,.12) 0deg 3deg, rgba(0,0,0,.22) 3deg 6deg);
+      -webkit-mask: radial-gradient(circle, transparent 58%, #000 61%);
+      mask: radial-gradient(circle, transparent 58%, #000 61%);
+      opacity: .55; pointer-events: none;
+    }
+    .knob-ind {                            /* rotating carrier — keeps body light fixed */
+      position: absolute; inset: 0; border-radius: 50%;
       transform: rotate(var(--rot));
     }
-    .knob-dial::before {                   /* pointer notch */
-      content: ''; position: absolute; left: 50%; top: 8%;
-      width: 3px; height: 30%;
+    .knob-ind::before {                    /* pointer notch */
+      content: ''; position: absolute; left: 50%; top: 7%;
+      width: 3px; height: 32%;
       transform: translateX(-50%);
-      background: #efe6d2; border-radius: 2px;
+      background: #f1e8d2; border-radius: 2px;
+      box-shadow: 0 0 3px rgba(0,0,0,.45);
     }
     .knob-label {
       font-size: 9px;
@@ -599,11 +641,11 @@
               </div>
             </div>
             <div class="amp-knobs">
-              <div class="knob" data-passive><div class="knob-dial" style="--rot:-135deg"></div><span class="knob-label label">Gain</span></div>
-              <div class="knob" data-passive><div class="knob-dial" style="--rot:-121deg"></div><span class="knob-label label">Bass</span></div>
-              <div class="knob" data-passive><div class="knob-dial" style="--rot:-128deg"></div><span class="knob-label label">Mid</span></div>
-              <div class="knob" data-passive><div class="knob-dial" style="--rot:-114deg"></div><span class="knob-label label">Treble</span></div>
-              <div class="knob" data-passive><div class="knob-dial" style="--rot:-125deg"></div><span class="knob-label label">Volume</span></div>
+              <div class="knob" data-passive><div class="knob-dial" style="--rot:-135deg"><span class="knob-ind"></span></div><span class="knob-label label">Gain</span></div>
+              <div class="knob" data-passive><div class="knob-dial" style="--rot:-121deg"><span class="knob-ind"></span></div><span class="knob-label label">Bass</span></div>
+              <div class="knob" data-passive><div class="knob-dial" style="--rot:-128deg"><span class="knob-ind"></span></div><span class="knob-label label">Mid</span></div>
+              <div class="knob" data-passive><div class="knob-dial" style="--rot:-114deg"><span class="knob-ind"></span></div><span class="knob-label label">Treble</span></div>
+              <div class="knob" data-passive><div class="knob-dial" style="--rot:-125deg"><span class="knob-ind"></span></div><span class="knob-label label">Volume</span></div>
             </div>
           </div>
         </div>
