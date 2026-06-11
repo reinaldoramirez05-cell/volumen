@@ -99,13 +99,15 @@
     }
     /* black corner protectors (quarter-round caps, clipped by the box radius) */
     .amp-corners {
+      --cap: 26px;
+      --capbox: 40px;
       position: absolute; inset: 0; border-radius: 14px;
       pointer-events: none;
       background:
-        radial-gradient(circle 26px at 0 0,       #1d1d1d 55%, #0b0b0b 96%, transparent) top left     / 40px 40px no-repeat,
-        radial-gradient(circle 26px at 100% 0,    #1d1d1d 55%, #0b0b0b 96%, transparent) top right    / 40px 40px no-repeat,
-        radial-gradient(circle 26px at 0 100%,    #1d1d1d 55%, #0b0b0b 96%, transparent) bottom left  / 40px 40px no-repeat,
-        radial-gradient(circle 26px at 100% 100%, #1d1d1d 55%, #0b0b0b 96%, transparent) bottom right / 40px 40px no-repeat;
+        radial-gradient(circle var(--cap) at 0 0,       #1d1d1d 55%, #0b0b0b 96%, transparent) top left     / var(--capbox) var(--capbox) no-repeat,
+        radial-gradient(circle var(--cap) at 100% 0,    #1d1d1d 55%, #0b0b0b 96%, transparent) top right    / var(--capbox) var(--capbox) no-repeat,
+        radial-gradient(circle var(--cap) at 0 100%,    #1d1d1d 55%, #0b0b0b 96%, transparent) bottom left  / var(--capbox) var(--capbox) no-repeat,
+        radial-gradient(circle var(--cap) at 100% 100%, #1d1d1d 55%, #0b0b0b 96%, transparent) bottom right / var(--capbox) var(--capbox) no-repeat;
     }
     /* cream face filling the front, framed by tolex */
     .amp-face {
@@ -352,15 +354,34 @@
       .switch { width: 50px; height: 78px; }
       .rocker { padding: 9px 0; }
     }
+    /* phones: stay a wide, low-profile head — one row, scaled-down hardware */
     @media (max-width: 480px) {
-      .amp { width: min(92vw, 360px); }
-      .amp-panel { flex-wrap: wrap; gap: 8px; row-gap: 12px; }
-      .amp-knobs { gap: 8px; padding: 8px; }
-      .amp-power { order: 1; }            /* knob bank first row, power + jack below */
-      .amp-jack-unit { order: 2; }
+      .amp { width: min(94vw, 400px); padding: 12px; border-radius: 12px; }
+      .amp-corners { --cap: 18px; --capbox: 28px; border-radius: 12px; }
+      .amp-handle { height: 24px; top: -12px; border-width: 4px; }
+      .amp-face { padding: 10px 14px 12px; gap: 8px; }
+      .amp-logo { font-size: 15px; padding: 2px 9px 1px; border-width: 1.5px; }
       .amp-model { display: none; }
-      .knob-dial { width: 36px; height: 36px; }
-      .knob-label { font-size: 8px; }
+      .amp-crest { width: 20px; height: 20px; font-size: 12px; border-width: 1.5px; }
+      .amp-panel { flex-wrap: nowrap; gap: 8px; padding: 8px; }
+      .amp-power { gap: 6px; }
+      .pilot { width: 10px; height: 10px; border-width: 1.5px; }
+      .amp-knobs { gap: 6px; padding: 6px 8px; }
+      .knob { gap: 5px; }
+      .knob-dial { width: 26px; height: 26px; }
+      .knob-label { font-size: 7px; letter-spacing: .06em; }
+      .switch-unit { gap: 4px; }
+      .switch-label { font-size: 8px; }
+      .switch { width: 36px; height: 56px; border-radius: 7px; }
+      .switch-well { inset: 4px; }
+      .rocker { inset: 2px; padding: 6px 0; }
+      .glyph-o { width: 9px; height: 9px; border-width: 2px; }
+      .glyph-i { width: 2px; height: 10px; }
+      .amp-jack-unit { display: none; }   /* decorative — clutter at this size */
+    }
+    @media (max-width: 350px) {
+      .knob-dial { width: 23px; height: 23px; }
+      .amp-knobs { gap: 5px; }
     }
     @media (prefers-reduced-motion: reduce) {
       .switch.ready .rocker { animation: none; }
