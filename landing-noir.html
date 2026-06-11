@@ -516,6 +516,17 @@
     .scroll-hint { margin-top: 0; display: flex; align-items: center; gap: 12px; }
     .scroll-hint .bar { width: 36px; height: 1px; background: var(--red); transform-origin: left; animation: pulse 2.4s ease-in-out infinite; }
     @keyframes pulse { 0%,100%{opacity:.3;transform:scaleX(.6)} 50%{opacity:1;transform:scaleX(1)} }
+    /* mobile: collapse the full-height hero so it isn't mostly empty */
+    @media (max-width: 640px) {
+      .hero {
+        min-height: auto;
+        justify-content: flex-start;
+        gap: clamp(36px, 8vh, 64px);
+        padding-top: 92px;
+        padding-bottom: 40px;
+      }
+      .hero-sub { margin-top: clamp(20px, 4vw, 32px); }
+    }
 
     /* elements hidden only when JS-driven animation is active */
     .js-anim .hero [data-anim] { opacity: 0; }
