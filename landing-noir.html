@@ -233,21 +233,21 @@
     /* the chrome bat — pivots at the bushing, sweeps out toward you on flip */
     .toggle-lever {
       position: absolute; left: 50%; bottom: 50%;
-      width: 11px; height: 38px;
-      margin-left: -5.5px;
+      width: 9px; height: 30px;
+      margin-left: -4.5px;
       transform-origin: 50% 100%;
       transform: rotateX(-142deg);          /* OFF: thrown down */
       transition: transform .38s cubic-bezier(.4, 1.6, .5, 1);
-      border-radius: 5px 5px 3px 3px;
+      border-radius: 4px;
       background: linear-gradient(90deg, #6e6e6e, #fbfbfb 38%, #d6d6d6 55%, #777);
     }
-    .toggle-lever::before {                 /* ball tip */
-      content: ''; position: absolute; left: 50%; top: -8px;
-      width: 17px; height: 17px;
-      margin-left: -8.5px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 28%, #fff, #d0d0d0 45%, #8c8c8c 85%, #747474);
-      box-shadow: 0 1px 3px rgba(0,0,0,.35);
+    .toggle-lever::before {                 /* flared bat end — rounded slab, no ball */
+      content: ''; position: absolute; left: 50%; top: -9px;
+      width: 15px; height: 20px;
+      margin-left: -7.5px;
+      border-radius: 7px 7px 6px 6px;
+      background: linear-gradient(90deg, #696969, #f8f8f8 36%, #cfcfcf 58%, #707070);
+      box-shadow: 0 1px 3px rgba(0,0,0,.35), inset 0 1px 1px rgba(255,255,255,.55);
     }
     /* unlocked: green pulse around the nut */
     .switch.ready { cursor: pointer; }
