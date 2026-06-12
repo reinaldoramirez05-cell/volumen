@@ -16,3 +16,7 @@ Thumbs.db
 
 # Temp PR bodies
 .pr-body.tmp.md
+
+# Camera originals (multi-MB) — only the web-optimized copies are tracked
+photos/DSC_*
+photos/Untitled-*
