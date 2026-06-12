@@ -414,6 +414,93 @@
     }
 
     /* ═════════════════════════════════════════
+       LIGHTBOX — click a frame for the story
+    ═════════════════════════════════════════ */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 950;
+      display: flex;
+      background: rgba(5,5,5,.97);
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity .35s ease, visibility 0s linear .35s;
+    }
+    .lightbox.open {
+      opacity: 1; visibility: visible; pointer-events: auto;
+      transition: opacity .35s ease;
+    }
+    .lb-stage {
+      flex: 1; min-width: 0;
+      display: flex; align-items: center; justify-content: center;
+      padding: clamp(16px, 4vw, 56px);
+      cursor: zoom-out;
+    }
+    .lb-stage img {
+      max-width: 100%;
+      max-height: calc(100vh - clamp(32px, 8vw, 112px));
+      object-fit: contain;
+      box-shadow: 0 30px 80px rgba(0,0,0,.8);
+      cursor: default;
+    }
+    .lb-info {
+      flex: 0 0 auto;
+      width: min(330px, 36vw);
+      display: flex; flex-direction: column; gap: 18px;
+      padding: clamp(20px, 3vw, 40px) clamp(18px, 2.4vw, 32px);
+      border-left: 1px solid var(--line);
+      overflow-y: auto;
+    }
+    .lb-num { color: var(--red); }
+    .lb-title {
+      font-family: var(--font-disp);
+      font-size: clamp(26px, 2.6vw, 40px);
+      font-weight: 400;
+      line-height: .95;
+      letter-spacing: .02em;
+      color: var(--ink);
+    }
+    .lb-rows { display: flex; flex-direction: column; margin: 0; }
+    .lb-row {
+      display: flex; justify-content: space-between; align-items: baseline; gap: 14px;
+      padding: 10px 0;
+      border-top: 1px solid var(--line);
+    }
+    .lb-row[hidden] { display: none; }
+    .lb-row dd {
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--ink);
+      text-align: right;
+    }
+    .lb-desc {
+      font-size: 13.5px; line-height: 1.7;
+      color: var(--quiet);
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+    }
+    .lb-btn {
+      background: none;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em;
+      padding: 9px 16px;
+      cursor: pointer;
+      transition: border-color .3s, color .3s;
+    }
+    .lb-btn:hover, .lb-btn:focus-visible { border-color: var(--red); color: var(--red); outline: none; }
+    .lb-close { position: absolute; top: 16px; right: 16px; z-index: 2; }
+    .lb-nav { margin-top: auto; display: flex; justify-content: space-between; gap: 10px; }
+    .fig { cursor: pointer; }
+    @media (max-width: 760px) {
+      .lightbox { flex-direction: column; overflow-y: auto; }
+      .lb-stage { flex: 0 0 auto; padding: 56px 14px 14px; }
+      .lb-stage img { max-height: 60vh; }
+      .lb-info { width: 100%; border-left: none; border-top: 1px solid var(--line); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .lightbox { transition: none; }
+    }
+
+    /* ═════════════════════════════════════════
        CUSTOM CURSOR
     ═════════════════════════════════════════ */
     .cursor {
@@ -662,6 +749,31 @@
       </div>
       <div class="intro-hint label" id="intro-hint" data-en="Flip the switch" data-es="Activa el interruptor">Flip the switch</div>
     </div>
+  </div>
+
+  <!-- ── LIGHTBOX ─────────────────────────── -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo detail" aria-hidden="true">
+    <button class="lb-btn lb-close" id="lb-close" aria-label="Close">✕</button>
+    <div class="lb-stage" id="lb-stage"><img id="lb-img" src="" alt=""></div>
+    <aside class="lb-info">
+      <span class="lb-num label" id="lb-num"></span>
+      <h2 class="lb-title" id="lb-title"></h2>
+      <dl class="lb-rows">
+        <div class="lb-row" id="lb-row-loc" hidden>
+          <dt class="label" data-en="Location" data-es="Lugar">Location</dt>
+          <dd id="lb-loc"></dd>
+        </div>
+        <div class="lb-row" id="lb-row-date" hidden>
+          <dt class="label" data-en="Taken on" data-es="Fecha">Taken on</dt>
+          <dd id="lb-date"></dd>
+        </div>
+      </dl>
+      <p class="lb-desc" id="lb-desc"></p>
+      <div class="lb-nav">
+        <button class="lb-btn" id="lb-prev" aria-label="Previous photo">←</button>
+        <button class="lb-btn" id="lb-next" aria-label="Next photo">→</button>
+      </div>
+    </aside>
   </div>
 
   <!-- ── CURSOR + GRAIN ───────────────────── -->
@@ -1025,11 +1137,137 @@
       });
     }
 
+    /* ── LIGHTBOX (click a frame → photo + story) ──
+       Keyed by photo filename. loc/date rows only render when present —
+       fill them in as real venue/date info comes together. */
+    const PHOTO_META = {
+      'concert-wide':     { loc: 'Mohawk · Austin, TX',
+                            en: 'Full house under the rig — the wide view a second before the lights drop.',
+                            es: 'Sala llena bajo las luces — la vista amplia un segundo antes del apagón.' },
+      'singer-swirl':     { en: 'Vocals mid-spin while the lights smear into color.',
+                            es: 'La voz en pleno giro mientras las luces se funden en color.' },
+      'guitarist-floor':  { en: 'Shot from the floor, strings first — the riff up close.',
+                            es: 'Tomada desde el suelo, primero las cuerdas — el riff de cerca.' },
+      'drummer-neon':     { en: 'The kit glowing neon, sticks caught between beats.',
+                            es: 'La batería en neón, las baquetas entre golpe y golpe.' },
+      'viloria-crowd':    { en: 'The crowd carrying the chorus back to the stage.',
+                            es: 'El público devolviendo el coro al escenario.' },
+      'singer-bw':        { en: 'A quiet portrait between songs, all grain and breath.',
+                            es: 'Un retrato en calma entre canciones, puro grano y aliento.' },
+      'guitarist-stage':  { en: 'Stage right, head down, lost in the take.',
+                            es: 'Lado derecho del escenario, cabeza abajo, perdido en la toma.' },
+      'drummer-rear':     { en: 'From behind the kit — the drummer’s view of the room.',
+                            es: 'Desde atrás de la batería — la sala como la ve el baterista.' },
+      'singer-closeup':   { en: 'Close enough to hear the inhale before the line.',
+                            es: 'Tan cerca que se oye la inhalación antes del verso.' },
+      'guitarist-tent':   { en: 'Warm festival light under the tent, mid-solo.',
+                            es: 'Luz cálida de festival bajo la carpa, en pleno solo.' },
+      'wide-stage-view':  { en: 'Blue wash over the whole stage at 9:47 PM.',
+                            es: 'Luz azul sobre todo el escenario a las 9:47 PM.' },
+      'singer-spotlight': { en: 'Head back, note held, one spotlight doing all the work.',
+                            es: 'Cabeza atrás, nota sostenida, un solo reflector haciendo todo el trabajo.' },
+      'crowd-reach':      { en: 'Leaning into a sea of raised hands and phone lights.',
+                            es: 'Inclinado sobre un mar de manos alzadas y luces de celular.' },
+      'frontman-vinyl':   { en: 'Vinyl, glitter and attitude — a frontman built for flash.',
+                            es: 'Vinilo, brillo y actitud — un frontman hecho para el flash.' },
+      'drummer-overhead': { en: 'The kit from above, cymbals splitting orange and teal.',
+                            es: 'La batería desde arriba, los platillos partiendo naranja y turquesa.' },
+      'jumpsuit-duo':     { en: 'Two jumpsuits trading riffs under blue light.',
+                            es: 'Dos overoles intercambiando riffs bajo luz azul.' },
+      'dancers-bw':       { en: 'The dance floor mid-song — hair, motion and flash.',
+                            es: 'La pista en plena canción — pelo, movimiento y flash.' },
+      'singer-green':     { en: 'Crouched at the mic in green and magenta.',
+                            es: 'En cuclillas al micrófono entre verde y magenta.' },
+      'bassist-sequins':  { en: 'Sequins catching every stray beam of stage light.',
+                            es: 'Lentejuelas atrapando cada rayo perdido de luz.' },
+      'drummer-bw':       { en: 'Mid-hit, eyes shut, nothing held back.',
+                            es: 'En pleno golpe, ojos cerrados, sin guardarse nada.' },
+      'outdoor-smoke':    { en: 'Open air, purple smoke, the crowd pressed to the stage.',
+                            es: 'Aire libre, humo púrpura, el público pegado al escenario.' },
+      'bassist-noir':     { en: 'Chains, fishnet and low end in deep blue.',
+                            es: 'Cadenas, redes y graves profundos en azul oscuro.' },
+      'guitarist-bw':     { en: 'Flash-lit punk — stars on the strap, skulls on the arm.',
+                            es: 'Punk a puro flash — estrellas en la correa, calaveras en el brazo.' },
+      'band-monochrome':  { en: 'Last song of the night, everyone giving what’s left.',
+                            es: 'Última canción de la noche, todos dando lo que queda.' }
+    };
+
+    function setupLightbox() {
+      const lb = document.getElementById('lightbox');
+      if (!lb || !gallery) return;
+      const figs   = Array.prototype.slice.call(gallery.querySelectorAll('.fig'));
+      const img    = document.getElementById('lb-img');
+      const numEl  = document.getElementById('lb-num');
+      const title  = document.getElementById('lb-title');
+      const locRow = document.getElementById('lb-row-loc');
+      const locDd  = document.getElementById('lb-loc');
+      const dateRow= document.getElementById('lb-row-date');
+      const dateDd = document.getElementById('lb-date');
+      const descEl = document.getElementById('lb-desc');
+      let idx = -1, lastFocus = null;
+
+      const keyFor = (fig) => {
+        const src = fig.querySelector('img').getAttribute('src') || '';
+        return src.split('/').pop().replace(/\.(jpe?g|png|webp)$/i, '');
+      };
+
+      function render(i) {
+        idx = (i + figs.length) % figs.length;
+        const fig  = figs[idx];
+        const fimg = fig.querySelector('img');
+        const meta = PHOTO_META[keyFor(fig)] || {};
+        const lang = document.documentElement.lang === 'es' ? 'es' : 'en';
+        img.src = fimg.getAttribute('src');
+        img.alt = fimg.alt || '';
+        numEl.textContent = String(idx + 1).padStart(2, '0') + ' / ' + figs.length;
+        const where = fig.querySelector('.where');
+        title.textContent = where ? where.textContent : '';
+        if (meta.loc)  { locDd.textContent  = meta.loc;  locRow.hidden  = false; } else { locRow.hidden  = true; }
+        if (meta.date) { dateDd.textContent = meta.date; dateRow.hidden = false; } else { dateRow.hidden = true; }
+        descEl.textContent = meta[lang] || '';
+        if (ANIM) G.fromTo([img, '.lb-info'],
+          { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out', stagger: 0.06 });
+      }
+
+      function open(i) {
+        lastFocus = document.activeElement;
+        render(i);
+        lb.classList.add('open');
+        lb.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        if (lenis) lenis.stop();
+        try { document.getElementById('lb-close').focus({ preventScroll: true }); } catch (e) {}
+      }
+      function close() {
+        lb.classList.remove('open');
+        lb.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (lenis) lenis.start();
+        if (lastFocus) { try { lastFocus.focus({ preventScroll: true }); } catch (e) {} }
+      }
+
+      figs.forEach((fig, i) => fig.addEventListener('click', () => open(i)));
+      document.getElementById('lb-close').addEventListener('click', close);
+      document.getElementById('lb-prev').addEventListener('click', () => render(idx - 1));
+      document.getElementById('lb-next').addEventListener('click', () => render(idx + 1));
+      // clicking the dark stage (not the photo) closes
+      document.getElementById('lb-stage').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) close();
+      });
+      window.addEventListener('keydown', (e) => {
+        if (!lb.classList.contains('open')) return;
+        if (e.key === 'Escape') close();
+        else if (e.key === 'ArrowLeft') render(idx - 1);
+        else if (e.key === 'ArrowRight') render(idx + 1);
+      });
+    }
+
     /* ── BOOT ── */
     wrapMedia();
     setupReveals();
     setupHeroMotion();
     setupLiquid();
+    setupLightbox();
     if (document.readyState === 'complete') startIntro();
     else window.addEventListener('load', startIntro);
   </script>
