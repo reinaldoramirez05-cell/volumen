@@ -573,8 +573,13 @@
       flex-direction: column;
       justify-content: space-between;   /* spread eyebrow / statement / cue — kills dead center */
       padding: 124px var(--pad) 64px;
-      max-width: 1200px;
+      /* full-bleed so the cursor glow tracks across the whole viewport, not a
+         left-aligned 1200px box (which clipped the red glow on wide screens) */
     }
+    /* content stays in the same left 1200px column it occupied before — only the
+       glow + hover area now span the full width. child combinator beats the
+       later `.hero-mid { max-width:100% }` rule. */
+    .hero > .label, .hero > .hero-mid, .hero > .scroll-hint { width: 100%; max-width: calc(1200px - 2 * var(--pad)); }
     .hero > * { position: relative; z-index: 1; }
     /* cursor-tracking spotlight — the empty black becomes interactive */
     .hero-glow {
