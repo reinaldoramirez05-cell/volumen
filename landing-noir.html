@@ -678,6 +678,36 @@
     .gallery.grid .fig:hover { opacity: 1; }
 
     /* ═════════════════════════════════════════
+       COMMUNITY PICKS
+    ═════════════════════════════════════════ */
+    .community { border-top: 1px solid var(--line); padding: clamp(48px, 8vw, 96px) var(--pad); }
+    .community .section-header { display: flex; flex-direction: column; gap: 10px; margin-bottom: clamp(24px, 4vw, 44px); }
+    .community .section-title { font-family: var(--font-disp); font-size: clamp(32px, 6vw, 64px); font-weight: 400; line-height: 1; letter-spacing: 0.01em; }
+    .community .section-sub { color: var(--quiet); font-size: 13px; max-width: 480px; }
+
+    .pick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 4px; }
+    .pick-card { position: relative; margin: 0; aspect-ratio: 1 / 1; overflow: hidden; }
+    .pick-card img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.92); transition: filter 0.4s, transform 0.6s; }
+    .pick-card:hover img { filter: brightness(1.05); transform: scale(1.03); }
+
+    .pick-vote {
+      position: absolute; left: 10px; bottom: 10px; display: flex; align-items: center; gap: 6px;
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; color: var(--ink);
+      background: rgba(0,0,0,0.55); border: 1px solid var(--line); border-radius: 999px;
+      padding: 6px 12px; cursor: pointer; transition: border-color 0.2s, color 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .pick-vote:hover, .pick-vote:focus-visible { border-color: var(--ink); }
+    .pick-vote .pick-heart { font-size: 12px; line-height: 1; transition: color 0.2s, transform 0.2s; }
+    .pick-vote.voted { border-color: var(--red); color: var(--red); }
+    .pick-vote.voted .pick-heart { color: var(--red); transform: scale(1.15); }
+    .pick-vote .pick-count { font-variant-numeric: tabular-nums; }
+
+    @media (max-width: 720px) {
+      .pick-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ═════════════════════════════════════════
        FOOTER
     ═════════════════════════════════════════ */
     footer {
@@ -864,6 +894,49 @@
     <figure class="fig wide"><img src="photos/band-monochrome.jpg" alt="Full band on stage" loading="lazy"><figcaption><span class="where">And Then It Was Over</span><span class="num">24</span></figcaption></figure>
   </section>
 
+  <!-- ── COMMUNITY PICKS ──────────────────── -->
+  <section class="community" id="community">
+    <div class="section-header">
+      <span class="label" data-en="Community" data-es="Comunidad">Community</span>
+      <h2 class="section-title" data-en="Community Picks" data-es="Favoritas">Community Picks</h2>
+      <p class="section-sub" data-en="Vote for your favorite shot." data-es="Vota por tu foto favorita.">Vote for your favorite shot.</p>
+    </div>
+    <div class="pick-grid">
+      <figure class="pick-card" data-key="singer-spotlight">
+        <img src="photos/singer-spotlight.jpg" alt="Vocalist head back under a white spotlight" loading="lazy">
+        <button class="pick-vote" aria-label="Vote for this photo"><span class="pick-heart">♥</span><span class="pick-count">0</span></button>
+      </figure>
+      <figure class="pick-card" data-key="crowd-reach">
+        <img src="photos/crowd-reach.jpg" alt="Guitarist leaning over a crowd of raised hands and phones" loading="lazy">
+        <button class="pick-vote" aria-label="Vote for this photo"><span class="pick-heart">♥</span><span class="pick-count">0</span></button>
+      </figure>
+      <figure class="pick-card" data-key="frontman-vinyl">
+        <img src="photos/frontman-vinyl.jpg" alt="Frontman in vinyl pants gripping the mic, backlit" loading="lazy">
+        <button class="pick-vote" aria-label="Vote for this photo"><span class="pick-heart">♥</span><span class="pick-count">0</span></button>
+      </figure>
+      <figure class="pick-card" data-key="drummer-overhead">
+        <img src="photos/drummer-overhead.jpg" alt="Drummer from above, cymbals in orange and teal" loading="lazy">
+        <button class="pick-vote" aria-label="Vote for this photo"><span class="pick-heart">♥</span><span class="pick-count">0</span></button>
+      </figure>
+      <figure class="pick-card" data-key="dancers-bw">
+        <img src="photos/dancers-bw.jpg" alt="Dancers mid-motion at a bar show, black and white" loading="lazy">
+        <button class="pick-vote" aria-label="Vote for this photo"><span class="pick-heart">♥</span><span class="pick-count">0</span></button>
+      </figure>
+      <figure class="pick-card" data-key="bassist-sequins">
+        <img src="photos/bassist-sequins.jpg" alt="Bassist in a sequined dress under warm stage light" loading="lazy">
+        <button class="pick-vote" aria-label="Vote for this photo"><span class="pick-heart">♥</span><span class="pick-count">0</span></button>
+      </figure>
+      <figure class="pick-card" data-key="outdoor-smoke">
+        <img src="photos/outdoor-smoke.jpg" alt="Performer facing an outdoor crowd through purple smoke" loading="lazy">
+        <button class="pick-vote" aria-label="Vote for this photo"><span class="pick-heart">♥</span><span class="pick-count">0</span></button>
+      </figure>
+      <figure class="pick-card" data-key="band-monochrome">
+        <img src="photos/band-monochrome.jpg" alt="Full band on stage" loading="lazy">
+        <button class="pick-vote" aria-label="Vote for this photo"><span class="pick-heart">♥</span><span class="pick-count">0</span></button>
+      </figure>
+    </div>
+  </section>
+
   <!-- ── FOOTER ───────────────────────────── -->
   <footer>
     <div class="by">
@@ -940,9 +1013,7 @@
 
     /* ── INTRO: AMP POWER SWITCH GATE (one flip to enter) ── */
     function startIntro() {
-      const seen = sessionStorage.getItem('volumen-intro');
-      if (!ANIM || !intro || seen) { finishIntroInstant(); return; }
-      sessionStorage.setItem('volumen-intro', '1');
+      if (!ANIM || !intro) { finishIntroInstant(); return; }
       enableOn();
     }
 
@@ -1279,12 +1350,42 @@
       }, { passive: true });
     }
 
+    /* ── COMMUNITY PICKS: client-side vote toggle ── */
+    function setupCommunity() {
+      const KEY = 'volumen-picks';
+      const SEED_KEY = 'volumen-picks-seed';
+      const cards = document.querySelectorAll('.pick-card');
+      if (!cards.length) return;
+      const votes = JSON.parse(localStorage.getItem(KEY) || '{}');
+      const seeds = JSON.parse(localStorage.getItem(SEED_KEY) || '{}');
+      cards.forEach((card) => {
+        const k = card.dataset.key;
+        if (!(k in seeds)) seeds[k] = 12 + Math.floor(Math.random() * 30);
+        const btn = card.querySelector('.pick-vote');
+        const countEl = card.querySelector('.pick-count');
+        const sync = () => {
+          const voted = !!votes[k];
+          countEl.textContent = String(seeds[k] + (voted ? 1 : 0));
+          btn.classList.toggle('voted', voted);
+        };
+        sync();
+        btn.addEventListener('click', () => {
+          votes[k] = !votes[k];
+          localStorage.setItem(KEY, JSON.stringify(votes));
+          sync();
+          if (navigator.vibrate) { try { navigator.vibrate(10); } catch (e) {} }
+        });
+      });
+      localStorage.setItem(SEED_KEY, JSON.stringify(seeds));
+    }
+
     /* ── BOOT ── */
     wrapMedia();
     setupReveals();
     setupHeroMotion();
     setupLiquid();
     setupLightbox();
+    setupCommunity();
     if (document.readyState === 'complete') startIntro();
     else window.addEventListener('load', startIntro);
   </script>
