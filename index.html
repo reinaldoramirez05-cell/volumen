@@ -659,6 +659,14 @@
     }
     .view-toggle button.active { color: var(--ink); }
     .view-toggle button.active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 1px; background: var(--red); }
+    /* jump-to-section action — sits next to the view modes but reads as a link,
+       not a third view (divider + red heart, no active underline) */
+    .view-toggle .jump-link {
+      display: inline-flex; align-items: center; gap: 7px;
+      margin-left: 2px; padding-left: 22px; border-left: 1px solid var(--line);
+    }
+    .view-toggle .jump-link:hover, .view-toggle .jump-link:focus-visible { color: var(--ink); }
+    .view-toggle .jump-link .jump-heart { color: var(--red); font-size: 12px; line-height: 1; }
 
     /* ═════════════════════════════════════════
        GALLERY
@@ -884,6 +892,10 @@
     <div class="view-toggle">
       <button id="view-flow" class="active" data-en="Flow" data-es="Flujo">Flow</button>
       <button id="view-grid" data-en="Grid" data-es="Cuadrícula">Grid</button>
+      <button id="jump-community" class="jump-link" aria-label="Jump to Community Picks">
+        <span class="jump-heart" aria-hidden="true">♥</span>
+        <span data-en="Community Picks" data-es="Favoritas">Community Picks</span>
+      </button>
     </div>
   </div>
 
@@ -1124,6 +1136,17 @@
     flowBtn.addEventListener('click', () => setView('flow', true));
     gridBtn.addEventListener('click', () => setView('grid', true));
     applyView(localStorage.getItem('volumen-view') || 'flow');
+
+    /* Community Picks: smooth-scroll to the voting section (offset clears the
+       sticky controls bar). Uses Lenis when active, native scroll otherwise. */
+    const jumpBtn = document.getElementById('jump-community');
+    const community = document.getElementById('community');
+    if (jumpBtn && community) {
+      jumpBtn.addEventListener('click', () => {
+        if (lenis) lenis.scrollTo(community, { offset: -64 });
+        else community.scrollIntoView({ behavior: REDUCE ? 'auto' : 'smooth' });
+      });
+    }
 
     /* ── CUSTOM CURSOR ── */
     if (HAS_HOVER && ANIM) {
