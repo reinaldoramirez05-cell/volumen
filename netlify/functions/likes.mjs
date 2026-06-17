@@ -37,7 +37,10 @@ function json(body, status = 200) {
 export default async (req) => {
   let store;
   try {
-    store = getStore(storeName());
+    // strong consistency = read-after-write. Without it Blobs is eventually
+    // consistent and a read right after a like can still see the old value,
+    // which would break the increment and the leaderboard ordering.
+    store = getStore({ name: storeName(), consistency: 'strong' });
   } catch (err) {
     return json({ error: 'store unavailable' }, 503);
   }
