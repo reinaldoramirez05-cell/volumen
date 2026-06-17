@@ -446,14 +446,14 @@
     .lb-stage {
       flex: 1; min-width: 0;
       display: flex; align-items: center; justify-content: center;
-      padding: clamp(16px, 4vw, 56px);
+      padding: clamp(12px, 2.5vw, 40px);
       cursor: zoom-out;
     }
     .lb-stage img {
       max-width: 100%;
-      max-height: calc(100vh - clamp(32px, 8vw, 112px));
+      max-height: calc(100vh - clamp(24px, 5vw, 72px));
       object-fit: contain;
-      box-shadow: 0 30px 80px rgba(0,0,0,.8);
+      box-shadow: 0 40px 110px rgba(0,0,0,.85);
       cursor: default;
     }
     .lb-info {
@@ -519,10 +519,17 @@
     .lb-like .lb-like-count { font-variant-numeric: tabular-nums; opacity: .85; }
     .fig { cursor: pointer; }
     @media (max-width: 760px) {
+      /* photo gets the whole space above the info and sits dead-centre in it —
+         no more empty black void at the bottom */
       .lightbox { flex-direction: column; overflow-y: auto; }
-      .lb-stage { flex: 0 0 auto; padding: 56px 14px 14px; }
-      .lb-stage img { max-height: 60vh; }
-      .lb-info { width: 100%; border-left: none; border-top: 1px solid var(--line); }
+      .lb-stage { flex: 1 1 auto; min-height: 0; padding: 52px 10px 12px; }
+      .lb-stage img { max-width: 100%; max-height: 100%; }
+      .lb-info {
+        width: 100%; flex: 0 0 auto; max-height: 46vh;
+        gap: 12px; padding: 16px 18px 18px;
+        border-left: none; border-top: 1px solid var(--line);
+      }
+      .lb-info .lb-title { font-size: clamp(24px, 7.5vw, 32px); }
     }
     @media (prefers-reduced-motion: reduce) {
       .lightbox { transition: none; }
@@ -705,28 +712,6 @@
     .fig figcaption .num { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); font-variant-numeric: tabular-nums; }
     .fig::after { content:''; position:absolute; inset:0; background: linear-gradient(to top, rgba(0,0,0,.55), transparent 40%); opacity:0; transition: opacity .4s; pointer-events:none; }
     .fig:hover::after { opacity: 1; }
-
-    /* Instagram-style like on each gallery frame. Hidden until hover on desktop,
-       always shown on touch (no hover) and whenever already liked. Sits above the
-       photo; click is intercepted so it doesn't open the lightbox. */
-    .fig-like {
-      position: absolute; top: 12px; right: 12px; z-index: 3;
-      display: inline-flex; align-items: center; gap: 6px;
-      font-family: var(--font-mono); font-size: 11px; letter-spacing: .04em;
-      color: #fff; background: rgba(0,0,0,0.45);
-      border: 1px solid rgba(255,255,255,0.18); border-radius: 999px;
-      padding: 6px 11px; cursor: pointer; -webkit-tap-highlight-color: transparent;
-      opacity: 0; transform: translateY(-4px);
-      transition: opacity .35s, transform .35s, border-color .2s, color .2s, background .2s;
-      -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
-    }
-    .fig:hover .fig-like, .fig-like.liked, .fig-like:focus-visible { opacity: 1; transform: translateY(0); }
-    .fig-like:hover { border-color: #fff; }
-    .fig-like .fig-heart { font-size: 13px; line-height: 1; color: rgba(255,255,255,.85); transition: color .2s, transform .2s; }
-    .fig-like.liked { border-color: var(--red); color: var(--red); background: rgba(0,0,0,0.6); }
-    .fig-like.liked .fig-heart { color: var(--red); transform: scale(1.18); }
-    .fig-like .fig-like-count { font-variant-numeric: tabular-nums; }
-    @media (hover: none) { .fig-like { opacity: 1; transform: none; } }
 
     .gallery.flow { display: flex; flex-direction: column; align-items: center; gap: clamp(22px, 4vw, 64px); padding-top: clamp(28px, 4vw, 56px); padding-bottom: clamp(48px, 8vw, 110px); }
     .gallery.flow .fig { width: 100%; max-width: 1040px; }
@@ -1396,30 +1381,6 @@
       return { load, toggle, subscribe, count, isLiked, fmt, setOnChange: (fn) => { onChange = fn; } };
     })();
 
-    /* inject an Instagram-style heart onto every gallery frame */
-    function setupGalleryLikes() {
-      if (!gallery) return;
-      gallery.querySelectorAll('.fig').forEach((fig) => {
-        if (fig.querySelector('.fig-like')) return;
-        const key = keyOfFig(fig);
-        if (!key) return;
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'fig-like';
-        btn.setAttribute('aria-label', 'Like this photo');
-        btn.innerHTML = '<span class="fig-heart" aria-hidden="true">♥</span><span class="fig-like-count"></span>';
-        fig.appendChild(btn);
-        const countEl = btn.querySelector('.fig-like-count');
-        LikeStore.subscribe(key, (n, lk) => {
-          if (!btn.isConnected) return;
-          btn.classList.toggle('liked', lk);
-          btn.setAttribute('aria-pressed', lk ? 'true' : 'false');
-          countEl.textContent = LikeStore.fmt(n);
-        });
-        btn.addEventListener('click', (e) => { e.stopPropagation(); LikeStore.toggle(key); });
-      });
-    }
-
     function setupLightbox() {
       const lb = document.getElementById('lightbox');
       if (!lb || !gallery) return;
@@ -1461,8 +1422,11 @@
         if (meta.date) { dateDd.textContent = meta.date; dateRow.hidden = false; } else { dateRow.hidden = true; }
         descEl.textContent = meta[lang] || '';
         paintLike();
-        if (ANIM) G.fromTo([img, '.lb-info'],
-          { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out', stagger: 0.06 });
+        if (ANIM) {
+          // photo expands forward for a "wow" entrance; info settles in just after
+          G.fromTo(img, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'power3.out' });
+          G.fromTo('.lb-info', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', delay: 0.06 });
+        }
       }
 
       function open(i) {
@@ -1587,9 +1551,8 @@
     setupHeroMotion();
     setupLiquid();
     setupLightbox();
-    setupGalleryLikes();
     setupCommunity();
-    LikeStore.load();              // fetch global counts, then repaint every heart
+    LikeStore.load();              // fetch global counts, then repaint the hearts
     if (document.readyState === 'complete') startIntro();
     else window.addEventListener('load', startIntro);
   </script>
