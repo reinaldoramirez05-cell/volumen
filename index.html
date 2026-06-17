@@ -505,6 +505,18 @@
     .lb-btn:hover, .lb-btn:focus-visible { border-color: var(--red); color: var(--red); outline: none; }
     .lb-close { position: absolute; top: 16px; right: 16px; z-index: 2; }
     .lb-nav { margin-top: auto; display: flex; justify-content: space-between; gap: 10px; }
+    .lb-like {
+      display: inline-flex; align-items: center; gap: 9px; align-self: flex-start;
+      font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--ink); background: none; border: 1px solid var(--line); border-radius: 999px;
+      padding: 9px 16px; cursor: pointer; transition: border-color .25s, color .25s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .lb-like:hover, .lb-like:focus-visible { border-color: var(--red); color: var(--red); outline: none; }
+    .lb-like .lb-heart { font-size: 14px; line-height: 1; transition: transform .2s, color .2s; }
+    .lb-like.liked { border-color: var(--red); color: var(--red); }
+    .lb-like.liked .lb-heart { color: var(--red); transform: scale(1.18); }
+    .lb-like .lb-like-count { font-variant-numeric: tabular-nums; opacity: .85; }
     .fig { cursor: pointer; }
     @media (max-width: 760px) {
       .lightbox { flex-direction: column; overflow-y: auto; }
@@ -694,6 +706,28 @@
     .fig::after { content:''; position:absolute; inset:0; background: linear-gradient(to top, rgba(0,0,0,.55), transparent 40%); opacity:0; transition: opacity .4s; pointer-events:none; }
     .fig:hover::after { opacity: 1; }
 
+    /* Instagram-style like on each gallery frame. Hidden until hover on desktop,
+       always shown on touch (no hover) and whenever already liked. Sits above the
+       photo; click is intercepted so it doesn't open the lightbox. */
+    .fig-like {
+      position: absolute; top: 12px; right: 12px; z-index: 3;
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: .04em;
+      color: #fff; background: rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.18); border-radius: 999px;
+      padding: 6px 11px; cursor: pointer; -webkit-tap-highlight-color: transparent;
+      opacity: 0; transform: translateY(-4px);
+      transition: opacity .35s, transform .35s, border-color .2s, color .2s, background .2s;
+      -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+    }
+    .fig:hover .fig-like, .fig-like.liked, .fig-like:focus-visible { opacity: 1; transform: translateY(0); }
+    .fig-like:hover { border-color: #fff; }
+    .fig-like .fig-heart { font-size: 13px; line-height: 1; color: rgba(255,255,255,.85); transition: color .2s, transform .2s; }
+    .fig-like.liked { border-color: var(--red); color: var(--red); background: rgba(0,0,0,0.6); }
+    .fig-like.liked .fig-heart { color: var(--red); transform: scale(1.18); }
+    .fig-like .fig-like-count { font-variant-numeric: tabular-nums; }
+    @media (hover: none) { .fig-like { opacity: 1; transform: none; } }
+
     .gallery.flow { display: flex; flex-direction: column; align-items: center; gap: clamp(22px, 4vw, 64px); padding-top: clamp(28px, 4vw, 56px); padding-bottom: clamp(48px, 8vw, 110px); }
     .gallery.flow .fig { width: 100%; max-width: 1040px; }
     .gallery.flow .fig.wide { max-width: 1280px; aspect-ratio: 16 / 8; }
@@ -728,9 +762,17 @@
     }
     .pick-vote:hover, .pick-vote:focus-visible { border-color: var(--ink); }
     .pick-vote .pick-heart { font-size: 12px; line-height: 1; transition: color 0.2s, transform 0.2s; }
-    .pick-vote.voted { border-color: var(--red); color: var(--red); }
-    .pick-vote.voted .pick-heart { color: var(--red); transform: scale(1.15); }
+    .pick-vote.liked { border-color: var(--red); color: var(--red); }
+    .pick-vote.liked .pick-heart { color: var(--red); transform: scale(1.15); }
     .pick-vote .pick-count { font-variant-numeric: tabular-nums; }
+    /* rank badge — shows the leaderboard position (01..07) top-left of each pick */
+    .pick-rank {
+      position: absolute; top: 10px; left: 10px;
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.85); background: rgba(0,0,0,0.5);
+      border-radius: 999px; padding: 4px 9px; font-variant-numeric: tabular-nums;
+    }
+    .pick-empty { color: var(--quiet); font-size: 13px; font-family: var(--font-mono); letter-spacing: .04em; padding: 8px 0; }
 
     @media (max-width: 720px) {
       .pick-grid { grid-template-columns: repeat(2, 1fr); }
@@ -817,6 +859,11 @@
     <aside class="lb-info">
       <span class="lb-num label" id="lb-num"></span>
       <h2 class="lb-title" id="lb-title"></h2>
+      <button class="lb-like" id="lb-like" type="button" aria-pressed="false" aria-label="Like this photo">
+        <span class="lb-heart" aria-hidden="true">♥</span>
+        <span class="lb-like-word" data-en="Like" data-es="Me gusta">Like</span>
+        <span class="lb-like-count" id="lb-like-count"></span>
+      </button>
       <dl class="lb-rows">
         <div class="lb-row" id="lb-row-loc" hidden>
           <dt class="label" data-en="Location" data-es="Lugar">Location</dt>
@@ -932,42 +979,9 @@
     <div class="section-header">
       <span class="label" data-en="Community" data-es="Comunidad">Community</span>
       <h2 class="section-title" data-en="Community Picks" data-es="Favoritas">Community Picks</h2>
-      <p class="section-sub" data-en="Vote for your favorite shot." data-es="Vota por tu foto favorita.">Vote for your favorite shot.</p>
+      <p class="section-sub" data-en="The seven most-liked frames, chosen by you. Tap the heart on any shot to vote it up." data-es="Los siete cuadros con más me gusta, elegidos por ti. Toca el corazón de cualquier foto para subirla.">The seven most-liked frames, chosen by you. Tap the heart on any shot to vote it up.</p>
     </div>
-    <div class="pick-grid">
-      <figure class="pick-card" data-key="singer-spotlight">
-        <img src="photos/singer-spotlight.jpg" alt="Vocalist head back under a white spotlight" loading="lazy">
-        <button class="pick-vote" aria-label="Vote for this photo"><span class="pick-heart">♥</span><span class="pick-count">0</span></button>
-      </figure>
-      <figure class="pick-card" data-key="crowd-reach">
-        <img src="photos/crowd-reach.jpg" alt="Guitarist leaning over a crowd of raised hands and phones" loading="lazy">
-        <button class="pick-vote" aria-label="Vote for this photo"><span class="pick-heart">♥</span><span class="pick-count">0</span></button>
-      </figure>
-      <figure class="pick-card" data-key="frontman-vinyl">
-        <img src="photos/frontman-vinyl.jpg" alt="Frontman in vinyl pants gripping the mic, backlit" loading="lazy">
-        <button class="pick-vote" aria-label="Vote for this photo"><span class="pick-heart">♥</span><span class="pick-count">0</span></button>
-      </figure>
-      <figure class="pick-card" data-key="drummer-overhead">
-        <img src="photos/drummer-overhead.jpg" alt="Drummer from above, cymbals in orange and teal" loading="lazy">
-        <button class="pick-vote" aria-label="Vote for this photo"><span class="pick-heart">♥</span><span class="pick-count">0</span></button>
-      </figure>
-      <figure class="pick-card" data-key="dancers-bw">
-        <img src="photos/dancers-bw.jpg" alt="Dancers mid-motion at a bar show, black and white" loading="lazy">
-        <button class="pick-vote" aria-label="Vote for this photo"><span class="pick-heart">♥</span><span class="pick-count">0</span></button>
-      </figure>
-      <figure class="pick-card" data-key="bassist-sequins">
-        <img src="photos/bassist-sequins.jpg" alt="Bassist in a sequined dress under warm stage light" loading="lazy">
-        <button class="pick-vote" aria-label="Vote for this photo"><span class="pick-heart">♥</span><span class="pick-count">0</span></button>
-      </figure>
-      <figure class="pick-card" data-key="outdoor-smoke">
-        <img src="photos/outdoor-smoke.jpg" alt="Performer facing an outdoor crowd through purple smoke" loading="lazy">
-        <button class="pick-vote" aria-label="Vote for this photo"><span class="pick-heart">♥</span><span class="pick-count">0</span></button>
-      </figure>
-      <figure class="pick-card" data-key="band-monochrome">
-        <img src="photos/band-monochrome.jpg" alt="Full band on stage" loading="lazy">
-        <button class="pick-vote" aria-label="Vote for this photo"><span class="pick-heart">♥</span><span class="pick-count">0</span></button>
-      </figure>
-    </div>
+    <div class="pick-grid" id="pick-grid"></div>
   </section>
 
   <!-- ── FOOTER ───────────────────────────── -->
@@ -1307,6 +1321,105 @@
                             es: 'Última canción de la noche, todos dando lo que queda.' }
     };
 
+    /* photo key = filename stem, e.g. photos/singer-bw.jpg -> "singer-bw" */
+    const keyFromSrc = (src) => (src || '').split('/').pop().replace(/\.(jpe?g|png|webp)$/i, '');
+    const keyOfFig   = (fig) => keyFromSrc(fig.querySelector('img') && fig.querySelector('img').getAttribute('src'));
+
+    /* ── LIKES: shared, server-backed (Netlify Blobs) with optimistic UI ──
+       Global counts come from the serverless function; the per-photo "liked"
+       flag is kept in this browser (no accounts) so the heart stays filled on
+       return visits and acts as a one-like-per-browser guard. If the function
+       is unreachable (e.g. a plain static preview) everything still toggles
+       optimistically so the UI feels live. */
+    const LikeStore = (() => {
+      const API = '/.netlify/functions/likes';
+      const LIKED_KEY = 'volumen-liked';
+      const counts = Object.create(null);
+      let liked = {};
+      try { liked = JSON.parse(localStorage.getItem(LIKED_KEY) || '{}') || {}; } catch (e) { liked = {}; }
+      const subs = Object.create(null);   // key -> [fn(count, isLiked)]
+      const busy = Object.create(null);   // key -> in-flight guard
+      let onChange = null;
+
+      const fmt = (n) => (n > 0 ? String(n) : '');     // blank when zero
+      const count = (k) => counts[k] || 0;
+      const isLiked = (k) => !!liked[k];
+
+      function notify(k) {
+        const list = subs[k]; if (!list) return;
+        for (let i = 0; i < list.length; i++) { try { list[i](count(k), isLiked(k)); } catch (e) {} }
+      }
+      function subscribe(k, fn) {
+        (subs[k] || (subs[k] = [])).push(fn);
+        try { fn(count(k), isLiked(k)); } catch (e) {}   // initial paint
+      }
+      function persist() { try { localStorage.setItem(LIKED_KEY, JSON.stringify(liked)); } catch (e) {} }
+      function fireChange() { if (onChange) { try { onChange(); } catch (e) {} } }
+
+      async function load() {
+        try {
+          const r = await fetch(API, { headers: { accept: 'application/json' } });
+          if (r.ok) {
+            const data = await r.json();
+            const c = (data && data.counts) || {};
+            Object.keys(c).forEach((k) => { counts[k] = Number(c[k]) || 0; });
+          }
+        } catch (e) { /* offline / static preview — stay optimistic */ }
+        Object.keys(subs).forEach(notify);
+        fireChange();
+      }
+
+      async function toggle(k) {
+        if (busy[k]) return;
+        busy[k] = true;
+        const wasLiked = isLiked(k);
+        const op = wasLiked ? 'unlike' : 'like';
+        liked[k] = !wasLiked;
+        counts[k] = Math.max(0, count(k) + (wasLiked ? -1 : 1));   // optimistic
+        persist();
+        notify(k);
+        fireChange();
+        if (navigator.vibrate) { try { navigator.vibrate(wasLiked ? 8 : 14); } catch (e) {} }
+        try {
+          const r = await fetch(API, {
+            method: 'POST', headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ key: k, op }),
+          });
+          if (r.ok) {
+            const data = await r.json();
+            if (data && typeof data.count === 'number') { counts[k] = data.count; notify(k); fireChange(); }
+          }
+        } catch (e) { /* keep optimistic value */ }
+        finally { busy[k] = false; }
+      }
+
+      return { load, toggle, subscribe, count, isLiked, fmt, setOnChange: (fn) => { onChange = fn; } };
+    })();
+
+    /* inject an Instagram-style heart onto every gallery frame */
+    function setupGalleryLikes() {
+      if (!gallery) return;
+      gallery.querySelectorAll('.fig').forEach((fig) => {
+        if (fig.querySelector('.fig-like')) return;
+        const key = keyOfFig(fig);
+        if (!key) return;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'fig-like';
+        btn.setAttribute('aria-label', 'Like this photo');
+        btn.innerHTML = '<span class="fig-heart" aria-hidden="true">♥</span><span class="fig-like-count"></span>';
+        fig.appendChild(btn);
+        const countEl = btn.querySelector('.fig-like-count');
+        LikeStore.subscribe(key, (n, lk) => {
+          if (!btn.isConnected) return;
+          btn.classList.toggle('liked', lk);
+          btn.setAttribute('aria-pressed', lk ? 'true' : 'false');
+          countEl.textContent = LikeStore.fmt(n);
+        });
+        btn.addEventListener('click', (e) => { e.stopPropagation(); LikeStore.toggle(key); });
+      });
+    }
+
     function setupLightbox() {
       const lb = document.getElementById('lightbox');
       if (!lb || !gallery) return;
@@ -1319,12 +1432,19 @@
       const dateRow= document.getElementById('lb-row-date');
       const dateDd = document.getElementById('lb-date');
       const descEl = document.getElementById('lb-desc');
+      const likeBtn = document.getElementById('lb-like');
+      const likeCountEl = document.getElementById('lb-like-count');
       let idx = -1, lastFocus = null;
 
-      const keyFor = (fig) => {
-        const src = fig.querySelector('img').getAttribute('src') || '';
-        return src.split('/').pop().replace(/\.(jpe?g|png|webp)$/i, '');
-      };
+      const keyFor = (fig) => keyOfFig(fig);
+      function paintLike() {
+        if (idx < 0 || !likeBtn) return;
+        const k = keyOfFig(figs[idx]);
+        const lk = LikeStore.isLiked(k);
+        likeBtn.classList.toggle('liked', lk);
+        likeBtn.setAttribute('aria-pressed', lk ? 'true' : 'false');
+        likeCountEl.textContent = LikeStore.fmt(LikeStore.count(k));
+      }
 
       function render(i) {
         idx = (i + figs.length) % figs.length;
@@ -1340,6 +1460,7 @@
         if (meta.loc)  { locDd.textContent  = meta.loc;  locRow.hidden  = false; } else { locRow.hidden  = true; }
         if (meta.date) { dateDd.textContent = meta.date; dateRow.hidden = false; } else { dateRow.hidden = true; }
         descEl.textContent = meta[lang] || '';
+        paintLike();
         if (ANIM) G.fromTo([img, '.lb-info'],
           { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out', stagger: 0.06 });
       }
@@ -1362,6 +1483,12 @@
       }
 
       figs.forEach((fig, i) => fig.addEventListener('click', () => open(i)));
+      if (likeBtn) likeBtn.addEventListener('click', () => { if (idx >= 0) LikeStore.toggle(keyOfFig(figs[idx])); });
+      // keep the open photo's like button live if its count changes from elsewhere
+      figs.forEach((fig) => {
+        const k = keyOfFig(fig);
+        LikeStore.subscribe(k, () => { if (lb.classList.contains('open') && keyOfFig(figs[idx]) === k) paintLike(); });
+      });
       document.getElementById('lb-close').addEventListener('click', close);
       document.getElementById('lb-prev').addEventListener('click', () => render(idx - 1));
       document.getElementById('lb-next').addEventListener('click', () => render(idx + 1));
@@ -1394,33 +1521,64 @@
       }, { passive: true });
     }
 
-    /* ── COMMUNITY PICKS: client-side vote toggle ── */
+    /* ── COMMUNITY PICKS: live Top-7 leaderboard, ranked by likes ── */
     function setupCommunity() {
-      const KEY = 'volumen-picks';
-      const SEED_KEY = 'volumen-picks-seed';
-      const cards = document.querySelectorAll('.pick-card');
-      if (!cards.length) return;
-      const votes = JSON.parse(localStorage.getItem(KEY) || '{}');
-      const seeds = JSON.parse(localStorage.getItem(SEED_KEY) || '{}');
-      cards.forEach((card) => {
-        const k = card.dataset.key;
-        if (!(k in seeds)) seeds[k] = 12 + Math.floor(Math.random() * 30);
-        const btn = card.querySelector('.pick-vote');
-        const countEl = card.querySelector('.pick-count');
-        const sync = () => {
-          const voted = !!votes[k];
-          countEl.textContent = String(seeds[k] + (voted ? 1 : 0));
-          btn.classList.toggle('voted', voted);
+      const grid = document.getElementById('pick-grid');
+      if (!grid || !gallery) return;
+      const TOP = 7;
+      // the gallery frames are the source of truth for the candidate pool
+      const PHOTOS = Array.prototype.slice.call(gallery.querySelectorAll('.fig')).map((fig, i) => {
+        const img = fig.querySelector('img');
+        const where = fig.querySelector('.where');
+        return {
+          key: keyOfFig(fig),
+          src: img ? img.getAttribute('src') : '',
+          alt: img ? (img.alt || '') : '',
+          title: where ? where.textContent : '',
+          i,
         };
-        sync();
-        btn.addEventListener('click', () => {
-          votes[k] = !votes[k];
-          localStorage.setItem(KEY, JSON.stringify(votes));
-          sync();
-          if (navigator.vibrate) { try { navigator.vibrate(10); } catch (e) {} }
+      }).filter((p) => p.key);
+
+      function topSeven() {
+        return PHOTOS.slice().sort((a, b) => {
+          const d = LikeStore.count(b.key) - LikeStore.count(a.key);
+          return d !== 0 ? d : a.i - b.i;   // ties keep gallery order
+        }).slice(0, TOP);
+      }
+
+      function build() {
+        const frag = document.createDocumentFragment();
+        topSeven().forEach((p, rank) => {
+          const card = document.createElement('figure');
+          card.className = 'pick-card';
+          card.dataset.key = p.key;
+          card.innerHTML =
+            '<span class="pick-rank">' + String(rank + 1).padStart(2, '0') + '</span>' +
+            '<img src="' + p.src + '" alt="' + p.alt.replace(/"/g, '&quot;') + '" loading="lazy">' +
+            '<button class="pick-vote" type="button" aria-label="Like this photo">' +
+              '<span class="pick-heart" aria-hidden="true">♥</span>' +
+              '<span class="pick-count"></span>' +
+            '</button>';
+          const voteBtn = card.querySelector('.pick-vote');
+          const countEl = card.querySelector('.pick-count');
+          const paint = () => {
+            const lk = LikeStore.isLiked(p.key);
+            voteBtn.classList.toggle('liked', lk);
+            voteBtn.setAttribute('aria-pressed', lk ? 'true' : 'false');
+            countEl.textContent = LikeStore.fmt(LikeStore.count(p.key));
+          };
+          paint();
+          voteBtn.addEventListener('click', () => { LikeStore.toggle(p.key); paint(); });
+          frag.appendChild(card);
         });
-      });
-      localStorage.setItem(SEED_KEY, JSON.stringify(seeds));
+        grid.replaceChildren(frag);
+        if (ANIM) G.fromTo(grid.children, { opacity: 0 }, { opacity: 1, duration: 0.3, stagger: 0.02 });
+      }
+
+      // rebuild (debounced) whenever like counts change, so the ranking re-sorts
+      let t = null;
+      LikeStore.setOnChange(() => { clearTimeout(t); t = setTimeout(build, 450); });
+      build();   // initial paint (all zero -> gallery order, blank counts)
     }
 
     /* ── BOOT ── */
@@ -1429,7 +1587,9 @@
     setupHeroMotion();
     setupLiquid();
     setupLightbox();
+    setupGalleryLikes();
     setupCommunity();
+    LikeStore.load();              // fetch global counts, then repaint every heart
     if (document.readyState === 'complete') startIntro();
     else window.addEventListener('load', startIntro);
   </script>

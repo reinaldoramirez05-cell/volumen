@@ -1,0 +1,11 @@
+{
+  "name": "volumen",
+  "version": "1.0.0",
+  "description": "Volumen — bilingual rock magazine (Austin, TX). Static site + Netlify Functions.",
+  "private": true,
+  "type": "commonjs",
+  "license": "ISC",
+  "dependencies": {
+    "@netlify/blobs": "^10.7.9"
+  }
+}
