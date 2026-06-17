@@ -36,6 +36,12 @@
   to = "/events.html"
   status = 200
 
+# Retired prototype URL — its content is now the homepage (index.html)
+[[redirects]]
+  from = "/landing-noir.html"
+  to = "/"
+  status = 301
+
 # 404 fallback — branded error page instead of Spline loading screen
 [[redirects]]
   from = "/*"

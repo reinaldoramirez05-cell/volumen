@@ -64,7 +64,7 @@ export default async (req) => {
     const counts = (await store.get(BLOB_KEY, { type: 'json' })) || {};
     const cur = Number(counts[key]) || 0;
     const next = op === 'unlike' ? Math.max(0, cur - 1) : cur + 1;
-    counts[key] = next;
+    if (next > 0) counts[key] = next; else delete counts[key];   // self-cleaning: drop zeros
     await store.setJSON(BLOB_KEY, counts);
     return json({ key, count: next, counts });
   }
