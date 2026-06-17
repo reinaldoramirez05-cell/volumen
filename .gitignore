@@ -5,6 +5,9 @@
 .claude/
 .vscode/
 
+# Node deps (Netlify installs from package-lock during build)
+node_modules/
+
 # Dart / Flutter build artifacts (mcp_server)
 mcp_server/.dart_tool/
 mcp_server/pubspec.lock

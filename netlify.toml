@@ -1,5 +1,11 @@
 [build]
   publish = "."
+  [build.environment]
+    NODE_VERSION = "20"
+
+# Serverless functions (Community Picks likes). This is the default dir; stated for clarity.
+[functions]
+  directory = "netlify/functions"
 
 [[plugins]]
   package = "@netlify/plugin-lighthouse"
