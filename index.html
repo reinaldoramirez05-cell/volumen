@@ -733,6 +733,50 @@
     .community .section-title { font-family: var(--font-disp); font-size: clamp(32px, 6vw, 64px); font-weight: 400; line-height: 1; letter-spacing: 0.01em; }
     .community .section-sub { color: var(--quiet); font-size: 13px; max-width: 480px; }
 
+    /* ── Photo of the Week — the cover that crowns the section ── */
+    .potw {
+      margin: 0 0 clamp(28px, 5vw, 52px);
+      display: grid; gap: clamp(16px, 3vw, 34px);
+      grid-template-columns: minmax(0, 1.7fr) minmax(220px, 1fr);
+      align-items: center;
+    }
+    .potw[hidden] { display: none; }
+    .potw-media {
+      position: relative; display: block; width: 100%; margin: 0; padding: 0;
+      border: none; background: #0d0d0d; aspect-ratio: 16 / 10; overflow: hidden;
+      cursor: zoom-in; -webkit-tap-highlight-color: transparent;
+    }
+    .potw-media img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      filter: grayscale(18%) contrast(1.02);
+      transition: filter .5s ease, transform 1.1s cubic-bezier(.2,.8,.2,1);
+    }
+    .potw-media:hover img, .potw-media:focus-visible img { filter: grayscale(0%); transform: scale(1.04); }
+    .potw-media::after { content:''; position:absolute; inset:0; background: linear-gradient(to top, rgba(0,0,0,.5), transparent 45%); opacity:0; transition: opacity .4s; pointer-events:none; }
+    .potw-media:hover::after { opacity: 1; }
+    .potw-cap { display: flex; flex-direction: column; gap: clamp(12px, 1.6vw, 18px); }
+    .potw-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--red); }
+    .potw-title {
+      font-family: var(--font-disp); font-weight: 400; line-height: .92; letter-spacing: .01em;
+      font-size: clamp(34px, 5vw, 76px); color: var(--ink);
+    }
+    .potw-like {
+      align-self: flex-start; display: inline-flex; align-items: center; gap: 9px;
+      font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--ink); background: none; border: 1px solid var(--line); border-radius: 999px;
+      padding: 9px 16px; cursor: pointer; transition: border-color .25s, color .25s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .potw-like:hover, .potw-like:focus-visible { border-color: var(--red); color: var(--red); outline: none; }
+    .potw-like .potw-heart { font-size: 14px; line-height: 1; transition: transform .2s, color .2s; }
+    .potw-like.liked { border-color: var(--red); color: var(--red); }
+    .potw-like.liked .potw-heart { color: var(--red); transform: scale(1.18); }
+    .potw-like .potw-like-count { font-variant-numeric: tabular-nums; opacity: .85; }
+    @media (max-width: 720px) {
+      .potw { grid-template-columns: 1fr; gap: 16px; }
+      .potw-media { aspect-ratio: 4 / 3; }
+    }
+
     .pick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 4px; }
     .pick-card { position: relative; margin: 0; aspect-ratio: 1 / 1; overflow: hidden; }
     .pick-card img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.92); transition: filter 0.4s, transform 0.6s; }
@@ -966,6 +1010,21 @@
       <h2 class="section-title" data-en="Community Picks" data-es="Favoritas">Community Picks</h2>
       <p class="section-sub" data-en="The seven most-liked frames, chosen by you. Tap the heart on any shot to vote it up." data-es="Los siete cuadros con más me gusta, elegidos por ti. Toca el corazón de cualquier foto para subirla.">The seven most-liked frames, chosen by you. Tap the heart on any shot to vote it up.</p>
     </div>
+
+    <figure class="potw" id="potw" hidden>
+      <button class="potw-media" id="potw-open" type="button" aria-label="Open the featured photo">
+        <img id="potw-img" src="" alt="" loading="lazy">
+      </button>
+      <figcaption class="potw-cap">
+        <span class="potw-label" data-en="★ Photo of the Week" data-es="★ Foto de la Semana">★ Photo of the Week</span>
+        <h3 class="potw-title" id="potw-title"></h3>
+        <button class="potw-like" id="potw-like" type="button" aria-pressed="false" aria-label="Like the featured photo">
+          <span class="potw-heart" aria-hidden="true">♥</span>
+          <span class="potw-like-count" id="potw-count"></span>
+        </button>
+      </figcaption>
+    </figure>
+
     <div class="pick-grid" id="pick-grid"></div>
   </section>
 
@@ -1310,6 +1369,25 @@
     const keyFromSrc = (src) => (src || '').split('/').pop().replace(/\.(jpe?g|png|webp)$/i, '');
     const keyOfFig   = (fig) => keyFromSrc(fig.querySelector('img') && fig.querySelector('img').getAttribute('src'));
 
+    /* the gallery frames are the single source of truth for photo data */
+    function galleryPhotoList() {
+      if (!gallery) return [];
+      return Array.prototype.slice.call(gallery.querySelectorAll('.fig')).map((fig, i) => {
+        const img = fig.querySelector('img');
+        const where = fig.querySelector('.where');
+        return {
+          key: keyOfFig(fig),
+          src: img ? img.getAttribute('src') : '',
+          alt: img ? (img.alt || '') : '',
+          title: where ? where.textContent : '',
+          i,
+        };
+      }).filter((p) => p.key);
+    }
+
+    // set by setupLightbox so any section (e.g. Photo of the Week) can open a photo by key
+    let openLightboxByKey = null;
+
     /* ── LIKES: shared, server-backed (Netlify Blobs) with optimistic UI ──
        Global counts come from the serverless function; the per-photo "liked"
        flag is kept in this browser (no accounts) so the heart stays filled on
@@ -1324,7 +1402,8 @@
       try { liked = JSON.parse(localStorage.getItem(LIKED_KEY) || '{}') || {}; } catch (e) { liked = {}; }
       const subs = Object.create(null);   // key -> [fn(count, isLiked)]
       const busy = Object.create(null);   // key -> in-flight guard
-      let onChange = null;
+      let onChange = null, onFeatured = null;
+      let featured = { key: null, scope: 'default' };   // Photo of the Week (server-computed)
 
       const fmt = (n) => (n > 0 ? String(n) : '');     // blank when zero
       const count = (k) => counts[k] || 0;
@@ -1340,6 +1419,7 @@
       }
       function persist() { try { localStorage.setItem(LIKED_KEY, JSON.stringify(liked)); } catch (e) {} }
       function fireChange() { if (onChange) { try { onChange(); } catch (e) {} } }
+      function fireFeatured() { if (onFeatured) { try { onFeatured(featured); } catch (e) {} } }
 
       async function load() {
         try {
@@ -1348,10 +1428,12 @@
             const data = await r.json();
             const c = (data && data.counts) || {};
             Object.keys(c).forEach((k) => { counts[k] = Number(c[k]) || 0; });
+            if (data && data.featured) featured = data.featured;
           }
         } catch (e) { /* offline / static preview — stay optimistic */ }
         Object.keys(subs).forEach(notify);
         fireChange();
+        fireFeatured();
       }
 
       async function toggle(k) {
@@ -1373,12 +1455,18 @@
           if (r.ok) {
             const data = await r.json();
             if (data && typeof data.count === 'number') { counts[k] = data.count; notify(k); fireChange(); }
+            if (data && data.featured) { featured = data.featured; fireFeatured(); }
           }
         } catch (e) { /* keep optimistic value */ }
         finally { busy[k] = false; }
       }
 
-      return { load, toggle, subscribe, count, isLiked, fmt, setOnChange: (fn) => { onChange = fn; } };
+      return {
+        load, toggle, subscribe, count, isLiked, fmt,
+        setOnChange: (fn) => { onChange = fn; },
+        getFeatured: () => featured,
+        setOnFeatured: (fn) => { onFeatured = fn; },
+      };
     })();
 
     function setupLightbox() {
@@ -1447,6 +1535,7 @@
       }
 
       figs.forEach((fig, i) => fig.addEventListener('click', () => open(i)));
+      openLightboxByKey = (key) => { const i = figs.findIndex((f) => keyOfFig(f) === key); if (i >= 0) open(i); };
       if (likeBtn) likeBtn.addEventListener('click', () => { if (idx >= 0) LikeStore.toggle(keyOfFig(figs[idx])); });
       // keep the open photo's like button live if its count changes from elsewhere
       figs.forEach((fig) => {
@@ -1545,6 +1634,55 @@
       build();   // initial paint (all zero -> gallery order, blank counts)
     }
 
+    /* ── PHOTO OF THE WEEK: featured cover, crowned by this week's likes ── */
+    function setupFeatured() {
+      const potw = document.getElementById('potw');
+      if (!potw || !gallery) return;
+      const img     = document.getElementById('potw-img');
+      const titleEl = document.getElementById('potw-title');
+      const openBtn = document.getElementById('potw-open');
+      const likeBtn = document.getElementById('potw-like');
+      const countEl = document.getElementById('potw-count');
+
+      const photos = galleryPhotoList();
+      const byKey = {};
+      photos.forEach((p) => { byKey[p.key] = p; });
+      // fallback before any likes exist — a strong portrait
+      const DEFAULT_KEY = byKey['singer-spotlight'] ? 'singer-spotlight' : ((photos[0] || {}).key || null);
+      let currentKey = null;
+
+      function paintLike() {
+        if (!currentKey) return;
+        const lk = LikeStore.isLiked(currentKey);
+        likeBtn.classList.toggle('liked', lk);
+        likeBtn.setAttribute('aria-pressed', lk ? 'true' : 'false');
+        countEl.textContent = LikeStore.fmt(LikeStore.count(currentKey));
+      }
+
+      function render() {
+        const f = LikeStore.getFeatured() || {};
+        const key = (f.key && byKey[f.key]) ? f.key : DEFAULT_KEY;
+        const p = key && byKey[key];
+        if (!p) { potw.hidden = true; return; }
+        currentKey = key;
+        if (img.getAttribute('src') !== p.src) {
+          img.src = p.src; img.alt = p.alt;
+          if (ANIM) G.fromTo(img, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power2.out' });
+        }
+        titleEl.textContent = p.title;
+        paintLike();
+        potw.hidden = false;
+      }
+
+      openBtn.addEventListener('click', () => { if (currentKey && openLightboxByKey) openLightboxByKey(currentKey); });
+      likeBtn.addEventListener('click', () => { if (currentKey) { LikeStore.toggle(currentKey); paintLike(); } });
+      // keep the featured like count live if its photo is liked from elsewhere
+      photos.forEach((p) => { LikeStore.subscribe(p.key, () => { if (currentKey === p.key) paintLike(); }); });
+
+      LikeStore.setOnFeatured(render);
+      render();   // show the default immediately; swaps to the server's pick after load
+    }
+
     /* ── BOOT ── */
     wrapMedia();
     setupReveals();
@@ -1552,7 +1690,8 @@
     setupLiquid();
     setupLightbox();
     setupCommunity();
-    LikeStore.load();              // fetch global counts, then repaint the hearts
+    setupFeatured();
+    LikeStore.load();              // fetch global counts + featured, then repaint
     if (document.readyState === 'complete') startIntro();
     else window.addEventListener('load', startIntro);
   </script>
