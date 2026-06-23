@@ -597,6 +597,36 @@
     .lang button { background: none; border: none; padding: 0; color: rgba(255,255,255,0.45); cursor: pointer; font: inherit; letter-spacing: inherit; transition: color 0.2s; }
     .lang button.active { color: #fff; }
 
+    /* ── HAMBURGER MENU ── */
+    .menu-toggle {
+      display: inline-flex; flex-direction: column; justify-content: center; gap: 5px;
+      width: 26px; height: 16px; padding: 0; background: none; border: none; cursor: pointer; color: inherit;
+    }
+    .menu-toggle span { display: block; width: 100%; height: 1.5px; background: currentColor; }
+    .menu {
+      position: fixed; inset: 0; z-index: 980;
+      background: rgba(5,5,5,0.975);
+      -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity .4s ease, visibility 0s linear .4s;
+      display: flex; flex-direction: column;
+      padding: clamp(18px, 4vw, 40px) var(--pad);
+    }
+    .menu.open { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity .4s ease; }
+    .menu-top { display: flex; justify-content: space-between; align-items: center; }
+    .menu-close { background: none; border: none; color: var(--ink); font-size: 22px; line-height: 1; cursor: pointer; padding: 4px; transition: color .2s; }
+    .menu-close:hover, .menu-close:focus-visible { color: var(--red); outline: none; }
+    .menu-nav { margin: auto 0; display: flex; flex-direction: column; gap: clamp(8px, 1.6vw, 16px); }
+    .menu-nav a {
+      font-family: var(--font-disp); font-weight: 400; font-size: clamp(44px, 10vw, 104px);
+      line-height: .96; letter-spacing: .02em; color: var(--ink); width: max-content;
+      transition: color .25s ease, transform .25s ease;
+    }
+    .menu-nav a:hover, .menu-nav a:focus-visible { color: var(--red); transform: translateX(10px); outline: none; }
+    .menu-foot { display: flex; flex-wrap: wrap; gap: 8px 26px; align-items: center; }
+    .menu-foot a { color: var(--quiet); transition: color .2s; }
+    .menu-foot a:hover { color: var(--ink); }
+
     /* ═════════════════════════════════════════
        HERO
     ═════════════════════════════════════════ */
@@ -938,8 +968,29 @@
         <button id="btn-en" class="active">EN</button>
         <button id="btn-es">ES</button>
       </div>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </header>
+
+  <!-- ── MENU ─────────────────────────────── -->
+  <nav class="menu" id="menu" aria-hidden="true" aria-label="Main menu">
+    <div class="menu-top">
+      <a href="/" class="wordmark"><span>V</span>OLUMEN</a>
+      <button class="menu-close" id="menu-close" aria-label="Close menu">✕</button>
+    </div>
+    <div class="menu-nav">
+      <a href="/#gallery" data-en="Frames" data-es="Cuadros">Frames</a>
+      <a href="/#community" data-en="Community Picks" data-es="Favoritas">Community Picks</a>
+      <a href="/contact.html" data-en="Contact" data-es="Contacto">Contact</a>
+    </div>
+    <div class="menu-foot label">
+      <a href="mailto:reinaldoramirez05@gmail.com">Email</a>
+      <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="https://twitter.com/reinaldor93" target="_blank" rel="noopener noreferrer">Twitter</a>
+    </div>
+  </nav>
 
   <!-- ── HERO ─────────────────────────────── -->
   <section class="hero">
@@ -1228,6 +1279,33 @@
       clock.textContent = 'AUSTIN ' + t;
     }
     tick(); setInterval(tick, 15000);
+
+    /* ── MENU (hamburger overlay) ── */
+    function setupMenu() {
+      const toggle = document.getElementById('menu-toggle');
+      const menu = document.getElementById('menu');
+      const closeBtn = document.getElementById('menu-close');
+      if (!toggle || !menu) return;
+      const openMenu = () => {
+        menu.classList.add('open'); menu.setAttribute('aria-hidden', 'false');
+        toggle.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+        if (typeof lenis !== 'undefined' && lenis) lenis.stop();
+        if (closeBtn) { try { closeBtn.focus({ preventScroll: true }); } catch (e) {} }
+      };
+      const closeMenu = () => {
+        menu.classList.remove('open'); menu.setAttribute('aria-hidden', 'true');
+        toggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+        if (typeof lenis !== 'undefined' && lenis) lenis.start();
+        try { toggle.focus({ preventScroll: true }); } catch (e) {}
+      };
+      toggle.addEventListener('click', openMenu);
+      if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+      menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
+      window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu.classList.contains('open')) closeMenu(); });
+    }
+    setupMenu();
 
     /* ── BILINGUAL TOGGLE ── */
     const btnEn = document.getElementById('btn-en');
