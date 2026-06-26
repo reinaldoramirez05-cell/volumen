@@ -716,6 +716,8 @@
     .cal-list { display: flex; flex-direction: column; }
     .cal-row { display: grid; grid-template-columns: 66px 1fr auto; align-items: center; gap: 18px; padding: 16px 0; border-top: 1px solid var(--line); }
     .cal-row:last-child { border-bottom: 1px solid var(--line); }
+    .cal-row.is-link { cursor: pointer; transition: background .2s ease, padding-left .2s ease; }
+    .cal-row.is-link:hover { background: rgba(255,255,255,.025); padding-left: 8px; }
     .cal-date { display: flex; flex-direction: column; align-items: flex-start; line-height: 1; }
     .cal-date .cal-mon { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; color: var(--quiet); }
     .cal-date .cal-day { font-family: var(--font-disp); font-size: 34px; line-height: .9; color: var(--red); }
@@ -1494,6 +1496,26 @@
       const getSaved = () => { try { return new Set(JSON.parse(localStorage.getItem(SAVED_KEY) || '[]')); } catch (e) { return new Set(); } };
       const setSaved = (set) => { try { localStorage.setItem(SAVED_KEY, JSON.stringify(Array.from(set))); } catch (e) {} };
       let saved = getSaved();
+
+      // Official calendar per venue — used as the click target when a show has no
+      // ticket URL (e.g. curated Hotel Vegas / Radio/East entries). Keep in sync
+      // with the .cal-venues links in the menu markup.
+      const VENUE_LINKS = {
+        "emo's": 'https://www.emosaustin.com/shows',
+        'mohawk': 'https://www.prekindle.com/events/mohawk',
+        'hotel vegas': 'https://texashotelvegas.com/calendar/',
+        'radio/east': 'https://dice.fm/venue/radio-east-mdow',
+      };
+
+      // Spread the capped list across venues so one room (Emo's) doesn't crowd
+      // the rest out, then re-sort the survivors by date.
+      function balanced(items, perVenue) {
+        const groups = {};
+        items.forEach((ev) => { const v = String(ev.venue || ''); (groups[v] = groups[v] || []).push(ev); });
+        let out = [];
+        Object.keys(groups).forEach((v) => { out = out.concat(groups[v].slice(0, perVenue)); });
+        return out.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+      }
       const fmtDate = (iso, lang) => {
         const d = new Date(iso + 'T00:00:00');
         const loc = lang === 'es' ? 'es-ES' : 'en-US';
@@ -1513,8 +1535,10 @@
         if (ev.doors) meta.push((lang === 'es' ? 'Puertas ' : 'Doors ') + escHtml(ev.doors));
         if (ev.ages)  meta.push(escHtml(ev.ages));
         const metaHTML = meta.length ? '<p class="cal-meta">' + meta.join(' · ') + '</p>' : '';
-        const tix = ev.tickets
-          ? '<a class="cal-tix" href="' + escHtml(ev.tickets) + '" target="_blank" rel="noopener noreferrer">' + (lang === 'es' ? 'Boletos →' : 'Tickets →') + '</a>'
+        const href = ev.tickets || VENUE_LINKS[String(ev.venue || '').toLowerCase()] || '';
+        const tixLabel = ev.tickets ? (lang === 'es' ? 'Boletos →' : 'Tickets →') : (lang === 'es' ? 'Lugar →' : 'Venue →');
+        const tix = href
+          ? '<a class="cal-tix" href="' + escHtml(href) + '" target="_blank" rel="noopener noreferrer">' + tixLabel + '</a>'
           : '';
         const k = evKey(ev);
         const isSaved = saved.has(k);
@@ -1522,7 +1546,7 @@
           + ' aria-pressed="' + (isSaved ? 'true' : 'false') + '"'
           + ' aria-label="' + (lang === 'es' ? 'Guardar este show' : 'Save this show') + '"'
           + ' title="' + (lang === 'es' ? (isSaved ? 'Guardado' : 'Guardar — voy') : (isSaved ? 'Saved' : 'Save — I’m going')) + '">★</button>';
-        return '<div class="cal-row">'
+        return '<div class="cal-row' + (href ? ' is-link' : '') + '"' + (href ? ' data-href="' + escHtml(href) + '"' : '') + '>'
           + '<div class="cal-date"><span class="cal-mon">' + dt.mon + '</span><span class="cal-day">' + dt.day + '</span><span class="cal-wd">' + dt.wd + '</span></div>'
           + '<div class="cal-info"><h3 class="cal-artist">' + escHtml(ev.artist) + shooting + '</h3>'
           + '<p class="cal-venue">' + escHtml(ev.venue) + '</p>' + metaHTML + '</div>'
@@ -1553,7 +1577,7 @@
           if (moreEl) moreEl.hidden = true;
           return;
         }
-        const shown = savedOnly ? up : up.slice(0, CAP);
+        const shown = savedOnly ? up : balanced(up, 5).slice(0, CAP);
         list.innerHTML = shown.map((ev) => rowHTML(ev, lang)).join('');
         if (moreEl) {
           const extra = up.length - shown.length;
@@ -1566,13 +1590,15 @@
       window.__renderCal = render;
       // toggle "going"/save via delegation so it survives re-renders
       list.addEventListener('click', (e) => {
-        const btn = e.target.closest('.cal-save');
-        if (!btn) return;
-        const k = btn.getAttribute('data-key');
-        if (!k) return;
-        if (saved.has(k)) saved.delete(k); else saved.add(k);
-        setSaved(saved);
-        render();
+        const star = e.target.closest('.cal-save');
+        if (star) {                                   // toggle save, never navigate
+          const k = star.getAttribute('data-key');
+          if (k) { if (saved.has(k)) saved.delete(k); else saved.add(k); setSaved(saved); render(); }
+          return;
+        }
+        if (e.target.closest('a')) return;            // let the Tickets/Venue link open natively
+        const row = e.target.closest('.cal-row');     // click anywhere else on the row → its page
+        if (row && row.dataset.href) window.open(row.dataset.href, '_blank', 'noopener');
       });
       if (savedToggle) savedToggle.addEventListener('click', () => { savedOnly = !savedOnly; render(); });
       const openCal = () => { savedOnly = false; render(); menu.classList.add('cal-open'); if (backBtn) { try { backBtn.focus({ preventScroll: true }); } catch (e) {} } };
