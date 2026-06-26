@@ -678,6 +678,68 @@
     .menu-foot a { color: var(--quiet); transition: color .2s; }
     .menu-foot a:hover { color: var(--ink); }
 
+    /* ── MENU: UPCOMING (calendar) link + sub-panel ── */
+    .menu-nav .upcoming {
+      font-family: var(--font-disp); font-weight: 400;
+      font-size: clamp(44px, 10vw, 104px); line-height: .96; letter-spacing: .02em;
+      color: var(--red); width: max-content;
+      background: none; border: none; padding: 0; cursor: pointer; text-align: left;
+      display: inline-flex; align-items: center; gap: .26em;
+      transition: color .25s ease, transform .25s ease, text-shadow .25s ease;
+    }
+    .menu-nav .upcoming:hover, .menu-nav .upcoming:focus-visible {
+      color: #ff5b40; transform: translateX(10px); outline: none;
+      text-shadow: 0 0 26px rgba(191,45,31,.45);
+    }
+    .menu-nav .upcoming .up-dot {
+      width: .24em; height: .24em; border-radius: 50%; background: var(--red); flex: 0 0 auto;
+      box-shadow: 0 0 12px rgba(191,45,31,.9); animation: upPulse 2s ease-in-out infinite;
+    }
+    @keyframes upPulse { 0%,100% { opacity: .45; } 50% { opacity: 1; } }
+
+    .menu-cal {
+      display: none; flex: 1 1 auto; min-height: 0; overflow-y: auto;
+      flex-direction: column; gap: 16px; padding: clamp(14px, 3vh, 26px) 0 6px;
+    }
+    .menu.cal-open .menu-nav, .menu.cal-open .menu-foot { display: none; }
+    .menu.cal-open .menu-cal { display: flex; }
+
+    .cal-back {
+      align-self: flex-start; background: none; border: none; cursor: pointer;
+      font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--quiet); padding: 4px 0; transition: color .2s;
+    }
+    .cal-back:hover, .cal-back:focus-visible { color: var(--ink); outline: none; }
+    .cal-title { font-family: var(--font-disp); font-weight: 400; font-size: clamp(40px, 8vw, 72px); line-height: .95; color: var(--ink); }
+    .cal-sub { font-family: var(--font-mono); font-size: 12px; line-height: 1.6; letter-spacing: .03em; color: var(--quiet); max-width: 54ch; margin-top: -4px; }
+
+    .cal-list { display: flex; flex-direction: column; }
+    .cal-row { display: grid; grid-template-columns: 66px 1fr auto; align-items: center; gap: 18px; padding: 16px 0; border-top: 1px solid var(--line); }
+    .cal-row:last-child { border-bottom: 1px solid var(--line); }
+    .cal-date { display: flex; flex-direction: column; align-items: flex-start; line-height: 1; }
+    .cal-date .cal-mon { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; color: var(--quiet); }
+    .cal-date .cal-day { font-family: var(--font-disp); font-size: 34px; line-height: .9; color: var(--red); }
+    .cal-date .cal-wd { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; color: var(--quiet); }
+    .cal-artist { font-family: var(--font-disp); font-weight: 400; font-size: clamp(20px, 3.2vw, 28px); line-height: 1; letter-spacing: .01em; color: var(--ink); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .cal-venue { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--red); margin-top: 7px; }
+    .cal-meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: .04em; color: var(--quiet); margin-top: 4px; }
+    .cal-shooting { font-size: 12px; line-height: 1; padding: 3px 7px; border: 1px solid var(--red); border-radius: 999px; }
+    .cal-tix { justify-self: end; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); border: 1px solid var(--line); padding: 8px 14px; white-space: nowrap; transition: border-color .25s, color .25s; }
+    .cal-tix:hover, .cal-tix:focus-visible { border-color: var(--red); color: var(--red); outline: none; }
+
+    .cal-empty { font-family: var(--font-mono); font-size: 13px; line-height: 1.7; color: var(--quiet); padding: 8px 0 4px; }
+    .cal-venues { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
+    .cal-venues .label { color: var(--quiet); }
+    .cal-venues a { font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; color: var(--ink); border-bottom: 1px solid transparent; transition: color .2s, border-color .2s; }
+    .cal-venues a:hover, .cal-venues a:focus-visible { color: var(--red); border-color: var(--red); outline: none; }
+
+    @media (max-width: 560px) {
+      .cal-row { grid-template-columns: 52px 1fr; }
+      .cal-tix { grid-column: 1 / -1; justify-self: start; margin-top: 10px; }
+      .cal-date .cal-day { font-size: 28px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .menu-nav .upcoming .up-dot { animation: none; } }
+
     /* ═════════════════════════════════════════
        HERO
     ═════════════════════════════════════════ */
@@ -1032,8 +1094,30 @@
     <div class="menu-nav">
       <a href="/#gallery" data-en="Frames" data-es="Cuadros">Frames</a>
       <a href="/#community" data-en="Community Picks" data-es="Favoritas">Community Picks</a>
+      <button type="button" class="upcoming" id="menu-cal-link" aria-label="Upcoming shows">
+        <span class="up-dot" aria-hidden="true"></span>
+        <span class="up-label" data-en="Upcoming" data-es="Próximos">Upcoming</span>
+      </button>
       <a href="/contact.html" data-en="Contact" data-es="Contacto">Contact</a>
     </div>
+
+    <!-- Upcoming-shows calendar (hamburger only) -->
+    <div class="menu-cal" id="menu-cal" aria-label="Upcoming shows">
+      <button type="button" class="cal-back" id="cal-back">← <span data-en="Menu" data-es="Menú">Menu</span></button>
+      <h2 class="cal-title" data-en="Upcoming" data-es="Próximos">Upcoming</h2>
+      <p class="cal-sub"
+         data-en="Shows at the rooms Volumen shoots — Emo's, Radio/East, Mohawk &amp; Hotel Vegas. 📷 means Volumen is behind the lens."
+         data-es="Shows en las salas que Volumen fotografía — Emo's, Radio/East, Mohawk y Hotel Vegas. 📷 significa que Volumen está tras el lente.">Shows at the rooms Volumen shoots — Emo's, Radio/East, Mohawk &amp; Hotel Vegas. 📷 means Volumen is behind the lens.</p>
+      <div class="cal-list" id="cal-list"></div>
+      <div class="cal-venues">
+        <span class="label" data-en="Full calendars" data-es="Calendarios">Full calendars</span>
+        <a href="https://www.emosaustin.com/shows" target="_blank" rel="noopener noreferrer">Emo's</a>
+        <a href="https://dice.fm/venue/radio-east-mdow" target="_blank" rel="noopener noreferrer">Radio/East</a>
+        <a href="https://www.prekindle.com/events/mohawk" target="_blank" rel="noopener noreferrer">Mohawk</a>
+        <a href="https://texashotelvegas.com/calendar/" target="_blank" rel="noopener noreferrer">Hotel Vegas</a>
+      </div>
+    </div>
+
     <div class="menu-foot label">
       <a href="mailto:reinaldoramirez05@gmail.com">Email</a>
       <a href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener noreferrer">Instagram</a>
@@ -1336,6 +1420,7 @@
       const closeBtn = document.getElementById('menu-close');
       if (!toggle || !menu) return;
       const openMenu = () => {
+        menu.classList.remove('cal-open');   // always open to the nav view, not the calendar
         menu.classList.add('open'); menu.setAttribute('aria-hidden', 'false');
         toggle.setAttribute('aria-expanded', 'true');
         document.body.style.overflow = 'hidden';
@@ -1365,10 +1450,94 @@
       btnEn.classList.toggle('active', lang === 'en');
       btnEs.classList.toggle('active', lang === 'es');
       localStorage.setItem('volumen-lang', lang);
+      if (typeof window.__renderCal === 'function') window.__renderCal();   // relocalize the gig list
     }
     btnEn.addEventListener('click', () => setLang('en'));
     btnEs.addEventListener('click', () => setLang('es'));
     if (localStorage.getItem('volumen-lang') === 'es') setLang('es');
+
+    /* ── MENU CALENDAR — "Upcoming" shows, hamburger only.
+       Data lives in /events.json (easy to edit by hand; later swap in a
+       Netlify Function feed). Always falls back to the venue links below. ── */
+    function setupCalendar() {
+      const menu = document.getElementById('menu');
+      const openLink = document.getElementById('menu-cal-link');
+      const backBtn = document.getElementById('cal-back');
+      const list = document.getElementById('cal-list');
+      if (!menu || !openLink || !list) return;
+      let events = [];
+      const escHtml = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+      const fmtDate = (iso, lang) => {
+        const d = new Date(iso + 'T00:00:00');
+        const loc = lang === 'es' ? 'es-ES' : 'en-US';
+        const clean = (s) => s.toUpperCase().replace(/\./g, '');
+        return {
+          mon: clean(d.toLocaleDateString(loc, { month: 'short' })),
+          day: String(d.getDate()).padStart(2, '0'),
+          wd:  clean(d.toLocaleDateString(loc, { weekday: 'short' })),
+        };
+      };
+      function rowHTML(ev, lang) {
+        const dt = fmtDate(ev.date, lang);
+        const shooting = ev.shooting
+          ? '<span class="cal-shooting" title="' + (lang === 'es' ? 'Volumen fotografía este show' : 'Volumen is shooting this show') + '">📷</span>'
+          : '';
+        const meta = [];
+        if (ev.doors) meta.push((lang === 'es' ? 'Puertas ' : 'Doors ') + escHtml(ev.doors));
+        if (ev.ages)  meta.push(escHtml(ev.ages));
+        const metaHTML = meta.length ? '<p class="cal-meta">' + meta.join(' · ') + '</p>' : '';
+        const tix = ev.tickets
+          ? '<a class="cal-tix" href="' + escHtml(ev.tickets) + '" target="_blank" rel="noopener noreferrer">' + (lang === 'es' ? 'Boletos →' : 'Tickets →') + '</a>'
+          : '';
+        return '<div class="cal-row">'
+          + '<div class="cal-date"><span class="cal-mon">' + dt.mon + '</span><span class="cal-day">' + dt.day + '</span><span class="cal-wd">' + dt.wd + '</span></div>'
+          + '<div class="cal-info"><h3 class="cal-artist">' + escHtml(ev.artist) + shooting + '</h3>'
+          + '<p class="cal-venue">' + escHtml(ev.venue) + '</p>' + metaHTML + '</div>'
+          + tix + '</div>';
+      }
+      function render() {
+        const lang = document.documentElement.lang === 'es' ? 'es' : 'en';
+        const today = new Date(); today.setHours(0, 0, 0, 0);
+        const up = events
+          .filter((ev) => ev && ev.date && new Date(ev.date + 'T00:00:00') >= today)
+          .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+        if (!up.length) {
+          list.innerHTML = '<p class="cal-empty">' + (lang === 'es'
+            ? 'Aún no hay shows fijados. Mira los calendarios completos de las salas abajo.'
+            : 'No shows pinned yet — browse the venues’ full calendars below.') + '</p>';
+          return;
+        }
+        list.innerHTML = up.map((ev) => rowHTML(ev, lang)).join('');
+      }
+      window.__renderCal = render;
+      const openCal = () => { menu.classList.add('cal-open'); if (backBtn) { try { backBtn.focus({ preventScroll: true }); } catch (e) {} } };
+      const closeCal = () => { menu.classList.remove('cal-open'); try { openLink.focus({ preventScroll: true }); } catch (e) {} };
+      openLink.addEventListener('click', (e) => { e.preventDefault(); openCal(); });
+      if (backBtn) backBtn.addEventListener('click', closeCal);
+      window.addEventListener('keydown', (e) => {
+        // first Esc backs out of the calendar; a second Esc then closes the menu
+        if (e.key === 'Escape' && menu.classList.contains('cal-open')) { e.stopImmediatePropagation(); closeCal(); }
+      }, true);
+      // Curated file (Hotel Vegas + Radio/East + overrides) merged with the live
+      // Ticketmaster feed (Emo's + Mohawk). Curated entries win on duplicates so
+      // hand-set "shooting" flags / edits take precedence. Either source can fail
+      // silently — the calendar still shows whatever it has, plus the venue links.
+      const grab = (url) => fetch(url).then((r) => (r.ok ? r.json() : { events: [] })).catch(() => ({ events: [] }));
+      Promise.all([grab('events.json'), grab('/.netlify/functions/shows')]).then(([curated, live]) => {
+        const a = (curated && curated.events) || [];
+        const b = (live && live.events) || [];
+        const seen = new Set();
+        events = a.concat(b).filter((ev) => {
+          if (!ev || !ev.date) return false;
+          const k = ev.date + '|' + String(ev.venue || '').toLowerCase() + '|' + String(ev.artist || '').toLowerCase().slice(0, 40);
+          if (seen.has(k)) return false;
+          seen.add(k);
+          return true;
+        });
+        render();
+      });
+    }
+    setupCalendar();
 
     /* ── HERO SPOTLIGHT + SCROLL PARALLAX ── */
     function setupHeroMotion() {
