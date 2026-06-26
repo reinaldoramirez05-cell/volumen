@@ -724,8 +724,20 @@
     .cal-venue { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--red); margin-top: 7px; }
     .cal-meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: .04em; color: var(--quiet); margin-top: 4px; }
     .cal-shooting { font-size: 12px; line-height: 1; padding: 3px 7px; border: 1px solid var(--red); border-radius: 999px; }
-    .cal-tix { justify-self: end; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); border: 1px solid var(--line); padding: 8px 14px; white-space: nowrap; transition: border-color .25s, color .25s; }
+    .cal-tix { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); border: 1px solid var(--line); padding: 8px 14px; white-space: nowrap; transition: border-color .25s, color .25s; }
     .cal-tix:hover, .cal-tix:focus-visible { border-color: var(--red); color: var(--red); outline: none; }
+
+    /* save / "going" star + the saved filter */
+    .cal-actions { display: flex; align-items: center; gap: 12px; justify-self: end; }
+    .cal-save { background: none; border: none; cursor: pointer; padding: 2px; font-size: 19px; line-height: 1; color: var(--quiet); transition: color .2s, transform .12s, text-shadow .2s; -webkit-tap-highlight-color: transparent; }
+    .cal-save:hover, .cal-save:focus-visible { color: var(--ink); outline: none; }
+    .cal-save:active { transform: scale(1.25); }
+    .cal-save.saved { color: var(--red); text-shadow: 0 0 12px rgba(191,45,31,.5); }
+    .cal-controls { display: flex; gap: 10px; margin-top: -4px; }
+    .cal-saved-toggle { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--quiet); background: none; border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; cursor: pointer; transition: color .2s, border-color .2s; }
+    .cal-saved-toggle:hover, .cal-saved-toggle:focus-visible { color: var(--ink); border-color: var(--quiet); outline: none; }
+    .cal-saved-toggle.active { color: var(--red); border-color: var(--red); }
+    .cal-more { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; color: var(--quiet); padding: 12px 0 2px; }
 
     .cal-empty { font-family: var(--font-mono); font-size: 13px; line-height: 1.7; color: var(--quiet); padding: 8px 0 4px; }
     .cal-venues { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
@@ -735,7 +747,7 @@
 
     @media (max-width: 560px) {
       .cal-row { grid-template-columns: 52px 1fr; }
-      .cal-tix { grid-column: 1 / -1; justify-self: start; margin-top: 10px; }
+      .cal-actions { grid-column: 1 / -1; justify-self: start; margin-top: 10px; }
       .cal-date .cal-day { font-size: 28px; }
     }
     @media (prefers-reduced-motion: reduce) { .menu-nav .upcoming .up-dot { animation: none; } }
@@ -1108,7 +1120,11 @@
       <p class="cal-sub"
          data-en="Shows at the rooms Volumen shoots — Emo's, Radio/East, Mohawk &amp; Hotel Vegas. 📷 means Volumen is behind the lens."
          data-es="Shows en las salas que Volumen fotografía — Emo's, Radio/East, Mohawk y Hotel Vegas. 📷 significa que Volumen está tras el lente.">Shows at the rooms Volumen shoots — Emo's, Radio/East, Mohawk &amp; Hotel Vegas. 📷 means Volumen is behind the lens.</p>
+      <div class="cal-controls">
+        <button type="button" class="cal-saved-toggle" id="cal-saved-toggle" aria-pressed="false" hidden>★ <span data-en="Saved" data-es="Guardados">Saved</span> (<span id="cal-saved-n">0</span>)</button>
+      </div>
       <div class="cal-list" id="cal-list"></div>
+      <p class="cal-more" id="cal-more" hidden></p>
       <div class="cal-venues">
         <span class="label" data-en="Full calendars" data-es="Calendarios">Full calendars</span>
         <a href="https://www.emosaustin.com/shows" target="_blank" rel="noopener noreferrer">Emo's</a>
@@ -1464,9 +1480,20 @@
       const openLink = document.getElementById('menu-cal-link');
       const backBtn = document.getElementById('cal-back');
       const list = document.getElementById('cal-list');
+      const savedToggle = document.getElementById('cal-saved-toggle');
+      const savedCountEl = document.getElementById('cal-saved-n');
+      const moreEl = document.getElementById('cal-more');
       if (!menu || !openLink || !list) return;
+      const CAP = 12;                                  // most upcoming shows to list at once
       let events = [];
+      let savedOnly = false;
       const escHtml = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+      const evKey = (ev) => ev.date + '|' + String(ev.venue || '').toLowerCase() + '|' + String(ev.artist || '').toLowerCase().slice(0, 40);
+      // "Going" / saved shows — one per browser, persisted in localStorage like the photo likes.
+      const SAVED_KEY = 'volumen-saved-shows';
+      const getSaved = () => { try { return new Set(JSON.parse(localStorage.getItem(SAVED_KEY) || '[]')); } catch (e) { return new Set(); } };
+      const setSaved = (set) => { try { localStorage.setItem(SAVED_KEY, JSON.stringify(Array.from(set))); } catch (e) {} };
+      let saved = getSaved();
       const fmtDate = (iso, lang) => {
         const d = new Date(iso + 'T00:00:00');
         const loc = lang === 'es' ? 'es-ES' : 'en-US';
@@ -1489,28 +1516,66 @@
         const tix = ev.tickets
           ? '<a class="cal-tix" href="' + escHtml(ev.tickets) + '" target="_blank" rel="noopener noreferrer">' + (lang === 'es' ? 'Boletos →' : 'Tickets →') + '</a>'
           : '';
+        const k = evKey(ev);
+        const isSaved = saved.has(k);
+        const saveBtn = '<button type="button" class="cal-save' + (isSaved ? ' saved' : '') + '" data-key="' + escHtml(k) + '"'
+          + ' aria-pressed="' + (isSaved ? 'true' : 'false') + '"'
+          + ' aria-label="' + (lang === 'es' ? 'Guardar este show' : 'Save this show') + '"'
+          + ' title="' + (lang === 'es' ? (isSaved ? 'Guardado' : 'Guardar — voy') : (isSaved ? 'Saved' : 'Save — I’m going')) + '">★</button>';
         return '<div class="cal-row">'
           + '<div class="cal-date"><span class="cal-mon">' + dt.mon + '</span><span class="cal-day">' + dt.day + '</span><span class="cal-wd">' + dt.wd + '</span></div>'
           + '<div class="cal-info"><h3 class="cal-artist">' + escHtml(ev.artist) + shooting + '</h3>'
           + '<p class="cal-venue">' + escHtml(ev.venue) + '</p>' + metaHTML + '</div>'
-          + tix + '</div>';
+          + '<div class="cal-actions">' + saveBtn + tix + '</div>'
+          + '</div>';
+      }
+      function syncSavedToggle() {
+        const n = saved.size;
+        if (savedCountEl) savedCountEl.textContent = n;
+        if (savedToggle) {
+          savedToggle.hidden = (n === 0 && !savedOnly);
+          savedToggle.classList.toggle('active', savedOnly);
+          savedToggle.setAttribute('aria-pressed', savedOnly ? 'true' : 'false');
+        }
       }
       function render() {
         const lang = document.documentElement.lang === 'es' ? 'es' : 'en';
         const today = new Date(); today.setHours(0, 0, 0, 0);
-        const up = events
+        let up = events
           .filter((ev) => ev && ev.date && new Date(ev.date + 'T00:00:00') >= today)
           .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+        if (savedOnly) up = up.filter((ev) => saved.has(evKey(ev)));
+        syncSavedToggle();
         if (!up.length) {
-          list.innerHTML = '<p class="cal-empty">' + (lang === 'es'
-            ? 'Aún no hay shows fijados. Mira los calendarios completos de las salas abajo.'
-            : 'No shows pinned yet — browse the venues’ full calendars below.') + '</p>';
+          list.innerHTML = '<p class="cal-empty">' + (savedOnly
+            ? (lang === 'es' ? 'No has guardado shows todavía. Toca ★ en cualquier show.' : 'No saved shows yet — tap ★ on any show.')
+            : (lang === 'es' ? 'Aún no hay shows fijados. Mira los calendarios completos de las salas abajo.' : 'No shows pinned yet — browse the venues’ full calendars below.')) + '</p>';
+          if (moreEl) moreEl.hidden = true;
           return;
         }
-        list.innerHTML = up.map((ev) => rowHTML(ev, lang)).join('');
+        const shown = savedOnly ? up : up.slice(0, CAP);
+        list.innerHTML = shown.map((ev) => rowHTML(ev, lang)).join('');
+        if (moreEl) {
+          const extra = up.length - shown.length;
+          if (!savedOnly && extra > 0) {
+            moreEl.hidden = false;
+            moreEl.textContent = (lang === 'es' ? '+ ' + extra + ' más — calendarios completos abajo ↓' : '+ ' + extra + ' more — full calendars below ↓');
+          } else { moreEl.hidden = true; }
+        }
       }
       window.__renderCal = render;
-      const openCal = () => { menu.classList.add('cal-open'); if (backBtn) { try { backBtn.focus({ preventScroll: true }); } catch (e) {} } };
+      // toggle "going"/save via delegation so it survives re-renders
+      list.addEventListener('click', (e) => {
+        const btn = e.target.closest('.cal-save');
+        if (!btn) return;
+        const k = btn.getAttribute('data-key');
+        if (!k) return;
+        if (saved.has(k)) saved.delete(k); else saved.add(k);
+        setSaved(saved);
+        render();
+      });
+      if (savedToggle) savedToggle.addEventListener('click', () => { savedOnly = !savedOnly; render(); });
+      const openCal = () => { savedOnly = false; render(); menu.classList.add('cal-open'); if (backBtn) { try { backBtn.focus({ preventScroll: true }); } catch (e) {} } };
       const closeCal = () => { menu.classList.remove('cal-open'); try { openLink.focus({ preventScroll: true }); } catch (e) {} };
       openLink.addEventListener('click', (e) => { e.preventDefault(); openCal(); });
       if (backBtn) backBtn.addEventListener('click', closeCal);
@@ -1529,7 +1594,7 @@
         const seen = new Set();
         events = a.concat(b).filter((ev) => {
           if (!ev || !ev.date) return false;
-          const k = ev.date + '|' + String(ev.venue || '').toLowerCase() + '|' + String(ev.artist || '').toLowerCase().slice(0, 40);
+          const k = evKey(ev);
           if (seen.has(k)) return false;
           seen.add(k);
           return true;
