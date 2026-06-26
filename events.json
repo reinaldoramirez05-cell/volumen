@@ -1,0 +1,4 @@
+{
+  "_note": "Curated shows for the venues Ticketmaster does NOT carry (Hotel Vegas, Radio/East) plus any manual overrides. Emo's + Mohawk are auto-filled live by the 'shows' Netlify function (Ticketmaster). The frontend merges both; curated entries win on duplicates. Schema per event: date (YYYY-MM-DD), artist, venue, doors, ages, tickets (URL), shooting (true if Volumen is shooting it). Example: { \"date\": \"2026-07-11\", \"artist\": \"Las Ardillas\", \"venue\": \"Hotel Vegas\", \"doors\": \"9:00 PM\", \"ages\": \"21+\", \"tickets\": \"https://texashotelvegas.com/calendar/\", \"shooting\": true }",
+  "events": []
+}
