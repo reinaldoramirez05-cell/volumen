@@ -4,6 +4,20 @@ Bilingual (EN/ES) music-photography site for Reinaldo Ramirez (Austin, TX). Noir
 cinematic, single-page portfolio + a contact page. Live at https://volumen.media
 (also volumenmag.netlify.app), hosted on **Netlify**, auto-deployed from `main`.
 
+## Repository
+- GitHub: **`reinaldoramirez05-cell/volumen`** (remote `origin`,
+  https://github.com/reinaldoramirez05-cell/volumen).
+- Branches:
+  - `main` — production; Netlify auto-deploys this. Source of truth.
+  - `landing-minimal` — primary working branch; PR's into `main` (already merged up to date).
+  - `preview` — experimental, **diverged ~111 commits from `main`, not merged**. Holds
+    work-in-progress not yet shipped: an interactive iPod landing page, a Stackbit setup
+    (`stackbit.config.ts`), and signup-form loading/animation tweaks. Treat as a sandbox.
+  - `optimization-overhaul` — separate line with perf + a11y/i18n work (Lenis/GSAP on the
+    photo essay, bilingual `viloria.html`, Spline fallback fixes). Not merged to `main`.
+- Note: the working tree often shows many files as "modified" purely from CRLF/line-ending
+  differences (`core.fileMode=false`); these are noise, not real content changes.
+
 ## Stack
 - Static HTML/CSS/JS, **no build step**. Each page is self-contained (inline `<style>` + `<script>`).
 - GSAP + Lenis (smooth scroll) via CDN on the homepage.

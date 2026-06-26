@@ -95,19 +95,24 @@
       border-radius: 14px;
       background:
         /* cabinet form: soft top light, shaded foot */
-        linear-gradient(180deg, rgba(255,255,255,.13), rgba(255,255,255,0) 13%, rgba(0,0,0,0) 76%, rgba(0,0,0,.32)),
-        /* pebbled vinyl grain: paired shadow + highlight bump per cell */
-        radial-gradient(circle at 62% 66%, rgba(0,0,0,.28) .6px, transparent 1.7px) 0 0 / 6px 6px,
-        radial-gradient(circle at 34% 30%, rgba(255,255,255,.12) .6px, transparent 1.7px) 0 0 / 6px 6px,
+        linear-gradient(180deg, rgba(255,255,255,.15), rgba(255,255,255,0) 14%, rgba(0,0,0,0) 70%, rgba(0,0,0,.42)),
+        /* broad diagonal sheen sweeping across the vinyl */
+        linear-gradient(118deg, transparent 33%, rgba(255,255,255,.07) 47%, transparent 61%),
+        /* pebbled basketweave: paired shadow + highlight bump per cell (finer) */
+        radial-gradient(circle at 62% 66%, rgba(0,0,0,.30) .6px, transparent 1.7px) 0 0 / 5px 5px,
+        radial-gradient(circle at 30% 28%, rgba(255,255,255,.13) .6px, transparent 1.7px) 0 0 / 5px 5px,
+        /* third weave bump, offset half a cell to break the grid regularity */
+        radial-gradient(circle at 50% 50%, rgba(0,0,0,.14) .5px, transparent 1.5px) 2.5px 2.5px / 5px 5px,
         /* woven basketweave hatch */
-        repeating-linear-gradient(45deg,  rgba(0,0,0,.05) 0 1px, transparent 1px 5px),
-        repeating-linear-gradient(-45deg, rgba(0,0,0,.05) 0 1px, transparent 1px 5px),
+        repeating-linear-gradient(45deg,  rgba(0,0,0,.055) 0 1px, transparent 1px 5px),
+        repeating-linear-gradient(-45deg, rgba(0,0,0,.055) 0 1px, transparent 1px 5px),
         /* base tolex red */
         linear-gradient(160deg, #c83b28, #a3261a 55%, #ba2c1e);
       box-shadow:
         0 26px 64px rgba(0,0,0,.72),
-        0 6px 16px rgba(0,0,0,.5),
-        inset 0 2px 0 rgba(255,255,255,.20),
+        0 10px 24px rgba(0,0,0,.55),
+        0 3px 6px rgba(0,0,0,.5),               /* tighter contact shadow */
+        inset 0 2px 0 rgba(255,255,255,.22),
         inset 0 -3px 10px rgba(0,0,0,.45),
         inset 0 0 22px rgba(0,0,0,.28);     /* recessed-opening lip */
     }
@@ -116,10 +121,14 @@
       position: absolute; left: 50%; top: -15px;
       transform: translateX(-50%);
       width: clamp(130px, 26%, 190px); height: 30px;
-      border: 5px solid #181818;
+      border: 5px solid #151515;
       border-bottom: none;
+      border-top-color: #2c2c2c;             /* top of the strap catches the light */
       border-radius: 14px 14px 0 0;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 -2px 5px rgba(0,0,0,.4);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.16),  /* top rib highlight */
+        inset 0 -2px 4px rgba(0,0,0,.5),       /* under-curve shade */
+        0 -2px 6px rgba(0,0,0,.45);            /* lifts off the cabinet */
       pointer-events: none;
     }
     /* black corner protectors (quarter-round caps, clipped by the box radius) */
@@ -264,6 +273,13 @@
       mask: radial-gradient(circle, transparent 58%, #000 61%);
       opacity: .55; pointer-events: none;
     }
+    .knob-dial::before {                   /* soft gloss on the cap top */
+      content: ''; position: absolute; left: 50%; top: 8%;
+      width: 60%; height: 40%; transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.28), rgba(255,255,255,0) 72%);
+      pointer-events: none;
+    }
     .knob-ind {                            /* rotating carrier — keeps body light fixed */
       position: absolute; inset: 0; border-radius: 50%;
       transform: rotate(var(--rot));
@@ -294,20 +310,43 @@
     /* ── PILOT LAMP + POWER GROUP ── */
     .amp-power { display: flex; align-items: center; gap: clamp(10px, 1.6vw, 16px); }
     .pilot {
+      position: relative;
       flex: 0 0 auto;
-      width: 14px; height: 14px; border-radius: 50%;
-      background: radial-gradient(circle at 35% 30%, #6b1d15, #3a0d09 70%);
-      border: 2px solid #b3a787;
-      box-shadow: inset 0 1px 3px rgba(0,0,0,.8), 0 1px 0 rgba(255,255,255,.55);
+      width: 15px; height: 15px; border-radius: 50%;
+      background: radial-gradient(circle at 36% 30%, #7a221a, #46100a 58%, #2c0a06);
+      border: 2px solid #9a8c66;                 /* tarnished-brass bezel */
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,.55),               /* bezel shadow line */
+        inset 0 1px 3px rgba(0,0,0,.85),
+        0 1px 0 rgba(255,255,255,.5);
       transition: background .2s, box-shadow .2s;
     }
-    .pilot.lit {
-      background: radial-gradient(circle at 35% 30%, #ffd9d2, #ff4733 45%, #c0271a 85%);
-      box-shadow:
-        inset 0 1px 2px rgba(255,255,255,.5),
-        0 0 10px rgba(255,71,51,.9),
-        0 0 26px rgba(255,71,51,.5);
+    /* faceted jewel cut — faint white wedges catch the light */
+    .pilot::before {
+      content: ''; position: absolute; inset: 1.5px; border-radius: 50%;
+      background: conic-gradient(from -40deg,
+        rgba(255,255,255,.20), transparent 17%, rgba(255,255,255,.10) 34%,
+        transparent 52%, rgba(255,255,255,.16) 70%, transparent 86%, rgba(255,255,255,.20));
+      pointer-events: none;
     }
+    /* glass specular hotspot */
+    .pilot::after {
+      content: ''; position: absolute; top: 17%; left: 24%;
+      width: 34%; height: 30%; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,.85), transparent 70%);
+      pointer-events: none;
+    }
+    .pilot.lit {
+      background: radial-gradient(circle at 36% 30%, #fff1ed, #ff6a52 38%, #d12d1c 82%);
+      border-color: #c6b277;
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,.4),
+        inset 0 1px 2px rgba(255,255,255,.6),
+        0 0 12px rgba(255,71,51,.95),
+        0 0 30px rgba(255,71,51,.55);
+    }
+    .pilot.lit::before { opacity: .85; }
+    .pilot.lit::after  { background: radial-gradient(circle, rgba(255,255,255,.95), transparent 72%); }
     .intro-hint { transition: opacity 0.4s ease; }
 
     /* ── ILLUMINATED ROCKER POWER SWITCH (red paddle, I = on) ── */
@@ -576,6 +615,37 @@
     }
 
     /* ═════════════════════════════════════════
+       NOIR POLISH  —  cinematic frame, selection, scrollbar
+    ═════════════════════════════════════════ */
+    /* deep-red text selection */
+    ::selection   { background: var(--red); color: #050505; text-shadow: none; }
+    ::-moz-selection { background: var(--red); color: #050505; }
+
+    /* red caret in form fields */
+    input, textarea, select { caret-color: var(--red); }
+
+    /* slim noir scrollbar — graphite thumb, reddens on hover */
+    * { scrollbar-width: thin; scrollbar-color: #242424 var(--black); }
+    ::-webkit-scrollbar { width: 11px; height: 11px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb {
+      background: #242424;
+      border: 3px solid var(--black);
+      border-radius: 8px;
+      transition: background .25s ease;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: var(--red); }
+
+    /* cinematic edge vignette — frames the viewport like film; sits above page
+       content but below grain (800) / cursor (900) / modals, never blocks clicks */
+    body::after {
+      content: ''; position: fixed; inset: 0; z-index: 790;
+      pointer-events: none;
+      background: radial-gradient(125% 125% at 50% 50%,
+        transparent 62%, rgba(0,0,0,.14) 82%, rgba(0,0,0,.42) 100%);
+    }
+
+    /* ═════════════════════════════════════════
        HEADER
     ═════════════════════════════════════════ */
     header {
@@ -662,7 +732,7 @@
       letter-spacing: 0.01em;
       max-width: 16ch;
     }
-    .hero-statement .accent { color: var(--red); }
+    .hero-statement .accent { color: var(--red); text-shadow: 0 0 28px rgba(191,45,31,.28); }
     .hero-sub {
       margin-top: clamp(32px, 5vw, 56px);
       max-width: 46ch;
