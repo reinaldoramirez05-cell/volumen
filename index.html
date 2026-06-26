@@ -875,7 +875,7 @@
     .pick-vote.liked { border-color: var(--red); color: var(--red); }
     .pick-vote.liked .pick-heart { color: var(--red); transform: scale(1.15); }
     .pick-vote .pick-count { font-variant-numeric: tabular-nums; }
-    /* rank badge — shows the leaderboard position (01..07) top-left of each pick */
+    /* rank badge — shows the leaderboard position (01..08) top-left of each pick */
     .pick-rank {
       position: absolute; top: 10px; left: 10px;
       font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
@@ -1108,7 +1108,7 @@
     <div class="section-header">
       <span class="label" data-en="Community" data-es="Comunidad">Community</span>
       <h2 class="section-title" data-en="Community Picks" data-es="Favoritas">Community Picks</h2>
-      <p class="section-sub" data-en="The seven most-liked frames, chosen by you. Tap the heart on any shot to vote it up." data-es="Los siete cuadros con más me gusta, elegidos por ti. Toca el corazón de cualquier foto para subirla.">The seven most-liked frames, chosen by you. Tap the heart on any shot to vote it up.</p>
+      <p class="section-sub" data-en="The eight most-liked frames, chosen by you. Tap the heart on any shot to vote it up." data-es="Los ocho cuadros con más me gusta, elegidos por ti. Toca el corazón de cualquier foto para subirla.">The eight most-liked frames, chosen by you. Tap the heart on any shot to vote it up.</p>
     </div>
 
     <figure class="potw" id="potw" hidden>
@@ -1705,7 +1705,7 @@
     function setupCommunity() {
       const grid = document.getElementById('pick-grid');
       if (!grid || !gallery) return;
-      const TOP = 7;
+      const TOP = 8;
       // the gallery frames are the source of truth for the candidate pool
       const PHOTOS = Array.prototype.slice.call(gallery.querySelectorAll('.fig')).map((fig, i) => {
         const img = fig.querySelector('img');
@@ -1719,7 +1719,7 @@
         };
       }).filter((p) => p.key);
 
-      function topSeven() {
+      function topPicks() {
         return PHOTOS.slice().sort((a, b) => {
           const d = LikeStore.count(b.key) - LikeStore.count(a.key);
           return d !== 0 ? d : a.i - b.i;   // ties keep gallery order
@@ -1728,7 +1728,7 @@
 
       function build() {
         const frag = document.createDocumentFragment();
-        topSeven().forEach((p, rank) => {
+        topPicks().forEach((p, rank) => {
           const card = document.createElement('figure');
           card.className = 'pick-card';
           card.dataset.key = p.key;
