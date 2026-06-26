@@ -185,6 +185,20 @@
       html { scroll-behavior: auto; }
       .menu { transition: none; }
     }
+
+    /* ── NOIR POLISH — cinematic frame, selection, scrollbar (matches index.html) ── */
+    ::selection   { background: var(--red); color: #050505; text-shadow: none; }
+    ::-moz-selection { background: var(--red); color: #050505; }
+    input, textarea, select { caret-color: var(--red); }
+    * { scrollbar-width: thin; scrollbar-color: #242424 var(--black); }
+    ::-webkit-scrollbar { width: 11px; height: 11px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: #242424; border: 3px solid var(--black); border-radius: 8px; transition: background .25s ease; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--red); }
+    body::after {
+      content: ''; position: fixed; inset: 0; z-index: 790; pointer-events: none;
+      background: radial-gradient(125% 125% at 50% 50%, transparent 62%, rgba(0,0,0,.14) 82%, rgba(0,0,0,.42) 100%);
+    }
   </style>
 </head>
 <body>
