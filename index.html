@@ -742,6 +742,19 @@
     .cal-saved-toggle.active { color: var(--red); border-color: var(--red); }
     .cal-more { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; color: var(--quiet); padding: 12px 0 2px; }
 
+    /* ── FLOATING BOOK CTA (persistent on the homepage) ── */
+    .book { position: fixed; right: clamp(16px, 4vw, 28px); bottom: max(clamp(16px, 4vw, 28px), env(safe-area-inset-bottom)); z-index: 850; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+    .book-fab { display: inline-flex; align-items: center; gap: 9px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: #0a0a0a; background: var(--red); border: 1px solid var(--red); border-radius: 999px; padding: 13px 20px; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,.5), 0 0 22px rgba(191,45,31,.45); transition: background .2s, transform .12s, box-shadow .2s; -webkit-tap-highlight-color: transparent; }
+    .book-fab:hover, .book-fab:focus-visible { background: #d6321f; outline: none; box-shadow: 0 10px 32px rgba(0,0,0,.55), 0 0 30px rgba(191,45,31,.7); }
+    .book-fab:active { transform: scale(.97); }
+    .book-dot { width: 7px; height: 7px; border-radius: 50%; background: #0a0a0a; animation: bookPulse 2.4s ease-in-out infinite; }
+    @keyframes bookPulse { 0%,100% { opacity: .5; } 50% { opacity: 1; } }
+    .book-menu { display: flex; flex-direction: column; align-items: stretch; gap: 7px; }
+    .book-menu[hidden] { display: none; }
+    .book-opt { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); background: rgba(12,12,12,.92); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border: 1px solid var(--line); border-radius: 999px; padding: 11px 18px; text-align: center; transition: border-color .2s, color .2s; }
+    .book-opt:hover, .book-opt:focus-visible { border-color: var(--red); color: var(--red); outline: none; }
+    @media (prefers-reduced-motion: reduce) { .book-dot { animation: none; } }
+
     .cal-empty { font-family: var(--font-mono); font-size: 13px; line-height: 1.7; color: var(--quiet); padding: 8px 0 4px; }
     .cal-venues { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
     .cal-venues .label { color: var(--quiet); }
@@ -1070,6 +1083,19 @@
 
   <!-- ── CURSOR ───────────────────────────── -->
   <div class="cursor" id="cursor"><span class="cursor-label" data-en="View" data-es="Ver">View</span></div>
+
+  <!-- ── FLOATING BOOK CTA ─────────────────── -->
+  <div class="book" id="book">
+    <div class="book-menu" id="book-menu" hidden>
+      <a class="book-opt" href="/contact.html" data-en="Booking form" data-es="Formulario">Booking form</a>
+      <a class="book-opt" href="mailto:reinaldoramirez05@gmail.com?subject=Shoot%20inquiry%20%E2%80%94%20Volumen" data-en="Email" data-es="Correo">Email</a>
+      <a class="book-opt" href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener noreferrer">Instagram DM</a>
+    </div>
+    <button class="book-fab" id="book-fab" type="button" aria-expanded="false" aria-controls="book-menu" aria-label="Book a shoot">
+      <span class="book-dot" aria-hidden="true"></span>
+      <span class="book-label" data-en="Book" data-es="Reserva">Book</span>
+    </button>
+  </div>
 
   <!-- Liquid displacement filter — attached to a single photo only while hovered.
        feTurbulence drifts continuously (cheap; only computed when referenced),
@@ -1639,6 +1665,23 @@
       });
     }
     setupCalendar();
+
+    /* ── FLOATING BOOK CTA ── */
+    (function setupBook() {
+      const wrap = document.getElementById('book');
+      const fab = document.getElementById('book-fab');
+      const menu = document.getElementById('book-menu');
+      if (!wrap || !fab || !menu) return;
+      const close = () => { menu.hidden = true; fab.setAttribute('aria-expanded', 'false'); };
+      fab.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const willOpen = menu.hidden;
+        menu.hidden = !willOpen;
+        fab.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+      });
+      document.addEventListener('click', (e) => { if (!wrap.contains(e.target)) close(); });
+      window.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+    })();
 
     /* ── HERO SPOTLIGHT + SCROLL PARALLAX ── */
     function setupHeroMotion() {
