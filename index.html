@@ -665,6 +665,7 @@
     }
     .menu.open { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity .4s ease; }
     .menu-top { display: flex; justify-content: space-between; align-items: center; }
+    .menu-top-right { display: flex; align-items: center; gap: clamp(14px, 2.4vw, 22px); }
     .menu-close { background: none; border: none; color: var(--ink); font-size: 22px; line-height: 1; cursor: pointer; padding: 4px; transition: color .2s; }
     .menu-close:hover, .menu-close:focus-visible { color: var(--red); outline: none; }
     .menu-nav { margin: auto 0; display: flex; flex-direction: column; gap: clamp(8px, 1.6vw, 16px); }
@@ -776,7 +777,7 @@
     /* cursor-tracking spotlight — the empty black becomes interactive */
     .hero-glow {
       position: absolute; inset: 0; z-index: 0; pointer-events: none;
-      background: radial-gradient(450px circle at var(--mx, 50%) var(--my, 38%), rgba(191,45,31,0.26), rgba(191,45,31,0.11) 40%, transparent 62%);
+      background: radial-gradient(460px circle at var(--mx, 50%) var(--my, 38%), rgba(191,45,31,0.31), rgba(191,45,31,0.13) 40%, transparent 62%);
       opacity: 0; transition: opacity 0.6s ease;
     }
     .hero:hover .hero-glow { opacity: 1; }
@@ -1103,7 +1104,13 @@
   <nav class="menu" id="menu" aria-hidden="true" aria-label="Main menu">
     <div class="menu-top">
       <a href="/" class="wordmark"><span>V</span>OLUMEN</a>
-      <button class="menu-close" id="menu-close" aria-label="Close menu">✕</button>
+      <div class="menu-top-right">
+        <div class="lang" aria-label="Language">
+          <button id="menu-btn-en" class="active">EN</button>
+          <button id="menu-btn-es">ES</button>
+        </div>
+        <button class="menu-close" id="menu-close" aria-label="Close menu">✕</button>
+      </div>
     </div>
     <div class="menu-nav">
       <a href="/#gallery" data-en="Frames" data-es="Cuadros">Frames</a>
@@ -1460,18 +1467,21 @@
     setupMenu();
 
     /* ── BILINGUAL TOGGLE ── */
-    const btnEn = document.getElementById('btn-en');
-    const btnEs = document.getElementById('btn-es');
+    // Two language toggles: the header one (btn-*) and one inside the menu
+    // (menu-btn-*), since the full-screen menu covers the header toggle.
+    const langBtns = { en: [], es: [] };
+    ['btn-en', 'menu-btn-en'].forEach((id) => { const b = document.getElementById(id); if (b) langBtns.en.push(b); });
+    ['btn-es', 'menu-btn-es'].forEach((id) => { const b = document.getElementById(id); if (b) langBtns.es.push(b); });
     function setLang(lang) {
       document.documentElement.lang = lang;
       document.querySelectorAll('[data-en][data-es]').forEach(el => { el.innerHTML = el.dataset[lang]; });
-      btnEn.classList.toggle('active', lang === 'en');
-      btnEs.classList.toggle('active', lang === 'es');
+      langBtns.en.forEach((b) => b.classList.toggle('active', lang === 'en'));
+      langBtns.es.forEach((b) => b.classList.toggle('active', lang === 'es'));
       localStorage.setItem('volumen-lang', lang);
       if (typeof window.__renderCal === 'function') window.__renderCal();   // relocalize the gig list
     }
-    btnEn.addEventListener('click', () => setLang('en'));
-    btnEs.addEventListener('click', () => setLang('es'));
+    langBtns.en.forEach((b) => b.addEventListener('click', () => setLang('en')));
+    langBtns.es.forEach((b) => b.addEventListener('click', () => setLang('es')));
     if (localStorage.getItem('volumen-lang') === 'es') setLang('es');
 
     /* ── MENU CALENDAR — "Upcoming" shows, hamburger only.
