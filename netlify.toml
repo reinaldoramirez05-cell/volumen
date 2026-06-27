@@ -36,6 +36,11 @@
   to = "/events.html"
   status = 200
 
+[[redirects]]
+  from = "/card"
+  to = "/card.html"
+  status = 200
+
 # Retired prototype URL — its content is now the homepage (index.html)
 [[redirects]]
   from = "/landing-noir.html"

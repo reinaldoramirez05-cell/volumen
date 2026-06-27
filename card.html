@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Reinaldo Ramirez — Music Photographer, Austin | Volumen</title>
+  <meta name="description" content="Reinaldo Ramirez — live music photography in Austin, TX. Live shows, promo / EPK, band portraits. Book a shoot.">
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="Reinaldo Ramirez — Music Photographer">
+  <meta property="og:description" content="Live music photography in Austin, TX. Book a shoot.">
+  <meta property="og:image" content="https://volumen.media/photos/singer-spotlight.jpg">
+  <meta property="og:url" content="https://volumen.media/card">
+  <meta name="theme-color" content="#050505">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #050505; --ink: #ededed; --quiet: #6c6c6c; --line: #1c1c1c; --red: #bf2d1f;
+      --pad: clamp(20px, 5vw, 46px);
+      --font-disp: 'Bebas Neue', sans-serif; --font-body: 'Inter', sans-serif; --font-mono: 'Space Mono', monospace;
+    }
+    html { -webkit-text-size-adjust: 100%; }
+    body { background: var(--black); color: var(--ink); font-family: var(--font-body); font-weight: 300;
+      min-height: 100vh; min-height: 100svh; overflow-x: hidden; }
+    ::selection { background: var(--red); color: #050505; }
+    a { color: inherit; text-decoration: none; }
+    .label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--quiet); }
+
+    .card { position: relative; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; overflow: hidden;
+      padding: max(20px, env(safe-area-inset-top)) var(--pad) max(26px, env(safe-area-inset-bottom)); }
+    /* darkened hero frame behind everything */
+    .card-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(5,5,5,.50) 0%, rgba(5,5,5,.26) 26%, rgba(5,5,5,.80) 70%, rgba(5,5,5,.97) 100%),
+        url('/photos/singer-spotlight.jpg') center 20% / cover no-repeat; }
+    .card > * { position: relative; z-index: 1; }
+
+    .card-top { display: flex; align-items: center; justify-content: space-between; }
+    .wordmark { font-family: var(--font-disp); font-size: 22px; letter-spacing: .22em; text-indent: .22em; color: var(--ink); }
+    .wordmark span { color: var(--red); }
+    .lang { font-family: var(--font-mono); display: flex; gap: 7px; font-size: 11px; letter-spacing: .06em; }
+    .lang button { background: none; border: none; padding: 0; color: rgba(255,255,255,.45); cursor: pointer; font: inherit; letter-spacing: inherit; transition: color .2s; }
+    .lang button.active { color: #fff; }
+
+    .card-id { margin-top: auto; }
+    .card-kicker { display: block; color: var(--red); }
+    .card-name { font-family: var(--font-disp); font-weight: 400; font-size: clamp(64px, 17vw, 124px); line-height: .85; letter-spacing: .01em; margin-top: 14px; }
+    .card-tag { font-family: var(--font-disp); font-size: clamp(26px, 7vw, 46px); line-height: 1; margin-top: 10px; }
+    .card-tag .ac { color: var(--red); text-shadow: 0 0 26px rgba(191,45,31,.42); }
+    .card-services { margin-top: 16px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .03em; color: var(--ink); opacity: .85; }
+
+    .card-actions { margin-top: clamp(22px, 5vh, 40px); display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .card-btn { display: flex; align-items: center; justify-content: center; text-align: center;
+      font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+      padding: 15px 14px; border: 1px solid var(--line); color: var(--ink); background: rgba(5,5,5,.35);
+      -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
+      transition: border-color .25s, color .25s, background .25s, transform .12s; -webkit-tap-highlight-color: transparent; }
+    .card-btn:hover, .card-btn:focus-visible { border-color: var(--red); color: var(--red); outline: none; }
+    .card-btn:active { transform: scale(.98); }
+    .card-btn.full { grid-column: 1 / -1; }
+    .card-btn.primary { background: var(--red); border-color: var(--red); color: #0a0a0a; }
+    .card-btn.primary:hover, .card-btn.primary:focus-visible { background: #d6321f; border-color: #d6321f; color: #050505; }
+
+    .card-foot { margin-top: clamp(20px, 4vh, 34px); display: flex; align-items: center; gap: 16px; }
+    .card-qr-wrap { background: #fff; padding: 8px; border-radius: 8px; line-height: 0; flex: 0 0 auto;
+      box-shadow: 0 8px 26px rgba(0,0,0,.5); }
+    .card-qr { width: 88px; height: 88px; display: block; }
+    .card-qr-cap { display: flex; flex-direction: column; gap: 3px; }
+    .card-qr-cap .big { font-family: var(--font-disp); font-size: 24px; letter-spacing: .02em; color: var(--ink); line-height: 1; }
+
+    @media (min-width: 680px) {
+      .card-actions { grid-template-columns: repeat(4, 1fr); }
+      .card-btn.full { grid-column: 1 / -1; }
+      .card-bg { background-position: center 28%; }
+    }
+    @media (prefers-reduced-motion: reduce) { .card-btn { transition: none; } }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="card-bg" aria-hidden="true"></div>
+
+    <header class="card-top">
+      <a href="/" class="wordmark"><span>V</span>OLUMEN</a>
+      <div class="lang" aria-label="Language">
+        <button id="c-en" class="active">EN</button>
+        <button id="c-es">ES</button>
+      </div>
+    </header>
+
+    <section class="card-id">
+      <span class="card-kicker label" data-en="Music Photographer · Austin, TX" data-es="Fotógrafo Musical · Austin, TX">Music Photographer · Austin, TX</span>
+      <h1 class="card-name">Reinaldo<br>Ramirez</h1>
+      <p class="card-tag" data-en='See the <span class="ac">sound.</span>' data-es='Mira el <span class="ac">sonido.</span>'>See the <span class="ac">sound.</span></p>
+      <p class="card-services" data-en="Live shows · Promo / EPK · Band portraits" data-es="Shows en vivo · Promo / EPK · Retratos de banda">Live shows · Promo / EPK · Band portraits</p>
+    </section>
+
+    <nav class="card-actions" aria-label="Links">
+      <a class="card-btn primary full" href="/contact.html" data-en="Book a shoot" data-es="Reserva una sesión">Book a shoot</a>
+      <a class="card-btn" href="/" data-en="Portfolio" data-es="Portafolio">Portfolio</a>
+      <a class="card-btn" href="https://instagram.com/reinaldo.photos" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a class="card-btn" href="mailto:reinaldoramirez05@gmail.com" data-en="Email" data-es="Correo">Email</a>
+      <a class="card-btn" href="https://twitter.com/reinaldor93" target="_blank" rel="noopener noreferrer">Twitter</a>
+    </nav>
+
+    <footer class="card-foot">
+      <div class="card-qr-wrap"><img src="/card-qr.svg" alt="QR code linking to volumen.media" class="card-qr"></div>
+      <div class="card-qr-cap">
+        <span class="big" data-en="Scan to keep" data-es="Escanea y guarda">Scan to keep</span>
+        <span class="label" data-en="the full portfolio" data-es="el portafolio completo">the full portfolio</span>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // Bilingual toggle — shares the site's localStorage key so language carries over.
+    const enBtn = document.getElementById('c-en');
+    const esBtn = document.getElementById('c-es');
+    function setLang(lang) {
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-en][data-es]').forEach((el) => { el.innerHTML = el.dataset[lang]; });
+      enBtn.classList.toggle('active', lang === 'en');
+      esBtn.classList.toggle('active', lang === 'es');
+      try { localStorage.setItem('volumen-lang', lang); } catch (e) {}
+    }
+    enBtn.addEventListener('click', () => setLang('en'));
+    esBtn.addEventListener('click', () => setLang('es'));
+    try { if (localStorage.getItem('volumen-lang') === 'es') setLang('es'); } catch (e) {}
+  </script>
+</body>
+</html>
